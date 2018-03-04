@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tips.Events", "Tips.Events\Tips.Events.csproj", "{D4FFF136-C155-4F29-B11A-B0DC8DDD05E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tips.Events.Tests", "Tips.Events.Tests\Tips.Events.Tests.csproj", "{1A487F1E-D648-4FFF-A8AD-E4F18B474034}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{B832E8BB-0EF6-49F1-A41C-07E992A2C77A}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\DeveloperTips.CSharp.Events.docx = Docs\DeveloperTips.CSharp.Events.docx
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4FFF136-C155-4F29-B11A-B0DC8DDD05E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4FFF136-C155-4F29-B11A-B0DC8DDD05E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4FFF136-C155-4F29-B11A-B0DC8DDD05E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4FFF136-C155-4F29-B11A-B0DC8DDD05E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A487F1E-D648-4FFF-A8AD-E4F18B474034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A487F1E-D648-4FFF-A8AD-E4F18B474034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A487F1E-D648-4FFF-A8AD-E4F18B474034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A487F1E-D648-4FFF-A8AD-E4F18B474034}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE8F02B4-D7CA-4395-A37D-B627212119EA}
+	EndGlobalSection
+EndGlobal
