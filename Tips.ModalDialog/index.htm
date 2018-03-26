@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Developer Tips: Bootstrap 3 Modal Dialog exit options</title>
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<style>
+		/* Bootstrap 3 Modal Vertically Center/Max-Height */
+		/* https://codepen.io/dimbslmh/full/mKfCc */
+		.modal {
+		  text-align: center;
+		  padding: 0!important;
+		}
+
+		.modal:before {
+		  content: '';
+		  display: inline-block;
+		  height: 100%;
+		  vertical-align: middle;
+		  margin-right: -4px;
+		}
+
+		.modal-dialog {
+		  display: inline-block;
+		  text-align: left;
+		  vertical-align: middle;
+		}
+	</style>
+</head>
+<body>
+    <div class="container body-content" style="margin-bottom: 100px;">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Developer Tips: Bootstrap 3 Modal Dialog exit options</h1>
+				<p>Here are some simple examples on how to do modals using bootstrap 3 while allowing/preventing the Esc keystroke or mouse click to exit.  Tested in Chrome, Edge, IE11, and Firefox.</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Modal JS - None</h2>
+				<ul>
+					<li>Mouse click exists: false</li>
+					<li>Esc keystroke exists: false</li>
+				</ul>
+				<p>data-keyboard="false" data-backdrop="static"</p>
+				<p>The modal will close after 5 seconds.</p>
+				<button class="btn btn-primary" onclick="showModalMessage($('#divModalMessageNoClicksNoKeystrokes'))">Open Modal</button>
+			</div>
+			<div class="col-md-6">
+				<h2>Modal JS - Click only</h2>
+				<ul>
+					<li>Mouse click exists: true</li>
+					<li>Esc keystroke exists: false</li>
+				</ul>
+				<p>data-backdrop="static"</p>
+				<p>The cursor will still take 5 seconds to change back to the default cursor.</p>
+				<button class="btn btn-primary" onclick="showModalMessage($('#divModalMessageClickExit'))">Open Modal</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Modal JS - Esc only</h2>
+				<ul>
+					<li>Mouse click exists: false</li>
+					<li>Esc keystroke exists: true</li>
+				</ul>
+				<p>data-keyboard="false"</p>
+				<p>In order to allow the Esc keystroke to work you must have tabindex="-1".<br/>
+				The cursor will still take 5 seconds to change back to the default cursor.</p>
+				<button class="btn btn-primary" onclick="showModalMessage($('#divModalMessageEscExit'))">Open Modal</button>
+			</div>
+			<div class="col-md-6">
+				<h2>Modal JS - Click and Esc</h2>
+				<ul>
+					<li>Mouse click exists: true</li>
+					<li>Esc keystroke exists: true</li>
+				</ul>
+				<p>{none}</p>
+				<p>In order to allow the Esc keystroke to work you must have tabindex="-1"..<br/>
+				The cursor will still take 5 seconds to change back to the default cursor.</p>
+				<button class="btn btn-primary" onclick="showModalMessage($('#divModalMessageClickAndEscExit'))">Open Modal</button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Modal Data-Toggle - None</h2>
+				<ul>
+					<li>Mouse click exists: false</li>
+					<li>Esc keystroke exists: false</li>
+				</ul>
+				<p>data-keyboard="false" data-backdrop="static"</p>
+				<p>Data-toggle saves you the effort of writing your own javascript if you don't mind the defaults.</p>
+				<button class="btn btn-primary" data-toggle="modal" data-target="#divModalMessageDataToggleNoClicksNoKeystrokes">Open Modal</button>
+			</div>
+			<div class="col-md-6">
+				<h2>Modal Data-Toggle - Click only</h2>
+				<ul>
+					<li>Mouse click exists: true</li>
+					<li>Esc keystroke exists: false</li>
+				</ul>
+				<p>data-backdrop="static"</p>
+				<p>The other versions work the same as the JS versions.</p>
+				<button class="btn btn-primary" data-toggle="modal" data-target="#divModalMessageDataToggleClickExit">Open Modal</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Conclusion</h2>
+				<p>Modals offer a nice simple way to prevent the user from performing any other actions until they have observed the content of the modal dialog.
+				The modal may just be a message letting the user know that their submission is processing.
+				Maybe it's an address form to stand out apart from the clutter of the rest of the page.
+				Hopefully, these examples will help you create your own modals.
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Resources</h2>
+				<ul>
+					<li><a href="https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal">https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal</a><br/>
+					This post provided the insight on preventing the Esc keystroke and mouse click.</li>
+					<li><a href="https://stackoverflow.com/questions/12630156/how-do-you-enable-the-escape-key-close-functionality-in-a-twitter-bootstrap-moda">https://stackoverflow.com/questions/12630156/how-do-you-enable-the-escape-key-close-functionality-in-a-twitter-bootstrap-moda</a><br/>
+					This post helped me get over the hurdle with the Esc keystroke not working because I forgot the tabindex="-1".</li>
+					<li><a href="https://codepen.io/dimbslmh/full/mKfCc">https://codepen.io/dimbslmh/full/mKfCc</a><br/>
+					I liked how this post centered the modal in the middle of the page instead of in the top middle.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!-- Modals -->
+		<div id="divModalMessageNoClicksNoKeystrokes" class="modal fade" data-keyboard="false" data-backdrop="static" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>Going back in time to rectify past mistakes...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="divModalMessageClickExit" class="modal fade" data-keyboard="false" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>No, you're right.  We should not have done that thing you said...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="divModalMessageEscExit" class="modal fade" data-backdrop="static" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>There is no way to (Esc)ape this hideous trap...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="divModalMessageClickAndEscExit" class="modal fade" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>You don't volunteer for most unplanned work, you're volunTOLD......</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="divModalMessageDataToggleNoClicksNoKeystrokes" class="modal fade" data-keyboard="false" data-backdrop="static" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>Now you're stuck here forever, muahahahaha.  Just don't click the button and we'll be cool...</div>
+						<br/>
+						<button class="btn btn-primary" data-toggle="modal" data-target="#divModalMessageDataToggleNoClicksNoKeystrokes">Go Back</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="divModalMessageDataToggleClickExit" class="modal fade" data-keyboard="false" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div>If I told a joke and I'm the only one who laughed, was it a good joke?  Yes, yes it was...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+	<script>
+		function showModalMessage(modalElement) {
+			document.body.style.cursor = 'wait';
+			modalElement.modal("show");
+			setTimeout(function() { hideModalMessage(modalElement) }, 5000);
+		}
+		
+		function hideModalMessage(modalElement) {
+			document.body.style.cursor = 'default';
+			modalElement.modal("hide");
+		}
+	</script>
+</body>
+</html>
