@@ -248,3 +248,14 @@ FROM @x.nodes('(/l:Library/b:Books/b:Book)') AS Books(Book)
 
 -- https://en.wikipedia.org/wiki/The_Wheel_of_Time
 -- These books were awesome!
+
+------------------
+-- Conclusion
+------------------
+
+-- Now that you've extracted the data from the XML,
+-- you can save the data to tables in your database,
+-- maybe store them in temp tables to generate a
+-- report.  There are plenty of options, this is
+-- just the beginning.  How do you shred your XML?
+-- Is there an easier way?
