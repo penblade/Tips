@@ -36,8 +36,9 @@ namespace Tips.JsonSerializer
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     options.SerializerSettings.SerializationBinder = new CustomJsonSerializationBinder(namespaceToTypes);
                 });
-            services.AddTransient<Product, Product1>();
-            services.AddTransient<Product, Product2>();
+            // The AddTransient is not necessary for the JsonSerializer.
+            //services.AddTransient<Product, Product1>();
+            //services.AddTransient<Product, Product2>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
