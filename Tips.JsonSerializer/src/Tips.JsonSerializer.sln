@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tips.JsonSerializer", "Tips.JsonSerializer\Tips.JsonSerializer.csproj", "{C9814911-77BD-46AF-AAB0-DAE06180F0B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tips.JsonSerializer.Tests", "Tips.JsonSerializer.Tests\Tips.JsonSerializer.Tests.csproj", "{C928FC12-1DB9-4B1D-BA2F-83C6D5DF3ECC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9814911-77BD-46AF-AAB0-DAE06180F0B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9814911-77BD-46AF-AAB0-DAE06180F0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9814911-77BD-46AF-AAB0-DAE06180F0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9814911-77BD-46AF-AAB0-DAE06180F0B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C928FC12-1DB9-4B1D-BA2F-83C6D5DF3ECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C928FC12-1DB9-4B1D-BA2F-83C6D5DF3ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C928FC12-1DB9-4B1D-BA2F-83C6D5DF3ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C928FC12-1DB9-4B1D-BA2F-83C6D5DF3ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8BD2FB3-8532-45CA-8F79-50C65755AAB4}
+	EndGlobalSection
+EndGlobal
