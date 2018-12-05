@@ -31,7 +31,7 @@ namespace Tips.JsonSerializer
                 {
                     // Indented to make it easier to read during this demo.
                     options.SerializerSettings.Formatting = Formatting.Indented;
-                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
+                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     options.SerializerSettings.SerializationBinder = new CustomJsonSerializationBinder(namespaceToTypes);

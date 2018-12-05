@@ -113,7 +113,6 @@ namespace Tips.JsonSerializer.Tests
 
             var namespaceToTypes = typeof(Product).Namespace;
             var settings = new JsonSerializerSettings {
-                //TypeNameHandling = TypeNameHandling.Objects;
                 TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
