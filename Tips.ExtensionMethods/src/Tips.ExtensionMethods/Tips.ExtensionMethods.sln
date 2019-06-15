@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendInterfaces", "ExtendInterfaces\ExtendInterfaces.csproj", "{B19C7CF9-728D-4C38-B751-FB691D4F3DB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendInterfaces.Tests", "ExtendInterfaces.Tests\ExtendInterfaces.Tests.csproj", "{1839CB2B-7E1C-4A62-B0A3-600376A8199D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B19C7CF9-728D-4C38-B751-FB691D4F3DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B19C7CF9-728D-4C38-B751-FB691D4F3DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B19C7CF9-728D-4C38-B751-FB691D4F3DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B19C7CF9-728D-4C38-B751-FB691D4F3DB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1839CB2B-7E1C-4A62-B0A3-600376A8199D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1839CB2B-7E1C-4A62-B0A3-600376A8199D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1839CB2B-7E1C-4A62-B0A3-600376A8199D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1839CB2B-7E1C-4A62-B0A3-600376A8199D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B367A16-BBE2-4EBB-892E-F4ED25202D6C}
+	EndGlobalSection
+EndGlobal
