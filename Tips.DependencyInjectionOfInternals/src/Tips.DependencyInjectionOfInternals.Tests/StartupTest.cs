@@ -20,17 +20,15 @@ namespace Tips.DependencyInjectionOfInternals.Tests
             // extension method AddMvc().
             var serviceCollection = new ServiceCollection();
 
-            var mockConfiguration = new Mock<IConfiguration>();
-
             var mockServiceCollectionForBusiness = new Mock<IServiceCollectionForBusiness>();
-            mockServiceCollectionForBusiness.Setup(x => x.RegisterDependencies(mockConfiguration.Object, serviceCollection));
+            mockServiceCollectionForBusiness.Setup(x => x.RegisterDependencies(serviceCollection));
 
-            var startup = new Startup(mockConfiguration.Object, mockServiceCollectionForBusiness.Object);
+            var startup = new Startup(mockServiceCollectionForBusiness.Object);
 
             startup.ConfigureServices(serviceCollection);
 
             // Verify that the static method was called once.
-            mockServiceCollectionForBusiness.Verify(x => x.RegisterDependencies(mockConfiguration.Object, serviceCollection), Times.Once);
+            mockServiceCollectionForBusiness.Verify(x => x.RegisterDependencies(serviceCollection), Times.Once);
         }
     }
 }

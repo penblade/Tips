@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tips.DependencyInjectionOfInternals.Business.Configuration;
 
@@ -14,10 +15,13 @@ namespace Tips.DependencyInjectionOfInternals
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                // Required to create configurations from JSON files.
+                .ConfigureServices(services => services.AddTransient<IConfigurationBuilder, ConfigurationBuilder>())
+
                 // Add custom service collection registration.
 
                 // In order to inject classes into the
-                // Startup constuctor, the services must
+                // Startup constructor, the services must
                 // be registered before we UseStartup.
 
                 // ConfigureServices must be called before

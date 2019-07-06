@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -21,14 +20,10 @@ namespace Tips.DependencyInjectionOfInternals
 
         private readonly IServiceCollectionForBusiness _serviceCollectionForBusiness;
 
-        public Startup(IConfiguration configuration,
-                       IServiceCollectionForBusiness serviceCollectionForBusiness)
+        public Startup(IServiceCollectionForBusiness serviceCollectionForBusiness)
         {
             _serviceCollectionForBusiness = serviceCollectionForBusiness;
-            Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime.
         // Use this method to add services to the container.
@@ -81,7 +76,7 @@ namespace Tips.DependencyInjectionOfInternals
         // we wouldn't have gained anything.
 
         // While Dependency Injection is great, don't
-        // overcomplicate the dependencies when you know
+        // over complicate the dependencies when you know
         // there will only be one implementation ever.
         // With the pattern followed in this solution,
         // it's easy for us to refactor the interface
@@ -89,7 +84,7 @@ namespace Tips.DependencyInjectionOfInternals
 
         private void AddBusinessLibrary(IServiceCollection services)
         {
-            _serviceCollectionForBusiness.RegisterDependencies(Configuration, services);
+            _serviceCollectionForBusiness.RegisterDependencies(services);
         }
 
         // This method gets called by the runtime.

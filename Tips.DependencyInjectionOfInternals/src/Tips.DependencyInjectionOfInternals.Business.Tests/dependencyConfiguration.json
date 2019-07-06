@@ -1,0 +1,23 @@
+﻿{
+  "Namespace": "Tips.DependencyInjectionOfInternals.Business",
+  "Dependencies": [
+    {
+      "Namespace": "Commands",
+      "ServiceLifetime": "Scoped",
+      "ServiceType": "ICommand",
+      "ImplementationType": "CommandB"
+    },
+    {
+      "Namespace": "Commands",
+      "ServiceLifetime": "Scoped",
+      "ServiceType": "ICommand",
+      "ImplementationType": "CommandA"
+    },
+    {
+      "Namespace": "Commands",
+      "ServiceLifetime": "Scoped",
+      "ServiceType": "ICommand",
+      "ImplementationType": "CommandC"
+    }
+  ]
+}

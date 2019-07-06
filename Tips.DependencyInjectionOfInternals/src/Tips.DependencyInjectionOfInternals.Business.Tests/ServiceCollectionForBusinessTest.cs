@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Tips.DependencyInjectionOfInternals.Business.Commands;
 using Tips.DependencyInjectionOfInternals.Business.Configuration;
 
@@ -25,35 +24,46 @@ namespace Tips.DependencyInjectionOfInternals.Business.Tests
         // public constructor.
         public ServiceCollectionForBusinessTest()
         {
-            // The mock configuration must setup all of the
-            // expected properties or an exception is thrown.
-
-            // System.ArgumentNullException: Value cannot be null.
-            // Value cannot be null.\r\nParameter name: configuration
-
-            var mockConfigurationSection = new Mock<IConfigurationSection>();
-            mockConfigurationSection.SetupGet(x => x[It.IsAny<string>()]).Returns("expected configuration value");
-
-            var mockConfiguration = new Mock<IConfiguration>();
-            mockConfiguration.Setup(x => x.GetSection(It.IsAny<string>())).Returns(mockConfigurationSection.Object);
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            var configuration = configurationBuilder.Build();
 
             var serviceCollection = new ServiceCollection();
 
-            var serviceCollectionForBusiness = new ServiceCollectionForBusiness();
-
-            serviceCollectionForBusiness.RegisterDependencies(mockConfiguration.Object, serviceCollection);
+            var serviceCollectionForBusiness = new ServiceCollectionForBusiness(configuration, configurationBuilder);
+            serviceCollectionForBusiness.RegisterDependencies(serviceCollection);
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
         [TestMethod]
         public void VerifyRegisterDependenciesForBusiness()
         {
-            Assert.IsInstanceOfType(_serviceProvider.GetService<IBusinessService>(), typeof(BusinessService));
-            Assert.IsInstanceOfType(_serviceProvider.GetService<ICommandFactory>(), typeof(CommandFactory));
-            AssertCommandsWereRegistered();
+            VerifyRegisterByConvention();
+            VerifyRegisterBusinessConfiguration();
+            VerifyRegisterDependencyConfiguration();
         }
 
-        private void AssertCommandsWereRegistered()
+        private void VerifyRegisterByConvention()
+        {
+            Assert.IsInstanceOfType(_serviceProvider.GetService<IBusinessService>(), typeof(BusinessService));
+            Assert.IsInstanceOfType(_serviceProvider.GetService<ICommandFactory>(), typeof(CommandFactory));
+        }
+
+        private void VerifyRegisterBusinessConfiguration()
+        {
+            var expectedBusinessConfiguration = new BusinessConfiguration
+            {
+                ConnectionString = "Super Secret Database Connection String that should be hidden by managing User Secrets.",
+                DocumentPath = "A path to server storage.",
+                IocFiles = new List<string> { "dependencyConfiguration.json" }
+            };
+            var actualBusinessConfiguration = _serviceProvider.GetServices<BusinessConfiguration>().Single();
+            Assert.AreEqual(expectedBusinessConfiguration.ConnectionString, actualBusinessConfiguration.ConnectionString);
+            Assert.AreEqual(expectedBusinessConfiguration.DocumentPath, actualBusinessConfiguration.DocumentPath);
+            Assert.AreEqual(expectedBusinessConfiguration.IocFiles.Single(), actualBusinessConfiguration.IocFiles.Single());
+        }
+
+        private void VerifyRegisterDependencyConfiguration()
         {
             var expectedCommands = new List<Type> { typeof(CommandB), typeof(CommandA), typeof(CommandC) };
 
