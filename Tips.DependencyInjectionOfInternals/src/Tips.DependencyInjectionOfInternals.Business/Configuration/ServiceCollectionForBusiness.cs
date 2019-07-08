@@ -27,7 +27,7 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
             if (businessConfiguration?.IocFiles == null) return;
 
             var dependencyConfig = BindDependencyConfiguration(services, _configurationBuilder, businessConfiguration.IocFiles);
-            RegisterDependencyConfiguration(services, dependencyConfig);
+            DependencyRegistrar.RegisterDependencyConfiguration(services, dependencyConfig);
         }
 
         private static void RegisterByConvention(IServiceCollection services)
@@ -75,39 +75,5 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
 
             return dependencyConfig;
         }
-
-        private static void RegisterDependencyConfiguration(IServiceCollection services, DependencyConfiguration configuration)
-        {
-            // Services are returned in the order they were registered in the Startup.
-            foreach (var dependency in configuration.Dependencies)
-            {
-                var (serviceLifetime, serviceType, implementationType) = ParseDependency(configuration, dependency);
-                RegisterDependencyByServiceLifeTime(services, serviceLifetime, serviceType, implementationType);
-            }
-        }
-
-        private static (ServiceLifetime serviceLifetime, Type serviceType, Type implementationType) ParseDependency(DependencyConfiguration configuration, Dependency dependency)
-        {
-            var serviceLifetime = ServiceLifetime.FromName(dependency?.ServiceLifetime);
-
-            var serviceType = ParseType(BuildTypeName(configuration.Namespace, dependency.Namespace, dependency.ServiceType));
-            var implementationType = ParseType(BuildTypeName(configuration.Namespace, dependency.Namespace, dependency.ImplementationType));
-
-            return (serviceLifetime, serviceType, implementationType);
-        }
-
-        private static void RegisterDependencyByServiceLifeTime(IServiceCollection services, ServiceLifetime serviceLifetime,
-            Type serviceType, Type implementationType)
-        {
-            if (serviceLifetime == ServiceLifetime.Scoped) services.AddScoped(serviceType, implementationType);
-            else if (serviceLifetime == ServiceLifetime.Transient) services.AddTransient(serviceType, implementationType);
-            else if (serviceLifetime == ServiceLifetime.Singleton) services.AddSingleton(serviceType, implementationType);
-            else if (serviceLifetime == ServiceLifetime.NotSet) throw new ArgumentException("Configuration Error: Dependency service lifetime was not set.");
-            else throw new ArgumentOutOfRangeException(nameof(serviceLifetime), "Configuration Error: Dependency service lifetime does not exist.");
-        }
-
-        private static Type ParseType(string typeName) => Type.GetType(typeName);
-
-        private static string BuildTypeName(string namespaceStart, string namespaceEnd, string typeName) => $"{namespaceStart}.{namespaceEnd}.{typeName}";
     }
 }
