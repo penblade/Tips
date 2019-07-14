@@ -7,7 +7,7 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
 {
     public class ServiceCollectionForBusiness : IServiceCollectionForBusiness
     {
-        private readonly IConfiguration _appSettingsConfiguration;
+        private IConfiguration _appSettingsConfiguration;
         private readonly IConfigurationBuilder _configurationBuilder;
 
         public ServiceCollectionForBusiness(IConfiguration appSettingsConfiguration,
@@ -20,13 +20,8 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
         public void RegisterDependencies(IServiceCollection services)
         {
             RegisterByConvention(services);
-
-            var businessConfiguration = CreateAndBindBusinessConfiguration(_appSettingsConfiguration);
-            RegisterBusinessConfiguration(services, businessConfiguration);
-
-            if (businessConfiguration?.IocFiles == null) return;
-
-            var dependencyConfig = BindDependencyConfiguration(services, _configurationBuilder, businessConfiguration.IocFiles);
+            var businessConfiguration = RegisterBusinessConfiguration(services);
+            var dependencyConfig = RegisterDependencyConfiguration(services, businessConfiguration?.IocFiles);
             DependencyRegistrar.RegisterDependencyConfiguration(services, dependencyConfig);
         }
 
@@ -40,22 +35,30 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
             }
         }
 
-        private static BusinessConfiguration CreateAndBindBusinessConfiguration(IConfiguration configuration)
+        private BusinessConfiguration RegisterBusinessConfiguration(IServiceCollection services)
         {
             // Bind the BusinessConfiguration section from the appsettings.json.
-            var businessConfiguration = new BusinessConfiguration();
-            configuration.Bind(nameof(BusinessConfiguration), businessConfiguration);
-
-            if (businessConfiguration == null) throw new ArgumentException("BusinessConfiguration was not configured.");
+            const string sectionName = nameof(BusinessConfiguration);
+            var businessConfiguration = CreateConfigurationByType<BusinessConfiguration>();
+            _appSettingsConfiguration.Bind(sectionName, businessConfiguration);
+            services.AddSingleton(businessConfiguration);
             return businessConfiguration;
         }
 
-        private static void RegisterBusinessConfiguration(IServiceCollection services, BusinessConfiguration businessConfiguration)
+        private DependencyConfiguration RegisterDependencyConfiguration(IServiceCollection services,
+            IEnumerable<string> iocFiles)
         {
-            services.AddSingleton(businessConfiguration);
+            // Bind the json files.  Update the app settings configuration after adding json files.
+            _appSettingsConfiguration = AddJsonFiles(_configurationBuilder, iocFiles);
+            var dependencyConfig = CreateConfigurationByType<DependencyConfiguration>();
+            _appSettingsConfiguration.Bind(dependencyConfig);
+            services.AddSingleton(dependencyConfig);
+            return dependencyConfig;
         }
 
-        private static DependencyConfiguration BindDependencyConfiguration(IServiceCollection services, IConfigurationBuilder configurationBuilder, IEnumerable<string> jsonFiles)
+        private static T CreateConfigurationByType<T>() => (T)Activator.CreateInstance(typeof(T));
+
+        private static IConfiguration AddJsonFiles(IConfigurationBuilder configurationBuilder, IEnumerable<string> jsonFiles)
         {
             if (jsonFiles == null) throw new ArgumentException("No Json files were found.");
 
@@ -63,17 +66,7 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
             {
                 configurationBuilder.AddJsonFile(file, false, true);
             }
-            var updatedConfiguration = configurationBuilder.Build();
-
-            // Bind the json files.  If you're binding the entire appSettingsConfiguration file, don't include the section name.
-            var dependencyConfig = new DependencyConfiguration();
-            updatedConfiguration.Bind(dependencyConfig);
-
-            if (dependencyConfig == null) throw new ArgumentException("Business dependencies were not configured.");
-
-            services.AddSingleton(dependencyConfig);
-
-            return dependencyConfig;
+            return configurationBuilder.Build();
         }
     }
 }

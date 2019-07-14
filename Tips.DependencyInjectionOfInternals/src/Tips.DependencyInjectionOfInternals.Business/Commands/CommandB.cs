@@ -8,7 +8,7 @@ namespace Tips.DependencyInjectionOfInternals.Business.Commands
         {
             // Do something
             // Return a message to demonstrate when the command was processed.
-            return "CommandB was processed";
+            return "CommandB was processed.";
         }
     }
 }
