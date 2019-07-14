@@ -15,36 +15,34 @@ namespace Tips.DependencyInjectionOfInternals.Business.Configuration
             }
         }
 
-        private static (ServiceLifetimeWrapper serviceLifetime, Type serviceType, Type implementationType) ParseDependency(string configurationNamespace, Dependency dependency)
+        private static (ServiceLifetime serviceLifetime, Type serviceType, Type implementationType) ParseDependency(string configurationNamespace, Dependency dependency)
         {
             var serviceType = ParseType(BuildTypeName(configurationNamespace, dependency.Namespace, dependency.ServiceType));
             var implementationType = ParseType(BuildTypeName(configurationNamespace, dependency.Namespace, dependency.ImplementationType));
 
-            return (ServiceLifetimeWrapper.FromName(dependency.ServiceLifetime), serviceType, implementationType);
+            return (Enum.Parse<ServiceLifetime>(dependency.ServiceLifetime), serviceType, implementationType);
         }
 
         private static Type ParseType(string typeName) => Type.GetType(typeName);
 
         private static string BuildTypeName(string namespaceStart, string namespaceEnd, string typeName) => $"{namespaceStart}.{namespaceEnd}.{typeName}";
 
-        private static void RegisterDependencyByServiceLifeTime(IServiceCollection services, ServiceLifetimeWrapper serviceLifetimeWrapper,
+        private static void RegisterDependencyByServiceLifeTime(IServiceCollection services, ServiceLifetime serviceLifetime,
             Type serviceType, Type implementationType)
         {
-            switch (serviceLifetimeWrapper.Name)
+            switch (serviceLifetime)
             {
-                case ServiceLifetimeWrapper.Scoped:
+                case ServiceLifetime.Scoped:
                     services.AddScoped(serviceType, implementationType);
                     break;
-                case ServiceLifetimeWrapper.Transient:
+                case ServiceLifetime.Transient:
                     services.AddTransient(serviceType, implementationType);
                     break;
-                case ServiceLifetimeWrapper.Singleton:
+                case ServiceLifetime.Singleton:
                     services.AddSingleton(serviceType, implementationType);
                     break;
-                case ServiceLifetimeWrapper.NotSet:
-                    throw new ArgumentException("Configuration Error: Dependency service lifetime was not set.");
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(serviceLifetimeWrapper), serviceLifetimeWrapper.Name, "Configuration Error: Dependency service lifetime does not exist.");
+                    throw new ArgumentOutOfRangeException(nameof(serviceLifetime), serviceLifetime, "Configuration Error: Dependency service lifetime does not exist.");
             }
         }
     }
