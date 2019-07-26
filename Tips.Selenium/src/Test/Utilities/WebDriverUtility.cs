@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Remote;
 
 namespace Tips.Selenium.Test.Utilities
 {
-    internal class RemoteWebDriverUtility : IRemoteWebDriverUtility
+    internal class WebDriverUtility : IWebDriverUtility
     {
-        public RemoteWebDriver Create(BrowserType browserType, string seleniumWebDriversPath)
+        public IWebDriver Create(BrowserType browserType, string seleniumWebDriversPath)
         {
             switch (browserType)
             {
@@ -28,7 +28,7 @@ namespace Tips.Selenium.Test.Utilities
             }
         }
 
-        public void Quit(BrowserType browserType, RemoteWebDriver driver)
+        public void Quit(BrowserType browserType, IWebDriver driver)
         {
             driver.Quit();
             if (browserType != BrowserType.IE11) return;
