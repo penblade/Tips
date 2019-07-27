@@ -1,4 +1,4 @@
-﻿namespace Tips.Selenium.Test.Utilities
+﻿namespace OpenQA.Selenium
 {
     public enum BrowserType
     {

@@ -1,23 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
-using Tips.Selenium.Test.Utilities;
 
 namespace Tips.Selenium.Test
 {
     [TestClass]
     public class WebDriverTest
     {
-        private readonly IWebDriverUtility _webDriverUtility;
         private const string SeleniumWebDriversPath = @"C:\Selenium.WebDrivers";
         private const string TestUrl = @"https://dogfoodcon.com/";
-
-        public WebDriverTest()
-        {
-            _webDriverUtility = new WebDriverUtility();
-        }
-
-        private static WebElementUtility CreateWebElementUtility(IWebDriver driver) => new WebElementUtility(driver);
 
         [TestMethod]
         [DataRow(BrowserType.Chrome, SeleniumWebDriversPath)]
@@ -26,17 +16,28 @@ namespace Tips.Selenium.Test
         [DataRow(BrowserType.IE11, SeleniumWebDriversPath)]
         public void VerifyRemoteWebDriversAreSetup(BrowserType browserType, string seleniumWebDriversPath)
         {
-            using (var driver = _webDriverUtility.Create(browserType, seleniumWebDriversPath))
+            using (var driver = WebDriverFactory.Create(browserType, seleniumWebDriversPath))
             {
-                var webElementUtility = CreateWebElementUtility(driver);
-
                 driver.Navigate().GoToUrl(TestUrl);
-                var htmlOnPage1 = webElementUtility.FindElement(By.XPath("html"));
 
-                var sessionsLink = webElementUtility.FindElement(By.XPath("//a[@title='Sessions']"));
+                // DogFoodCon
+                driver.WaitUntilInitialPageLoad("DogFoodCon");
+                var pageLoadCheck = driver.WaitUntilFindElementForPageLoadCheck();
+
+                var sessionsLink = driver.WaitUntilFindElement(By.XPath("//a[@title='Sessions']"));
                 sessionsLink.Click();
-                webElementUtility.WaitUntilPageLoad(htmlOnPage1, "Sessions – DogFoodCon");
-                _webDriverUtility.Quit(browserType, driver);
+
+                // Sessions - DogFoodCon
+                driver.WaitUntilPageLoad("Sessions – DogFoodCon", pageLoadCheck);
+                pageLoadCheck = driver.WaitUntilFindElementForPageLoadCheck();
+
+                var session = driver.WaitUntilFindElement(By.XPath("//a[text()='Jeff McKenzie']"));
+
+                // This scrolls to the element, but doesn't verify it is visible to the user.
+                // I did this step just so you can see the session appear on the screen.  :)
+                driver.ScrollIntoView(session);
+
+                driver.Quit(browserType);
             }
         }
     }
