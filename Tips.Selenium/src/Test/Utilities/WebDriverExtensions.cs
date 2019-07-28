@@ -5,7 +5,7 @@ using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
 namespace OpenQA.Selenium
 {
-    internal static class WebDriverExtension
+    internal static class WebDriverExtensions
     {
         // Consider storing the DefaultWaitTime in the web.config.
         private const int DefaultWaitTime = 10;
@@ -28,21 +28,23 @@ namespace OpenQA.Selenium
             return driver.FindElement(locator);
         }
 
-        public static void WaitUntilInitialPageLoad(this IWebDriver driver, string titleOnNewPage)
+        public static IWebElement WaitUntilInitialPageLoad(this IWebDriver driver, string titleOnNewPage)
         {
             driver.Wait().Until(ExpectedConditions.TitleIs(titleOnNewPage));
+            return driver.WaitUntilFindElementForPageLoadCheck();
         }
 
-        public static void WaitUntilPageLoad(this IWebDriver driver, string titleOnNewPage, IWebElement elementOnOldPage)
+        public static IWebElement WaitUntilPageLoad(this IWebDriver driver, string titleOnNewPage, IWebElement elementOnOldPage)
         {
             // Inspiration:
             // http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
             // https://stackoverflow.com/questions/49866334/c-sharp-selenium-expectedconditions-is-obsolete
             driver.Wait().Until(ExpectedConditions.StalenessOf(elementOnOldPage));
             driver.Wait().Until(ExpectedConditions.TitleIs(titleOnNewPage));
+            return driver.WaitUntilFindElementForPageLoadCheck();
         }
 
-        public static IWebElement WaitUntilFindElementForPageLoadCheck(this IWebDriver driver) => driver.WaitUntilFindElement(By.XPath("html"));
+        private static IWebElement WaitUntilFindElementForPageLoadCheck(this IWebDriver driver) => driver.WaitUntilFindElement(By.XPath("html"));
 
         public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
         {
