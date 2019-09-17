@@ -1,0 +1,3 @@
+-- Initial setup steps
+-- Ex. For Feature/DEV/QA/Staging environments
+-- include a database refresh to a desired state

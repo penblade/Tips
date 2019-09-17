@@ -1,0 +1,3 @@
+-- Tear down steps
+-- Ex. Delete files necessary for the
+-- deployment but are no longer needed
