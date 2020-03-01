@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,10 +37,10 @@ namespace Tips.DependencyInjectionOfInternals
 
         private static void AddMvc(IServiceCollection services)
         {
-            var namespaceToTypes = typeof(ProcessRequest).Namespace;
+            //var namespaceToTypes = typeof(ProcessRequest).Namespace;
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
 
                 // I prefer that Enums should be serialized
                 // as their string names, not their integer
@@ -47,16 +49,19 @@ namespace Tips.DependencyInjectionOfInternals
                 // having references to Newtonsoft.Json
                 // in the project libraries that don't care
                 // about this "presentation" concern.
-
                 .AddJsonOptions(options =>
                 {
                     // Indented to make it easier to read during this demo.
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    options.SerializerSettings.Formatting = Formatting.Indented;
-                    //options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    options.SerializerSettings.SerializationBinder = new CustomJsonSerializationBinder(namespaceToTypes);
-                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.WriteIndented = true;
+                    options.JsonSerializerOptions.IgnoreNullValues = false;
+
+                    // [TODO] These are options are not supported in .NET Core 3.1 which uses the newer System.Text.Json.  I need to research how to handle this.
+
+                    //options.JsonSerializerOptions.SerializationBinder = new CustomJsonSerializationBinder(namespaceToTypes);
+                    //options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
                 });
         }
 
