@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Tips.ApiMessage.Models
+namespace Tips.ApiMessage.Context
 {
     public class TodoContext : DbContext
     {
@@ -8,6 +8,6 @@ namespace Tips.ApiMessage.Models
         {
         }
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItemEntity> TodoItems { get; set; }
     }
 }

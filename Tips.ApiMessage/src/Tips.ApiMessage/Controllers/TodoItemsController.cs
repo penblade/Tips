@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tips.ApiMessage.Context;
+using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.Messages;
 using Tips.ApiMessage.Models;
 
 namespace Tips.ApiMessage.Controllers
@@ -14,40 +21,120 @@ namespace Tips.ApiMessage.Controllers
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
+        private readonly IActionResultHandler<Request, Response> _actionResultHandler;
+        private readonly IRequestHandler<TodoItemsQuery, Response> _getTodoItemsRequestHandler;
+        private readonly IRequestHandler<TodoItemQuery, Response> _getTodoItemRequestHandler;
         private readonly TodoContext _context;
+        private string TraceId => HttpContext.TraceIdentifier;
 
-        public TodoItemsController(TodoContext context)
+        public TodoItemsController(IActionResultHandler<Request, Response> actionResultHandler,
+            IRequestHandler<TodoItemsQuery, Response> getTodoItemsRequestHandler, IRequestHandler<TodoItemQuery, Response> getTodoItemRequestHandler,
+            TodoContext context)
         {
+            _actionResultHandler = actionResultHandler;
+            _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
+            _getTodoItemRequestHandler = getTodoItemRequestHandler;
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItemDTO>>> GetTodoItems() => await _context.TodoItems.Select(x =>ItemToDTO(x)).ToListAsync();
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<ActionResult> GetTodoItems() => await HandleRequest(async () => await ProcessGetTodoItems());
+        public async Task<ActionResult> GetTodoItems()
+        {
+            var cancellationToken = new CancellationToken();
+            return await _actionResultHandler.Handle(null, cancellationToken, () => _getTodoItemsRequestHandler.Handle(null, cancellationToken));
+        }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItemDTO>> GetTodoItem(long id)
-        {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-
-            if (todoItem == null) return NotFound();
-
-            return ItemToDTO(todoItem);
-        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetTodoItem(long id) => await HandleRequest(async () => await ProcessGetTodoItem(id));
 
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTodoItem(long id, TodoItemDTO todoItemDTO)
+        public async Task<IActionResult> UpdateTodoItem(long id, TodoItem todoItem) => await ProcessUpdateTodoItem(id, todoItem);
+
+        // POST: api/TodoItems
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateTodoItem(TodoItem todoItem) => await ProcessCreateTodoItem(todoItem);
+
+        // DELETE: api/TodoItems/5
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteTodoItem(long id) => await ProcessDeleteTodoItem(id);
+
+
+
+
+
+
+
+        private async Task<ActionResult> HandleRequest(Func<Task<ActionResult>> method)
         {
-            if (id != todoItemDTO.Id) return BadRequest();
+            try
+            {
+                return await method();
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log exception
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
 
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null) return NotFound();
+        private async Task<ActionResult> ProcessGetTodoItem(long id)
+        {
+            return Ok(await new GetTodoItemRequestHandler<TodoItemsQuery, Response>(_context).Handle(new TodoItemQuery { Id = id }, new CancellationToken()));
+        }
 
-            todoItem.Name = todoItemDTO.Name;
-            todoItem.IsComplete = todoItemDTO.IsComplete;
+
+
+
+
+
+        private async Task<ActionResult> ProcessCreateTodoItem(TodoItem todoItem)
+        {
+            var todoItemEntity = new TodoItemEntity
+            {
+                IsComplete = todoItem.IsComplete,
+                Name = todoItem.Name
+            };
+
+            _context.TodoItems.Add(todoItemEntity);
+            await _context.SaveChangesAsync();
+
+            var response = new TodoItemResponse
+            {
+                ApiMessage = CreateApiMessage(HttpStatusCode.Created),
+                TodoItem = ItemToResponse(todoItemEntity)
+            };
+            return CreatedAtAction(nameof(CreateTodoItem), new { id = todoItemEntity.Id }, response);
+        }
+
+        private async Task<IActionResult> ProcessUpdateTodoItem(long id, TodoItem todoItem)
+        {
+            if (id != todoItem.Id) return BadRequest();
+
+            var todoItemEntity = await _context.TodoItems.FindAsync(id);
+            if (todoItemEntity == null) return NotFound();
+
+            todoItemEntity.Name = todoItem.Name;
+            todoItemEntity.IsComplete = todoItem.IsComplete;
 
             try
             {
@@ -55,33 +142,27 @@ namespace Tips.ApiMessage.Controllers
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
             {
-                return NotFound();
+                var notification = new NotificationBuilder()
+                    .Id("9E1A675F-3073-4D78-9A22-317ECB1D88DC")
+                    .Severity(Severity.Error)
+                    .Detail($"TodoItem {id} was not found.")
+                    .Build();
+                return NotFound(new Response
+                {
+                    ApiMessage = CreateApiMessage(HttpStatusCode.NotFound, new List<Notification> {notification})
+                });
             }
 
-            return NoContent();
-        }
-
-        // POST: api/TodoItems
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<TodoItem>> CreateTodoItem(TodoItemDTO todoItemDTO)
-        {
-            var todoItem = new TodoItem
+            // I prefer to return an Ok response with a message that includes any possible notifications.
+            // I find it's easier for the client to have a standard response to implement.
+            // return NoContent();
+            return Ok(new Response
             {
-                IsComplete = todoItemDTO.IsComplete,
-                Name = todoItemDTO.Name
-            };
-
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, ItemToDTO(todoItem));
+                ApiMessage = CreateApiMessage(HttpStatusCode.OK)
+            });
         }
 
-        // DELETE: api/TodoItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        private async Task<IActionResult> ProcessDeleteTodoItem(long id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null)
@@ -97,12 +178,20 @@ namespace Tips.ApiMessage.Controllers
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
 
-        private static TodoItemDTO ItemToDTO(TodoItem todoItem) =>
-            new TodoItemDTO
+        private static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
+            new TodoItem
             {
                 Id = todoItem.Id,
                 Name = todoItem.Name,
                 IsComplete = todoItem.IsComplete
+            };
+
+        private Messages.ApiMessage CreateApiMessage(HttpStatusCode httpStatusCode, IEnumerable<Notification> notifications = null) =>
+            new Messages.ApiMessage
+            {
+                TraceId = TraceId,
+                Status = (int) httpStatusCode,
+                Notifications = notifications
             };
     }
 }

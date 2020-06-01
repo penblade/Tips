@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.Context;
+using Tips.ApiMessage.Handlers;
 
 namespace Tips.ApiMessage
 {
@@ -21,7 +22,15 @@ namespace Tips.ApiMessage
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            ConfigureDependencies(services);
             services.AddControllers();
+        }
+
+        private static void ConfigureDependencies(IServiceCollection services)
+        {
+            services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
+            services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, Response>), typeof(GetTodoItemsRequestHandler<TodoItemsQuery, Response>));
+            services.AddScoped(typeof(IRequestHandler<TodoItemQuery, Response>), typeof(GetTodoItemRequestHandler<TodoItemQuery, Response>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
