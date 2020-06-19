@@ -19,19 +19,15 @@ namespace Tips.ApiMessage.Controllers
 
     [Route("api/TodoItems")]
     [ApiController]
-    public class TodoItemsController : ControllerBase
+    public class TodoItemsController : Controller
     {
-        private readonly IActionResultHandler<Request, Response> _actionResultHandler;
         private readonly IRequestHandler<TodoItemsQuery, Response> _getTodoItemsRequestHandler;
         private readonly IRequestHandler<TodoItemQuery, Response> _getTodoItemRequestHandler;
         private readonly TodoContext _context;
         private string TraceId => HttpContext.TraceIdentifier;
 
-        public TodoItemsController(IActionResultHandler<Request, Response> actionResultHandler,
-            IRequestHandler<TodoItemsQuery, Response> getTodoItemsRequestHandler, IRequestHandler<TodoItemQuery, Response> getTodoItemRequestHandler,
-            TodoContext context)
+        public TodoItemsController(IRequestHandler<TodoItemsQuery, Response> getTodoItemsRequestHandler, IRequestHandler<TodoItemQuery, Response> getTodoItemRequestHandler, TodoContext context)
         {
-            _actionResultHandler = actionResultHandler;
             _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
             _getTodoItemRequestHandler = getTodoItemRequestHandler;
             _context = context;
@@ -41,11 +37,8 @@ namespace Tips.ApiMessage.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //public async Task<ActionResult> GetTodoItems() => await HandleRequest(async () => await ProcessGetTodoItems());
-        public async Task<ActionResult> GetTodoItems()
-        {
-            var cancellationToken = new CancellationToken();
-            return await _actionResultHandler.Handle(null, cancellationToken, () => _getTodoItemsRequestHandler.Handle(null, cancellationToken));
-        }
+        //public async Task<IActionResult> GetTodoItems() => await _actionResultHandler.Handle(null, cancellationToken, () => _getTodoItemsRequestHandler.Handle(null, new CancellationToken()));
+        public async Task<IActionResult> GetTodoItems() => await Handle((request) => _getTodoItemsRequestHandler.Handle(new TodoItemsQuery(), new CancellationToken()), null);
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]

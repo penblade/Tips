@@ -16,7 +16,7 @@ namespace Tips.ApiMessage.Handlers
 
         public async Task<Response> Handle(TodoItemsQuery request, CancellationToken cancellationToken)
         {
-            var todoItems = await _context.TodoItems.Select(x => ItemToResponse(x)).ToListAsync(cancellationToken);
+            var todoItems = await _context.TodoItems.Select(x => TodoItemMapper.ItemToResponse(x)).ToListAsync(cancellationToken);
 
             return new TodoItemsResponse
             {
@@ -27,13 +27,5 @@ namespace Tips.ApiMessage.Handlers
                 TodoItems = todoItems
             };
         }
-
-        private static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
-            new TodoItem
-            {
-                Id = todoItem.Id,
-                Name = todoItem.Name,
-                IsComplete = todoItem.IsComplete
-            };
     }
 }

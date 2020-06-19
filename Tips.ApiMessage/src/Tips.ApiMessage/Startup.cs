@@ -28,7 +28,7 @@ namespace Tips.ApiMessage
 
         private static void ConfigureDependencies(IServiceCollection services)
         {
-            services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
+            //services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
             services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, Response>), typeof(GetTodoItemsRequestHandler<TodoItemsQuery, Response>));
             services.AddScoped(typeof(IRequestHandler<TodoItemQuery, Response>), typeof(GetTodoItemRequestHandler<TodoItemQuery, Response>));
         }
