@@ -21,12 +21,15 @@ namespace Tips.ApiMessage.Controllers
     [ApiController]
     public class TodoItemsController : Controller
     {
-        private readonly IRequestHandler<TodoItemsQuery, Response> _getTodoItemsRequestHandler;
-        private readonly IRequestHandler<TodoItemQuery, Response> _getTodoItemRequestHandler;
+        private readonly IRequestHandler<TodoItemsQuery, TodoItemsResponse> _getTodoItemsRequestHandler;
+        private readonly IRequestHandler<TodoItemQuery, TodoItemResponse> _getTodoItemRequestHandler;
         private readonly TodoContext _context;
         private string TraceId => HttpContext.TraceIdentifier;
 
-        public TodoItemsController(IRequestHandler<TodoItemsQuery, Response> getTodoItemsRequestHandler, IRequestHandler<TodoItemQuery, Response> getTodoItemRequestHandler, TodoContext context)
+        public TodoItemsController(
+            IRequestHandler<TodoItemsQuery, TodoItemsResponse> getTodoItemsRequestHandler,
+            IRequestHandler<TodoItemQuery, TodoItemResponse> getTodoItemRequestHandler,
+            TodoContext context)
         {
             _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
             _getTodoItemRequestHandler = getTodoItemRequestHandler;
@@ -36,16 +39,14 @@ namespace Tips.ApiMessage.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<ActionResult> GetTodoItems() => await HandleRequest(async () => await ProcessGetTodoItems());
-        //public async Task<IActionResult> GetTodoItems() => await _actionResultHandler.Handle(null, cancellationToken, () => _getTodoItemsRequestHandler.Handle(null, new CancellationToken()));
-        public async Task<IActionResult> GetTodoItems() => await Handle((request) => _getTodoItemsRequestHandler.Handle(new TodoItemsQuery(), new CancellationToken()), null);
+        public async Task<IActionResult> GetTodoItems() => await Handle(_getTodoItemsRequestHandler.Handle, new TodoItemsQuery(), new CancellationToken());
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> GetTodoItem(long id) => await HandleRequest(async () => await ProcessGetTodoItem(id));
+        public async Task<IActionResult> GetTodoItem(long id) => await Handle(_getTodoItemRequestHandler.Handle, new TodoItemQuery { Id = id }, new CancellationToken());
 
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -70,35 +71,6 @@ namespace Tips.ApiMessage.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTodoItem(long id) => await ProcessDeleteTodoItem(id);
-
-
-
-
-
-
-
-        private async Task<ActionResult> HandleRequest(Func<Task<ActionResult>> method)
-        {
-            try
-            {
-                return await method();
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log exception
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
-        private async Task<ActionResult> ProcessGetTodoItem(long id)
-        {
-            return Ok(await new GetTodoItemRequestHandler<TodoItemsQuery, Response>(_context).Handle(new TodoItemQuery { Id = id }, new CancellationToken()));
-        }
-
-
-
-
-
 
         private async Task<ActionResult> ProcessCreateTodoItem(TodoItem todoItem)
         {

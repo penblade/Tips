@@ -6,19 +6,21 @@ using Tips.ApiMessage.Models;
 
 namespace Tips.ApiMessage.Handlers
 {
-    public class GetTodoItemRequestHandler<TRequest, TResponse> : IRequestHandler<TodoItemQuery, Response>
+    public class GetTodoItemRequestHandler : IRequestHandler<TodoItemQuery, TodoItemResponse>
     {
         private readonly TodoContext _context;
 
         public GetTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response> Handle(TodoItemQuery request, CancellationToken cancellationToken)
+        public async Task<TodoItemResponse> Handle(TodoItemQuery request, CancellationToken cancellationToken)
         {
             var todoItem = await _context.TodoItems.FindAsync(request.Id);
 
-            //if (todoItem == null) return NotFound();
+            return todoItem != null ? Found(todoItem) : NotFound();
+        }
 
-            return new TodoItemResponse
+        private static TodoItemResponse Found(TodoItemEntity todoItem) =>
+            new TodoItemResponse
             {
                 ApiMessage = new Messages.ApiMessage
                 {
@@ -26,7 +28,16 @@ namespace Tips.ApiMessage.Handlers
                 },
                 TodoItem = ItemToResponse(todoItem)
             };
-        }
+
+        private static TodoItemResponse NotFound() =>
+            new TodoItemResponse
+            {
+                ApiMessage = new Messages.ApiMessage
+                {
+                    Status = (int) HttpStatusCode.NotFound
+                },
+                TodoItem = null
+            };
 
         private static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
             new TodoItem

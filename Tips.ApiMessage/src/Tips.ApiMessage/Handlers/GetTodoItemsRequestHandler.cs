@@ -8,13 +8,13 @@ using Tips.ApiMessage.Models;
 
 namespace Tips.ApiMessage.Handlers
 {
-    public class GetTodoItemsRequestHandler<TRequest, TResponse> : IRequestHandler<TodoItemsQuery, Response>
+    public class GetTodoItemsRequestHandler : IRequestHandler<TodoItemsQuery, TodoItemsResponse>
     {
         private readonly TodoContext _context;
 
         public GetTodoItemsRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response> Handle(TodoItemsQuery request, CancellationToken cancellationToken)
+        public async Task<TodoItemsResponse> Handle(TodoItemsQuery request, CancellationToken cancellationToken)
         {
             var todoItems = await _context.TodoItems.Select(x => TodoItemMapper.ItemToResponse(x)).ToListAsync(cancellationToken);
 

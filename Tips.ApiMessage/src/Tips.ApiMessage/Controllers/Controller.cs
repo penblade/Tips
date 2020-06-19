@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tips.ApiMessage.Handlers;
@@ -8,15 +9,15 @@ namespace Tips.ApiMessage.Controllers
 {
     public class Controller : ControllerBase
     {
-        protected async Task<IActionResult> Handle(Func<Request, Task<Response>> method, Request request) => await TryHandle(() => method(request), request);
+        public delegate Task<TResponse> HandleDelegate<in TRequest, TResponse>(TRequest request, CancellationToken cancellationToken);
 
-        private static async Task<IActionResult> TryHandle(Func<Task<Response>> method, Request request)
+        protected async Task<IActionResult> Handle<TRequest, TResponse>(HandleDelegate<TRequest, TResponse> method, TRequest request, CancellationToken cancellationToken) where TResponse : Response
         {
             try
             {
                 // TODO: Log call to service.
                 // TODO: Log request if provided.
-                var response = await method();
+                var response = await method(request, cancellationToken);
                 var actionResult = CreateActionResult(response);
 
                 // TODO: Log actionResult
@@ -29,7 +30,7 @@ namespace Tips.ApiMessage.Controllers
             }
         }
 
-        private static IActionResult CreateActionResult(Response response) =>
+        private static IActionResult CreateActionResult<TResponse>(TResponse response) where TResponse : Response =>
             response?.ApiMessage?.Status switch
             {
                 null => throw new Exception("HttpStatusCode was not set."),

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Context;
 using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.Models;
 
 namespace Tips.ApiMessage
 {
@@ -29,8 +30,8 @@ namespace Tips.ApiMessage
         private static void ConfigureDependencies(IServiceCollection services)
         {
             //services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
-            services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, Response>), typeof(GetTodoItemsRequestHandler<TodoItemsQuery, Response>));
-            services.AddScoped(typeof(IRequestHandler<TodoItemQuery, Response>), typeof(GetTodoItemRequestHandler<TodoItemQuery, Response>));
+            services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, TodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<TodoItemQuery, TodoItemResponse>), typeof(GetTodoItemRequestHandler));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
