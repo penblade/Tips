@@ -26,19 +26,17 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
         private static DeleteTodoItemResponse NoContent() =>
             new DeleteTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.NoContent
-                }
+                Notifications = null,
+                Status = (int) HttpStatusCode.NoContent,
+                // TraceId = TraceId
             };
 
         private static DeleteTodoItemResponse NotFound() =>
             new DeleteTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.NotFound
-                }
+                Notifications = null,
+                Status = (int) HttpStatusCode.NotFound,
+                // TraceId = TraceId
             };
     }
 }

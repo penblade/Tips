@@ -23,14 +23,16 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreateTodoItemResponse
+            return Created(todoItemEntity);
+        }
+
+        private static CreateTodoItemResponse Created(TodoItemEntity todoItemEntity) =>
+            new CreateTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.Created
-                },
+                Notifications = null,
+                Status = (int) HttpStatusCode.Created,
+                // TraceId = TraceId,
                 Id = todoItemEntity.Id,
             };
-        }
     }
 }

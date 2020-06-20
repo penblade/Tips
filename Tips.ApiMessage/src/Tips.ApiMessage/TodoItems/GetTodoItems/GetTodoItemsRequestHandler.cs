@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Mappers;
+using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.GetTodoItems
 {
@@ -19,14 +21,16 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
         {
             var todoItems = await _context.TodoItems.Select(x => TodoItemMapper.ItemToResponse(x)).ToListAsync(cancellationToken);
 
-            return new GetTodoItemsResponse
+            return Ok(todoItems);
+        }
+
+        private static GetTodoItemsResponse Ok(IEnumerable<TodoItem> todoItems) =>
+            new GetTodoItemsResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.OK,
-                },
+                Notifications = null,
+                Status = (int) HttpStatusCode.OK,
+                // TraceId = TraceId,
                 TodoItems = todoItems
             };
-        }
     }
 }

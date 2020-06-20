@@ -32,7 +32,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         }
 
         private IActionResult CreateActionResult<TResponse>(TResponse response) where TResponse : Response =>
-            response?.ApiMessage?.Status switch
+            response?.Status switch
             {
                 null => throw new Exception("HttpStatusCode was not set."),
                 (int)HttpStatusCode.OK => new OkObjectResult(response),
@@ -46,7 +46,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                                         //new { id = 1 }, // TODO: Hmm... need to get this from the response or do something different.
                     new { id = (response as CreateTodoItemResponse).Id }, // TODO: Hmm... not very clean.  Look at this later.
                     response),
-                _ => throw new Exception($"HttpStatusCode {response.ApiMessage.Status} was not handled.")
+                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
             };
 
         private static StatusCodeResult CreateInternalServerError() => new StatusCodeResult((int)HttpStatusCode.InternalServerError);

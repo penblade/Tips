@@ -32,7 +32,6 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(request.Id))
             {
-                var notification = CreateNotFoundNotification(request);
                 return NotFound(new List<Notification> {CreateNotFoundNotification(request)});
             }
 
@@ -47,23 +46,25 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
         private static UpdateTodoItemResponse BadRequest(IEnumerable<Notification> notifications = null) =>
             new UpdateTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    //TraceId = TraceId,
-                    Status = (int) HttpStatusCode.BadRequest,
-                    Notifications = notifications
-                }
+                Notifications = notifications,
+                Status = (int)HttpStatusCode.BadRequest
+                //TraceId = TraceId
             };
 
         private static UpdateTodoItemResponse Ok(IEnumerable<Notification> notifications = null) =>
             new UpdateTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    //TraceId = TraceId,
-                    Status = (int) HttpStatusCode.OK,
-                    Notifications = notifications
-                }
+                Notifications = notifications,
+                Status = (int) HttpStatusCode.OK
+                //TraceId = TraceId
+            };
+
+        private static UpdateTodoItemResponse NotFound(IEnumerable<Notification> notifications = null) =>
+            new UpdateTodoItemResponse
+            {
+                Notifications = notifications,
+                Status = (int)HttpStatusCode.NotFound
+                //TraceId = TraceId
             };
 
         private static Notification CreateNotSameIdNotification(UpdateTodoItemRequest request) =>
@@ -79,15 +80,5 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
                 .Severity(Severity.Error)
                 .Detail($"TodoItem {request.Id} was not found.")
                 .Build();
-
-        private static UpdateTodoItemResponse NotFound(IEnumerable<Notification> notifications = null) =>
-            new UpdateTodoItemResponse
-            {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Notifications = notifications,
-                    Status = (int)HttpStatusCode.NotFound
-                }
-            };
     }
 }

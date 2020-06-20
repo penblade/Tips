@@ -23,20 +23,18 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
         private static GetTodoItemResponse Found(TodoItemEntity todoItem) =>
             new GetTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.OK
-                },
+                Notifications = null,
+                Status = (int) HttpStatusCode.OK,
+                // TraceId = TraceId,
                 TodoItem = ItemToResponse(todoItem)
             };
 
         private static GetTodoItemResponse NotFound() =>
             new GetTodoItemResponse
             {
-                ApiMessage = new Contracts.ApiMessage
-                {
-                    Status = (int) HttpStatusCode.NotFound
-                },
+                Notifications = null,
+                Status = (int) HttpStatusCode.NotFound,
+                // TraceId = TraceId,
                 TodoItem = null
             };
 
