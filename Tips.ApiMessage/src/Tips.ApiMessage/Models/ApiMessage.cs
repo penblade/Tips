@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tips.ApiMessage.Messages
+namespace Tips.ApiMessage.Models
 {
     public class ApiMessage
     {

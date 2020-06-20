@@ -3,24 +3,25 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Tips.ApiMessage.Context;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Mappers;
 
-namespace Tips.ApiMessage.Handlers
+namespace Tips.ApiMessage.TodoItems.GetTodoItems
 {
-    public class GetTodoItemsRequestHandler : IRequestHandler<TodoItemsQuery, TodoItemsResponse>
+    public class GetTodoItemsRequestHandler : IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse>
     {
         private readonly TodoContext _context;
 
         public GetTodoItemsRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<TodoItemsResponse> Handle(TodoItemsQuery request, CancellationToken cancellationToken)
+        public async Task<GetTodoItemsResponse> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken)
         {
             var todoItems = await _context.TodoItems.Select(x => TodoItemMapper.ItemToResponse(x)).ToListAsync(cancellationToken);
 
-            return new TodoItemsResponse
+            return new GetTodoItemsResponse
             {
-                ApiMessage = new Messages.ApiMessage
+                ApiMessage = new ApiMessage.Models.ApiMessage
                 {
                     Status = (int) HttpStatusCode.OK,
                 },

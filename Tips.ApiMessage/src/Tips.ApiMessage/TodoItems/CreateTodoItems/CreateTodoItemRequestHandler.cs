@@ -1,18 +1,18 @@
 ﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Tips.ApiMessage.Context;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.TodoItems.Context;
 
-namespace Tips.ApiMessage.Handlers
+namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
-    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse>
+    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>
     {
         private readonly TodoContext _context;
 
         public CreateTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<CreateTodoItemResponse> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<CreateTodoItemResponse> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
             var todoItemEntity = new TodoItemEntity
             {
@@ -25,7 +25,7 @@ namespace Tips.ApiMessage.Handlers
 
             return new CreateTodoItemResponse
             {
-                ApiMessage = new Messages.ApiMessage
+                ApiMessage = new ApiMessage.Models.ApiMessage
                 {
                     Status = (int) HttpStatusCode.Created
                 },

@@ -3,10 +3,10 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.Models;
+using Tips.ApiMessage.TodoItems.CreateTodoItems;
 
-namespace Tips.ApiMessage.Controllers
+namespace Tips.ApiMessage.TodoItems.Controllers
 {
     public class Controller : ControllerBase
     {

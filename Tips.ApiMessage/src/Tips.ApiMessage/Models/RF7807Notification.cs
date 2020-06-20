@@ -1,4 +1,4 @@
-﻿namespace Tips.ApiMessage.Messages
+﻿namespace Tips.ApiMessage.Models
 {
     // RFC 7807
     // https://tools.ietf.org/html/rfc7807

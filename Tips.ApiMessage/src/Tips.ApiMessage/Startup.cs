@@ -4,9 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Tips.ApiMessage.Context;
 using Tips.ApiMessage.Handlers;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.CreateTodoItems;
+using Tips.ApiMessage.TodoItems.GetTodoItem;
+using Tips.ApiMessage.TodoItems.GetTodoItems;
 
 namespace Tips.ApiMessage
 {
@@ -30,9 +32,9 @@ namespace Tips.ApiMessage
         private static void ConfigureDependencies(IServiceCollection services)
         {
             //services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
-            services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, TodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
-            services.AddScoped(typeof(IRequestHandler<TodoItemQuery, TodoItemResponse>), typeof(GetTodoItemRequestHandler));
-            services.AddScoped(typeof(IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>), typeof(GetTodoItemRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

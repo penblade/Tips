@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -7,12 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Tips.ApiMessage.Context;
 using Tips.ApiMessage.Handlers;
-using Tips.ApiMessage.Messages;
 using Tips.ApiMessage.Models;
+using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.CreateTodoItems;
+using Tips.ApiMessage.TodoItems.GetTodoItem;
+using Tips.ApiMessage.TodoItems.GetTodoItems;
+using Tips.ApiMessage.TodoItems.Models;
 
-namespace Tips.ApiMessage.Controllers
+namespace Tips.ApiMessage.TodoItems.Controllers
 {
     // Created based on the Tutorial: Create a web API with ASP.NET Core
     // https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-3.1&tabs=visual-studio
@@ -21,16 +23,16 @@ namespace Tips.ApiMessage.Controllers
     [ApiController]
     public class TodoItemsController : Controller
     {
-        private readonly IRequestHandler<TodoItemsQuery, TodoItemsResponse> _getTodoItemsRequestHandler;
-        private readonly IRequestHandler<TodoItemQuery, TodoItemResponse> _getTodoItemRequestHandler;
-        private readonly IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse> _createTodoItemRequestHandler;
+        private readonly IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse> _getTodoItemsRequestHandler;
+        private readonly IRequestHandler<GetTodoItemRequest, GetTodoItemResponse> _getTodoItemRequestHandler;
+        private readonly IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> _createTodoItemRequestHandler;
         private readonly TodoContext _context;
         private string TraceId => HttpContext.TraceIdentifier;
 
         public TodoItemsController(
-            IRequestHandler<TodoItemsQuery, TodoItemsResponse> getTodoItemsRequestHandler,
-            IRequestHandler<TodoItemQuery, TodoItemResponse> getTodoItemRequestHandler,
-            IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse> createTodoItemRequestHandler,
+            IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse> getTodoItemsRequestHandler,
+            IRequestHandler<GetTodoItemRequest, GetTodoItemResponse> getTodoItemRequestHandler,
+            IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> createTodoItemRequestHandler,
             TodoContext context)
         {
             _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
@@ -42,14 +44,14 @@ namespace Tips.ApiMessage.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTodoItems() => await Handle(_getTodoItemsRequestHandler.Handle, new TodoItemsQuery(), new CancellationToken());
+        public async Task<IActionResult> GetTodoItems() => await Handle(_getTodoItemsRequestHandler.Handle, new GetTodoItemsRequest(), new CancellationToken());
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTodoItem(long id) => await Handle(_getTodoItemRequestHandler.Handle, new TodoItemQuery { Id = id }, new CancellationToken());
+        public async Task<IActionResult> GetTodoItem(long id) => await Handle(_getTodoItemRequestHandler.Handle, new GetTodoItemRequest { Id = id }, new CancellationToken());
 
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -67,7 +69,7 @@ namespace Tips.ApiMessage.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateTodoItem(TodoItem todoItem) => await Handle(_createTodoItemRequestHandler.Handle, new CreateTodoItemCommand { TodoItem = todoItem }, new CancellationToken());
+        public async Task<IActionResult> CreateTodoItem(TodoItem todoItem) => await Handle(_createTodoItemRequestHandler.Handle, new CreateTodoItemRequest { TodoItem = todoItem }, new CancellationToken());
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
@@ -135,8 +137,8 @@ namespace Tips.ApiMessage.Controllers
                 IsComplete = todoItem.IsComplete
             };
 
-        private Messages.ApiMessage CreateApiMessage(HttpStatusCode httpStatusCode, IEnumerable<Notification> notifications = null) =>
-            new Messages.ApiMessage
+        private ApiMessage.Models.ApiMessage CreateApiMessage(HttpStatusCode httpStatusCode, IEnumerable<Notification> notifications = null) =>
+            new ApiMessage.Models.ApiMessage
             {
                 TraceId = TraceId,
                 Status = (int) httpStatusCode,

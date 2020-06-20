@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Tips.ApiMessage.Context
+namespace Tips.ApiMessage.TodoItems.Context
 {
     public class TodoContext : DbContext
     {

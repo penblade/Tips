@@ -1,7 +1,7 @@
-﻿using Tips.ApiMessage.Context;
-using Tips.ApiMessage.Models;
+﻿using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Models;
 
-namespace Tips.ApiMessage.Handlers
+namespace Tips.ApiMessage.TodoItems.Mappers
 {
     internal class TodoItemMapper
     {

@@ -1,4 +1,4 @@
-﻿namespace Tips.ApiMessage.Handlers
+﻿namespace Tips.ApiMessage.Models
 {
     public class Request
     {

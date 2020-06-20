@@ -1,6 +1,6 @@
-﻿using Tips.ApiMessage.Handlers;
+﻿using Tips.ApiMessage.Models;
 
-namespace Tips.ApiMessage.Models
+namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
     public class CreateTodoItemResponse : Response
     {

@@ -1,38 +1,39 @@
 ﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Tips.ApiMessage.Context;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Models;
 
-namespace Tips.ApiMessage.Handlers
+namespace Tips.ApiMessage.TodoItems.GetTodoItem
 {
-    public class GetTodoItemRequestHandler : IRequestHandler<TodoItemQuery, TodoItemResponse>
+    public class GetTodoItemRequestHandler : IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>
     {
         private readonly TodoContext _context;
 
         public GetTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<TodoItemResponse> Handle(TodoItemQuery request, CancellationToken cancellationToken)
+        public async Task<GetTodoItemResponse> Handle(GetTodoItemRequest request, CancellationToken cancellationToken)
         {
             var todoItem = await _context.TodoItems.FindAsync(request.Id);
 
             return todoItem != null ? Found(todoItem) : NotFound();
         }
 
-        private static TodoItemResponse Found(TodoItemEntity todoItem) =>
-            new TodoItemResponse
+        private static GetTodoItemResponse Found(TodoItemEntity todoItem) =>
+            new GetTodoItemResponse
             {
-                ApiMessage = new Messages.ApiMessage
+                ApiMessage = new ApiMessage.Models.ApiMessage
                 {
                     Status = (int) HttpStatusCode.OK
                 },
                 TodoItem = ItemToResponse(todoItem)
             };
 
-        private static TodoItemResponse NotFound() =>
-            new TodoItemResponse
+        private static GetTodoItemResponse NotFound() =>
+            new GetTodoItemResponse
             {
-                ApiMessage = new Messages.ApiMessage
+                ApiMessage = new ApiMessage.Models.ApiMessage
                 {
                     Status = (int) HttpStatusCode.NotFound
                 },
