@@ -10,6 +10,7 @@ using Tips.ApiMessage.TodoItems.CreateTodoItems;
 using Tips.ApiMessage.TodoItems.DeleteTodoItems;
 using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
+using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
 namespace Tips.ApiMessage
 {
@@ -37,6 +38,7 @@ namespace Tips.ApiMessage
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>), typeof(GetTodoItemRequestHandler));
             services.AddScoped(typeof(IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
             services.AddScoped(typeof(IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse>), typeof(DeleteTodoItemRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<UpdateTodoItemRequest, UpdateTodoItemResponse>), typeof(UpdateTodoItemRequestHandler));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

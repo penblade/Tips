@@ -15,10 +15,7 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
         public async Task<DeleteTodoItemResponse> Handle(DeleteTodoItemRequest request, CancellationToken cancellationToken)
         {
             var todoItem = await _context.TodoItems.FindAsync(request.Id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
+            if (todoItem == null) return NotFound();
 
             _context.TodoItems.Remove(todoItem);
             await _context.SaveChangesAsync(cancellationToken);
