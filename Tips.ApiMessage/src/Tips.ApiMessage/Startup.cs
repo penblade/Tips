@@ -32,6 +32,7 @@ namespace Tips.ApiMessage
             //services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
             services.AddScoped(typeof(IRequestHandler<TodoItemsQuery, TodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<TodoItemQuery, TodoItemResponse>), typeof(GetTodoItemRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

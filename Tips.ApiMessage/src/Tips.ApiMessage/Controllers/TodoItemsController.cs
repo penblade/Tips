@@ -23,16 +23,19 @@ namespace Tips.ApiMessage.Controllers
     {
         private readonly IRequestHandler<TodoItemsQuery, TodoItemsResponse> _getTodoItemsRequestHandler;
         private readonly IRequestHandler<TodoItemQuery, TodoItemResponse> _getTodoItemRequestHandler;
+        private readonly IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse> _createTodoItemRequestHandler;
         private readonly TodoContext _context;
         private string TraceId => HttpContext.TraceIdentifier;
 
         public TodoItemsController(
             IRequestHandler<TodoItemsQuery, TodoItemsResponse> getTodoItemsRequestHandler,
             IRequestHandler<TodoItemQuery, TodoItemResponse> getTodoItemRequestHandler,
+            IRequestHandler<CreateTodoItemCommand, CreateTodoItemResponse> createTodoItemRequestHandler,
             TodoContext context)
         {
             _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
             _getTodoItemRequestHandler = getTodoItemRequestHandler;
+            _createTodoItemRequestHandler = createTodoItemRequestHandler;
             _context = context;
         }
 
@@ -64,32 +67,13 @@ namespace Tips.ApiMessage.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> CreateTodoItem(TodoItem todoItem) => await ProcessCreateTodoItem(todoItem);
+        public async Task<IActionResult> CreateTodoItem(TodoItem todoItem) => await Handle(_createTodoItemRequestHandler.Handle, new CreateTodoItemCommand { TodoItem = todoItem }, new CancellationToken());
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTodoItem(long id) => await ProcessDeleteTodoItem(id);
-
-        private async Task<ActionResult> ProcessCreateTodoItem(TodoItem todoItem)
-        {
-            var todoItemEntity = new TodoItemEntity
-            {
-                IsComplete = todoItem.IsComplete,
-                Name = todoItem.Name
-            };
-
-            _context.TodoItems.Add(todoItemEntity);
-            await _context.SaveChangesAsync();
-
-            var response = new TodoItemResponse
-            {
-                ApiMessage = CreateApiMessage(HttpStatusCode.Created),
-                TodoItem = ItemToResponse(todoItemEntity)
-            };
-            return CreatedAtAction(nameof(CreateTodoItem), new { id = todoItemEntity.Id }, response);
-        }
 
         private async Task<IActionResult> ProcessUpdateTodoItem(long id, TodoItem todoItem)
         {
