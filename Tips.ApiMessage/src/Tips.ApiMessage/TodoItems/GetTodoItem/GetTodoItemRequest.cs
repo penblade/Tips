@@ -1,4 +1,4 @@
-﻿using Tips.ApiMessage.Models;
+﻿using Tips.ApiMessage.Contracts;
 
 namespace Tips.ApiMessage.TodoItems.GetTodoItem
 {

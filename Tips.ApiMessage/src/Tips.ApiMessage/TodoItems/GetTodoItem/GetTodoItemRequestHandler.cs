@@ -23,7 +23,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
         private static GetTodoItemResponse Found(TodoItemEntity todoItem) =>
             new GetTodoItemResponse
             {
-                ApiMessage = new ApiMessage.Models.ApiMessage
+                ApiMessage = new Contracts.ApiMessage
                 {
                     Status = (int) HttpStatusCode.OK
                 },
@@ -33,7 +33,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
         private static GetTodoItemResponse NotFound() =>
             new GetTodoItemResponse
             {
-                ApiMessage = new ApiMessage.Models.ApiMessage
+                ApiMessage = new Contracts.ApiMessage
                 {
                     Status = (int) HttpStatusCode.NotFound
                 },

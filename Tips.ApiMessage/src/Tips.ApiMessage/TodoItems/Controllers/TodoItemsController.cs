@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Handlers;
-using Tips.ApiMessage.Models;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
+using Tips.ApiMessage.TodoItems.DeleteTodoItems;
 using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
 using Tips.ApiMessage.TodoItems.Models;
@@ -26,6 +27,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         private readonly IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse> _getTodoItemsRequestHandler;
         private readonly IRequestHandler<GetTodoItemRequest, GetTodoItemResponse> _getTodoItemRequestHandler;
         private readonly IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> _createTodoItemRequestHandler;
+        private readonly IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse> _deleteTodoItemRequestHandler;
         private readonly TodoContext _context;
         private string TraceId => HttpContext.TraceIdentifier;
 
@@ -33,11 +35,13 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse> getTodoItemsRequestHandler,
             IRequestHandler<GetTodoItemRequest, GetTodoItemResponse> getTodoItemRequestHandler,
             IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> createTodoItemRequestHandler,
+            IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse> deleteTodoItemRequestHandler,
             TodoContext context)
         {
             _getTodoItemsRequestHandler = getTodoItemsRequestHandler;
             _getTodoItemRequestHandler = getTodoItemRequestHandler;
             _createTodoItemRequestHandler = createTodoItemRequestHandler;
+            _deleteTodoItemRequestHandler = deleteTodoItemRequestHandler;
             _context = context;
         }
 
@@ -75,7 +79,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteTodoItem(long id) => await ProcessDeleteTodoItem(id);
+        public async Task<IActionResult> DeleteTodoItem(long id) => await Handle(_deleteTodoItemRequestHandler.Handle, new DeleteTodoItemRequest { Id = id }, new CancellationToken());
 
         private async Task<IActionResult> ProcessUpdateTodoItem(long id, TodoItem todoItem)
         {
@@ -113,32 +117,10 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             });
         }
 
-        private async Task<IActionResult> ProcessDeleteTodoItem(long id)
-        {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.TodoItems.Remove(todoItem);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
 
-        private static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
-            new TodoItem
-            {
-                Id = todoItem.Id,
-                Name = todoItem.Name,
-                IsComplete = todoItem.IsComplete
-            };
-
-        private ApiMessage.Models.ApiMessage CreateApiMessage(HttpStatusCode httpStatusCode, IEnumerable<Notification> notifications = null) =>
-            new ApiMessage.Models.ApiMessage
+        private Contracts.ApiMessage CreateApiMessage(HttpStatusCode httpStatusCode, IEnumerable<Notification> notifications = null) =>
+            new Contracts.ApiMessage
             {
                 TraceId = TraceId,
                 Status = (int) httpStatusCode,

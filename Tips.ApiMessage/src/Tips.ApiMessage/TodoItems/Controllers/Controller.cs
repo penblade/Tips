@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tips.ApiMessage.Models;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
 
 namespace Tips.ApiMessage.TodoItems.Controllers
@@ -37,6 +37,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 null => throw new Exception("HttpStatusCode was not set."),
                 (int)HttpStatusCode.OK => new OkObjectResult(response),
                 (int)HttpStatusCode.BadRequest => new BadRequestObjectResult(response),
+                (int)HttpStatusCode.NoContent => new NoContentResult(),
                 (int)HttpStatusCode.NotFound => new NotFoundObjectResult(response),
                 (int)HttpStatusCode.UnprocessableEntity => new UnprocessableEntityObjectResult(response),
                 (int)HttpStatusCode.Created => new CreatedAtActionResult(

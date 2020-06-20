@@ -25,7 +25,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
             return new CreateTodoItemResponse
             {
-                ApiMessage = new ApiMessage.Models.ApiMessage
+                ApiMessage = new Contracts.ApiMessage
                 {
                     Status = (int) HttpStatusCode.Created
                 },

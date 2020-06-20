@@ -1,4 +1,4 @@
-﻿namespace Tips.ApiMessage.Models
+﻿namespace Tips.ApiMessage.Contracts
 {
     public class Request
     {

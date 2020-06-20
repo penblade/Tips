@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
+using Tips.ApiMessage.TodoItems.DeleteTodoItems;
 using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
 
@@ -35,6 +36,7 @@ namespace Tips.ApiMessage
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>), typeof(GetTodoItemRequestHandler));
             services.AddScoped(typeof(IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
+            services.AddScoped(typeof(IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse>), typeof(DeleteTodoItemRequestHandler));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

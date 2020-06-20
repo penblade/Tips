@@ -21,7 +21,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
 
             return new GetTodoItemsResponse
             {
-                ApiMessage = new ApiMessage.Models.ApiMessage
+                ApiMessage = new Contracts.ApiMessage
                 {
                     Status = (int) HttpStatusCode.OK,
                 },
