@@ -14,21 +14,13 @@ namespace Tips.ApiMessage.TodoItems.Controllers
 
         protected async Task<IActionResult> Handle<TRequest, TResponse>(HandleDelegate<TRequest, TResponse> method, TRequest request, CancellationToken cancellationToken) where TResponse : Response
         {
-            try
-            {
-                // TODO: Log call to service.
-                // TODO: Log request if provided.
-                var response = await method(request, cancellationToken);
-                var actionResult = CreateActionResult(response);
+            // TODO: Log call to service.
+            // TODO: Log request if provided.
+            var response = await method(request, cancellationToken);
+            var actionResult = CreateActionResult(response);
 
-                // TODO: Log actionResult
-                return actionResult;
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log exception
-                return CreateInternalServerError();
-            }
+            // TODO: Log actionResult
+            return actionResult;
         }
 
         private IActionResult CreateActionResult<TResponse>(TResponse response) where TResponse : Response =>
