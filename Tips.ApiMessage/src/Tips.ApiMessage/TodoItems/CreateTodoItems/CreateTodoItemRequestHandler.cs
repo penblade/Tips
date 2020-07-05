@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Mappers;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
@@ -32,7 +33,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
                 Notifications = null,
                 Status = (int) HttpStatusCode.Created,
                 // TraceId = TraceId,
-                Id = todoItemEntity.Id,
+                TodoItem = TodoItemMapper.ItemToResponse(todoItemEntity)
             };
     }
 }

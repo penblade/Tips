@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Mappers;
 
 namespace Tips.ApiMessage.TodoItems.GetTodoItem
 {
@@ -20,13 +20,13 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
             return todoItem != null ? Found(todoItem) : NotFound();
         }
 
-        private static GetTodoItemResponse Found(TodoItemEntity todoItem) =>
+        private static GetTodoItemResponse Found(TodoItemEntity todoItemEntity) =>
             new GetTodoItemResponse
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.OK,
                 // TraceId = TraceId,
-                TodoItem = ItemToResponse(todoItem)
+                TodoItem = TodoItemMapper.ItemToResponse(todoItemEntity)
             };
 
         private static GetTodoItemResponse NotFound() =>
@@ -36,14 +36,6 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
                 Status = (int) HttpStatusCode.NotFound,
                 // TraceId = TraceId,
                 TodoItem = null
-            };
-
-        private static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
-            new TodoItem
-            {
-                Id = todoItem.Id,
-                Name = todoItem.Name,
-                IsComplete = todoItem.IsComplete
             };
     }
 }

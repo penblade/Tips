@@ -35,10 +35,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
                 return NotFound(new List<Notification> {CreateNotFoundNotification(request)});
             }
 
-            // I prefer to return an Ok response with a message that includes any possible notifications.
-            // I find it's easier for the client to have a standard response to implement.
-            // return NoContent();
-            return Ok();
+            return NoContent();
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
@@ -46,24 +43,24 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
         private static UpdateTodoItemResponse BadRequest(IEnumerable<Notification> notifications = null) =>
             new UpdateTodoItemResponse
             {
-                Notifications = notifications,
+                Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.BadRequest
-                //TraceId = TraceId
-            };
-
-        private static UpdateTodoItemResponse Ok(IEnumerable<Notification> notifications = null) =>
-            new UpdateTodoItemResponse
-            {
-                Notifications = notifications,
-                Status = (int) HttpStatusCode.OK
                 //TraceId = TraceId
             };
 
         private static UpdateTodoItemResponse NotFound(IEnumerable<Notification> notifications = null) =>
             new UpdateTodoItemResponse
             {
-                Notifications = notifications,
+                Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.NotFound
+                //TraceId = TraceId
+            };
+
+        private static UpdateTodoItemResponse NoContent(IEnumerable<Notification> notifications = null) =>
+            new UpdateTodoItemResponse
+            {
+                Notifications = notifications ?? new List<Notification>(),
+                Status = (int)HttpStatusCode.NoContent
                 //TraceId = TraceId
             };
 
