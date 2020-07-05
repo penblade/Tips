@@ -25,14 +25,14 @@ namespace Tips.ApiMessage
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
-            ConfigureDependencies(services);
+            ConfigureDependenciesForTodoItems(services);
             services.AddControllers();
         }
 
-        private static void ConfigureDependencies(IServiceCollection services)
+        private static void ConfigureDependenciesForTodoItems(IServiceCollection services)
         {
-            //services.AddScoped(typeof(IActionResultHandler<,>), typeof(ActionResultHandler<,>));
+            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>), typeof(GetTodoItemRequestHandler));
             services.AddScoped(typeof(IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>), typeof(CreateTodoItemRequestHandler));
