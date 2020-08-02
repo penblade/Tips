@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
@@ -41,8 +42,10 @@ namespace Tips.ApiMessage
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddLog4Net();
+
             app.UseExceptionHandler("/error");
 
             app.UseHttpsRedirection();
