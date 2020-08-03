@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using System.Threading;
@@ -29,7 +30,6 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         private readonly IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> _createTodoItemRequestHandler;
         private readonly IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse> _deleteTodoItemRequestHandler;
         private readonly IRequestHandler<UpdateTodoItemRequest, UpdateTodoItemResponse> _updateTodoItemRequestHandler;
-        private string TraceId => HttpContext.TraceIdentifier;
 
         public TodoItemsController(ILogger<TodoItemsController> logger,
             IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse> getTodoItemsRequestHandler,
@@ -186,6 +186,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             return actionResult;
         }
 
+        private string TraceId => Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         private string CreateLogMessageForRequest(string request) => @$"TraceId: {TraceId} | Request: {FormatForLogging(request)}";
         private string CreateLogMessageForResponse(string response) => @$"TraceId: {TraceId} | Response: {FormatForLogging(response)}";
         private static string FormatForLogging(string message) => message.Replace("{", "{{").Replace("}", "}}");
