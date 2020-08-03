@@ -1,9 +1,15 @@
+using System.Diagnostics;
+using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Handlers;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
@@ -46,7 +52,38 @@ namespace Tips.ApiMessage
         {
             loggerFactory.AddLog4Net();
 
-            app.UseExceptionHandler("/error");
+            app.UseExceptionHandler(errorHandler =>
+            {
+                errorHandler.Run(async context =>
+                {
+                    // TODO: Logger is still logging the exception without scope.
+
+                    const string uncaughtExceptionId = "D1537B75-D85A-48CF-8A02-DF6C614C3198";
+                    //using var scope = _logger.BeginScope(nameof(Error));
+
+                    //var feature = context.Features.Get<IExceptionHandlerFeature>();
+                    //var exception = feature.Error;
+
+                    // ProblemDetails implements the RF7807 standards.
+                    // TraceId is already returned.
+                    var problemDetails = new ProblemDetails
+                    {
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+                        Title = "Internal Server Error",
+                        Status = (int)HttpStatusCode.InternalServerError,
+                        Detail = "Internal Server Error",
+                        Instance = $"urn:{CompanyConstants.UrnName}:error:{uncaughtExceptionId}",
+                    };
+
+                    problemDetails.Extensions["traceId"] = Activity.Current?.Id ?? context.TraceIdentifier;
+
+                    //_logger.LogError(exception, "Uncaught Exception", exception);
+
+                    context.Response.StatusCode = (int)problemDetails.Status;
+                    context.Response.ContentType = "application/problem+json";
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
+                });
+            });
 
             app.UseHttpsRedirection();
 
