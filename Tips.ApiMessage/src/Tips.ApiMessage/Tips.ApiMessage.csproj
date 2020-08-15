@@ -23,9 +23,5 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TodoItems\Handlers\" />
-  </ItemGroup>
-
 
 </Project>
