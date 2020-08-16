@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem

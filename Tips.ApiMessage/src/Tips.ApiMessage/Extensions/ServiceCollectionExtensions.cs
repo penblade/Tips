@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Tips.ApiMessage.Handlers;
+using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
 using Tips.ApiMessage.TodoItems.DeleteTodoItems;
@@ -15,6 +15,8 @@ namespace Tips.ApiMessage.Extensions
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+
+            services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, GetTodoItemsResponse>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, GetTodoItemResponse>), typeof(GetTodoItemRequestHandler));

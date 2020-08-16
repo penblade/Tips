@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tips.ApiMessage.Handlers
+namespace Tips.ApiMessage.Pipeline
 {
     public interface IRequestHandler<in TRequest, TResponse>
     {
