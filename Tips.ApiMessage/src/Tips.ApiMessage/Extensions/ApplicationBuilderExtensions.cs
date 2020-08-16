@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Tips.ApiMessage.Middleware;
+using Tips.ApiMessage.Pipeline;
 
 namespace Tips.ApiMessage.Extensions
 {

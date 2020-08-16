@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tips.ApiMessage.Configuration;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
@@ -12,9 +14,14 @@ namespace Tips.ApiMessage.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void RegisterDependencies(this IServiceCollection services)
+        public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+
+            // Bind the configuration to 
+            var config = new AppConfiguration();
+            configuration.Bind(nameof(AppConfiguration), config);
+            services.AddSingleton(config);
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 

@@ -21,8 +21,7 @@ namespace Tips.ApiMessage.Pipeline
         }
 
         private static string TraceId => Activity.Current?.Id;
-        private static string CreateLogMessageForRequest(string request) => @$"TraceId: {TraceId} | Request: {FormatForLogging(request)}";
-        private static string CreateLogMessageForResponse(string response) => @$"TraceId: {TraceId} | Response: {FormatForLogging(response)}";
-        private static string FormatForLogging(string message) => message.Replace("{", "{{").Replace("}", "}}");
+        private static string CreateLogMessageForRequest(string request) => @$"TraceId: {TraceId} | Request: {LogFormatter.FormatForLogging(request)}";
+        private static string CreateLogMessageForResponse(string response) => @$"TraceId: {TraceId} | Response: {LogFormatter.FormatForLogging(response)}";
     }
 }

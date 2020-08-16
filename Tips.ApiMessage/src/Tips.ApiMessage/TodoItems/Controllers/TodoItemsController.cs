@@ -104,6 +104,8 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         public async Task<IActionResult> CreateTodoItem([FromServices] IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse> handler,
             TodoItem todoItem, bool asProblemDetails, CancellationToken cancellationToken)
         {
+            throw new Exception("blah");
+
             var request = new CreateTodoItemRequest { TodoItem = todoItem };
 
             var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
