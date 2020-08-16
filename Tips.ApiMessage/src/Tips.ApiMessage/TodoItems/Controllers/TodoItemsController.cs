@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
 using Tips.ApiMessage.TodoItems.DeleteTodoItems;
@@ -42,7 +43,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             {
                 (int) HttpStatusCode.OK when asProblemDetails => Ok(response),
                 (int) HttpStatusCode.OK => Ok(response.TodoItems),
-                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
+                _ => UnhandledHttpStatusCode(response)
             };
         }
 
@@ -63,7 +64,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 (int) HttpStatusCode.NotFound => NotFound(),
                 (int) HttpStatusCode.OK when asProblemDetails => Ok(response),
                 (int) HttpStatusCode.OK => Ok(response.TodoItem),
-                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
+                _ => UnhandledHttpStatusCode(response)
             };
         }
 
@@ -89,7 +90,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 (int) HttpStatusCode.NotFound => NotFound(),
                 (int) HttpStatusCode.NoContent when asProblemDetails => Ok(response),
                 (int) HttpStatusCode.NoContent => NoContent(),
-                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
+                _ => UnhandledHttpStatusCode(response)
             };
         }
 
@@ -112,7 +113,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 (int) HttpStatusCode.BadRequest => BadRequest(response),
                 (int) HttpStatusCode.Created when asProblemDetails => CreatedAtAction(nameof(GetTodoItem), new { id = response.TodoItem.Id }, response),
                 (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.TodoItem.Id }, response.TodoItem),
-                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
+                _ => UnhandledHttpStatusCode(response)
             };
         }
 
@@ -134,8 +135,10 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 (int) HttpStatusCode.NotFound => NotFound(),
                 (int) HttpStatusCode.NoContent when asProblemDetails => Ok(response),
                 (int) HttpStatusCode.NoContent => NoContent(),
-                _ => throw new Exception($"HttpStatusCode {response.Status} was not handled.")
+                _ => UnhandledHttpStatusCode(response)
             };
         }
+
+        private static IActionResult UnhandledHttpStatusCode(Response response) => throw new Exception($"HttpStatusCode {response.Status} was not handled.");
     }
 }
