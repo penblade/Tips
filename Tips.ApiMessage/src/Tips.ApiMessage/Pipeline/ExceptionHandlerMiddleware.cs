@@ -32,7 +32,7 @@ namespace Tips.ApiMessage.Pipeline
             }
             catch (Exception exception)
             {
-                var problemDetails = CreateProblemDetails(TraceId);
+                var problemDetails = CreateProblemDetails(TraceId, _configuration.UrnName);
 
                 using var scope = _logger.BeginScope(nameof(ExceptionHandlerMiddleware));
                 _logger.LogError(CreateLogMessageForProblemDetails(TraceId, JsonSerializer.Serialize(problemDetails)), problemDetails);
@@ -42,13 +42,13 @@ namespace Tips.ApiMessage.Pipeline
                 context.Response.Headers["Cache-Control"] = "no-cache";
                 context.Response.Headers["Pragma"] = "no-cache";
                 context.Response.Headers["Expires"] = "-1";
-                context.Response.StatusCode = (int)problemDetails.Status;
+                context.Response.StatusCode = problemDetails.Status ?? 0;
                 context.Response.ContentType = "application/problem+json";
                 await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
             }
         }
 
-        private ProblemDetails CreateProblemDetails(string traceId)
+        private static ProblemDetails CreateProblemDetails(string traceId, string urnName)
         {
             const string uncaughtExceptionId = "D1537B75-D85A-48CF-8A02-DF6C614C3198";
 
@@ -59,7 +59,7 @@ namespace Tips.ApiMessage.Pipeline
                 Title = "Internal Server Error",
                 Status = (int) HttpStatusCode.InternalServerError,
                 Detail = "Internal Server Error",
-                Instance = $"urn:{_configuration.UrnName}:error:{uncaughtExceptionId}"
+                Instance = $"urn:{urnName}:error:{uncaughtExceptionId}"
             };
 
             problemDetails.Extensions["traceId"] = traceId;
