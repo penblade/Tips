@@ -1,19 +1,21 @@
 ﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Mappers;
+using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
-    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, CreateTodoItemResponse>
+    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {
         private readonly TodoContext _context;
 
         public CreateTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<CreateTodoItemResponse> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
             var todoItemEntity = new TodoItemEntity
             {
@@ -27,13 +29,13 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             return Created(todoItemEntity);
         }
 
-        private static CreateTodoItemResponse Created(TodoItemEntity todoItemEntity) =>
-            new CreateTodoItemResponse
+        private static Response<TodoItem> Created(TodoItemEntity todoItemEntity) =>
+            new Response<TodoItem>
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.Created,
                 // TraceId = TraceId,
-                TodoItem = TodoItemMapper.ItemToResponse(todoItemEntity)
+                Result = TodoItemMapper.ItemToResponse(todoItemEntity)
             };
     }
 }

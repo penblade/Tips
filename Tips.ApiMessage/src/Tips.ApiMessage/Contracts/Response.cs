@@ -2,6 +2,11 @@
 
 namespace Tips.ApiMessage.Contracts
 {
+    public class Response<TResult> : Response
+    {
+        public TResult Result { get; set; }
+    }
+
     public class Response
     {
         public IEnumerable<Notification> Notifications { get; set; } = new List<Notification>();

@@ -10,13 +10,13 @@ using Tips.ApiMessage.TodoItems.Context;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
-    public class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, UpdateTodoItemResponse>
+    public class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly TodoContext _context;
 
         public UpdateTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<UpdateTodoItemResponse> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
             if (request.Id != request.TodoItem.Id) return BadRequest(new List<Notification> {CreateNotSameIdNotification(request)});
 
@@ -40,24 +40,24 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
 
-        private static UpdateTodoItemResponse BadRequest(IEnumerable<Notification> notifications = null) =>
-            new UpdateTodoItemResponse
+        private static Response BadRequest(IEnumerable<Notification> notifications = null) =>
+            new Response
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.BadRequest
                 //TraceId = TraceId
             };
 
-        private static UpdateTodoItemResponse NotFound(IEnumerable<Notification> notifications = null) =>
-            new UpdateTodoItemResponse
+        private static Response NotFound(IEnumerable<Notification> notifications = null) =>
+            new Response
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.NotFound
                 //TraceId = TraceId
             };
 
-        private static UpdateTodoItemResponse NoContent(IEnumerable<Notification> notifications = null) =>
-            new UpdateTodoItemResponse
+        private static Response NoContent(IEnumerable<Notification> notifications = null) =>
+            new Response
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.NoContent

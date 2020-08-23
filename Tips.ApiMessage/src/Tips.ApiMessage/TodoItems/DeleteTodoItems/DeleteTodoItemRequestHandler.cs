@@ -1,18 +1,19 @@
 ﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 
 namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
 {
-    public class DeleteTodoItemRequestHandler : IRequestHandler<DeleteTodoItemRequest, DeleteTodoItemResponse>
+    public class DeleteTodoItemRequestHandler : IRequestHandler<DeleteTodoItemRequest, Response>
     {
         private readonly TodoContext _context;
 
         public DeleteTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<DeleteTodoItemResponse> Handle(DeleteTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response> Handle(DeleteTodoItemRequest request, CancellationToken cancellationToken)
         {
             var todoItem = await _context.TodoItems.FindAsync(request.Id);
             if (todoItem == null) return NotFound();
@@ -23,16 +24,16 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
             return NoContent();
         }
 
-        private static DeleteTodoItemResponse NoContent() =>
-            new DeleteTodoItemResponse
+        private static Response NoContent() =>
+            new Response
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.NoContent,
                 // TraceId = TraceId
             };
 
-        private static DeleteTodoItemResponse NotFound() =>
-            new DeleteTodoItemResponse
+        private static Response NotFound() =>
+            new Response
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.NotFound,
