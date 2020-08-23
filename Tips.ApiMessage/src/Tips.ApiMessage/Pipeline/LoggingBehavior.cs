@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -20,8 +19,7 @@ namespace Tips.ApiMessage.Pipeline
             return response;
         }
 
-        private static string TraceId => Activity.Current?.Id;
-        private static string CreateLogMessageForRequest(string request) => @$"TraceId: {TraceId} | Request: {LogFormatter.FormatForLogging(request)}";
-        private static string CreateLogMessageForResponse(string response) => @$"TraceId: {TraceId} | Response: {LogFormatter.FormatForLogging(response)}";
+        private static string CreateLogMessageForRequest(string request) => @$"TraceId: {Tracking.TraceId} | Request: {LogFormatter.FormatForLogging(request)}";
+        private static string CreateLogMessageForResponse(string response) => @$"TraceId: {Tracking.TraceId} | Response: {LogFormatter.FormatForLogging(response)}";
     }
 }

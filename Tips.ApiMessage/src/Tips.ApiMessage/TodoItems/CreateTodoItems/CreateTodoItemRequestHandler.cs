@@ -34,7 +34,6 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.Created,
-                // TraceId = TraceId,
                 Result = TodoItemMapper.ItemToResponse(todoItemEntity)
             };
     }

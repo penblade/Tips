@@ -45,7 +45,6 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.BadRequest
-                //TraceId = TraceId
             };
 
         private static Response NotFound(IEnumerable<Notification> notifications = null) =>
@@ -53,7 +52,6 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.NotFound
-                //TraceId = TraceId
             };
 
         private static Response NoContent(IEnumerable<Notification> notifications = null) =>
@@ -61,7 +59,6 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             {
                 Notifications = notifications ?? new List<Notification>(),
                 Status = (int)HttpStatusCode.NoContent
-                //TraceId = TraceId
             };
 
         private static Notification CreateNotSameIdNotification(UpdateTodoItemRequest request) =>

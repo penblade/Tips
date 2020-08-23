@@ -30,7 +30,6 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.OK,
-                // TraceId = TraceId,
                 Result = todoItems
             };
     }

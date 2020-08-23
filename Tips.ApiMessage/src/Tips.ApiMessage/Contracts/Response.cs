@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tips.ApiMessage.Pipeline;
 
 namespace Tips.ApiMessage.Contracts
 {
@@ -11,6 +12,6 @@ namespace Tips.ApiMessage.Contracts
     {
         public IEnumerable<Notification> Notifications { get; set; } = new List<Notification>();
         public int Status { get; set; }
-        public string TraceId { get; set; }
+        public string TraceId => Tracking.TraceId;
     }
 }

@@ -27,7 +27,6 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.OK,
-                // TraceId = TraceId,
                 Result = TodoItemMapper.ItemToResponse(todoItemEntity)
             };
 
@@ -36,7 +35,6 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.NotFound,
-                // TraceId = TraceId,
                 Result = null
             };
     }

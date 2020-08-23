@@ -29,7 +29,6 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.NoContent,
-                // TraceId = TraceId
             };
 
         private static Response NotFound() =>
@@ -37,7 +36,6 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
             {
                 Notifications = null,
                 Status = (int) HttpStatusCode.NotFound,
-                // TraceId = TraceId
             };
     }
 }
