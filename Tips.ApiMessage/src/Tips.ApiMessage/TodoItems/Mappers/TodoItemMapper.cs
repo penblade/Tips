@@ -5,12 +5,14 @@ namespace Tips.ApiMessage.TodoItems.Mappers
 {
     internal class TodoItemMapper
     {
-        public static TodoItem ItemToResponse(TodoItemEntity todoItem) =>
+        public static TodoItem ItemToResponse(TodoItemEntity todoItemEntity) =>
             new TodoItem
             {
-                Id = todoItem.Id,
-                Name = todoItem.Name,
-                IsComplete = todoItem.IsComplete
+                Id = todoItemEntity.Id,
+                Name = todoItemEntity.Name,
+                Description = todoItemEntity.Description,
+                Priority = todoItemEntity.Priority,
+                IsComplete = todoItemEntity.IsComplete
             };
     }
 }

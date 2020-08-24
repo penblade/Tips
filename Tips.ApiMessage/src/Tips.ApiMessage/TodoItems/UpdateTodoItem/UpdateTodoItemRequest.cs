@@ -2,9 +2,8 @@
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
-    public class UpdateTodoItemRequest
+    public class UpdateTodoItemRequest : SaveTodoItemRequest
     {
         public long Id { get; set; }
-        public TodoItem TodoItem { get; set; }
     }
 }

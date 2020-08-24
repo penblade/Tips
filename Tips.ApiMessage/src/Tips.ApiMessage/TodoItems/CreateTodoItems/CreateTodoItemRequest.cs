@@ -2,8 +2,7 @@
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
-    public class CreateTodoItemRequest
+    public class CreateTodoItemRequest : SaveTodoItemRequest
     {
-        public TodoItem TodoItem { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.UpdateTodoItem;
+using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.Rules
 {
@@ -15,7 +15,7 @@ namespace Tips.ApiMessage.TodoItems.Rules
         //     Do not modify the source.  Add helper/relational/reference objects as necessary.
         //     For each modification add info/warning/error messages per rules.
         // The following is very basic.  I may create another article later for complex ETL.
-        public List<Notification> ProcessRules(UpdateTodoItemRequest request, TodoItemEntity todoItemEntity)
+        public List<Notification> ProcessRules(SaveTodoItemRequest request, TodoItemEntity todoItemEntity)
         {
             var notifications = new List<Notification>();
             if (string.IsNullOrEmpty(request.TodoItem.Name)) notifications.Add(TodoItemNameWasNotProvidedNotification());
