@@ -29,25 +29,17 @@ namespace Tips.ApiMessage.TodoItems.Rules
 
             return notifications;
         }
+
+        internal const string TodoItemNameWasNotProvidedNotificationId = "148877DF-F147-413F-97AA-F306A36BCBE1";
         private static Notification TodoItemNameWasNotProvidedNotification() =>
-            new NotificationBuilder()
-                .Id("148877DF-F147-413F-97AA-F306A36BCBE1")
-                .Severity(Severity.Error)
-                .Detail("TodoItem Name was not provided.")
-                .Build();
+            Notification.CreateError(TodoItemNameWasNotProvidedNotificationId, "TodoItem Name was not provided.");
 
+        internal const string TodoItemDescriptionWasNotProvidedNotificationId = "54BD317D-60CD-4BDE-B52D-CF7D0A1D9D38";
         private static Notification TodoItemDescriptionWasNotProvidedNotification() =>
-            new NotificationBuilder()
-                .Id("54BD317D-60CD-4BDE-B52D-CF7D0A1D9D38")
-                .Severity(Severity.Error)
-                .Detail("TodoItem Description was not provided.")
-                .Build();
+            Notification.CreateError(TodoItemDescriptionWasNotProvidedNotificationId, "TodoItem Description was not provided.");
 
+        internal const string TodoItemPriorityIsNotInRangeNotificationId = "C5E1E6F4-D241-4D82-A4C5-832E3C6C1816";
         private static Notification TodoItemPriorityIsNotInRangeNotification() =>
-            new NotificationBuilder()
-                .Id("54BD317D-60CD-4BDE-B52D-CF7D0A1D9D38")
-                .Severity(Severity.Error)
-                .Detail("TodoItem Priority must be between 1 - 3.")
-                .Build();
+            Notification.CreateError(TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 3.");
     }
 }

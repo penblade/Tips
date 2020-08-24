@@ -25,14 +25,14 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
         public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
             if (request?.TodoItem == null) return BadRequest(TodoItemWasNotProvidedNotification());
-            if (request.Id != request.TodoItem.Id) return BadRequest(NotSameIdNotification(request));
+            if (request.Id != request.TodoItem.Id) return BadRequest(NotSameIdNotification(request.Id, request.TodoItem.Id));
 
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
-            if (todoItemEntity == null) return NotFound(NotFoundNotification(request));
+            if (todoItemEntity == null) return NotFound(NotFoundNotification(request.Id));
 
             var notifications = _todoItemRulesEngine.ProcessRules(request, todoItemEntity);
 
-            if (notifications.Any(x => x.Severity == Severity.Error)) return BadRequest(notifications);
+            if (notifications.Any(x => x.Severity == Notification.SeverityType.Error)) return BadRequest(notifications);
 
             try
             {
@@ -40,7 +40,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(request.Id))
             {
-                return NotFound(NotFoundWhenSavingNotification(request));
+                return NotFound(NotFoundWhenSavingNotification(request.Id));
             }
 
             return NoContent();
@@ -58,32 +58,20 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         private static Response NoContent() => new Response { Status = (int)HttpStatusCode.NoContent };
 
-        private static Notification NotSameIdNotification(UpdateTodoItemRequest request) =>
-            new NotificationBuilder()
-                .Id("38EFC3AD-7A84-4D49-85F5-E325125A6EE1")
-                .Severity(Severity.Error)
-                .Detail($"TodoItem {request.Id} does not match {request.TodoItem.Id}.")
-                .Build();
+        internal const string NotSameIdNotificationId = "38EFC3AD-7A84-4D49-85F5-E325125A6EE1";
+        private static Notification NotSameIdNotification(long requestId, long todoItemId) =>
+            Notification.CreateError(NotSameIdNotificationId, $"TodoItem {requestId} does not match {todoItemId}.");
 
-        private static Notification NotFoundNotification(UpdateTodoItemRequest request) =>
-            new NotificationBuilder()
-                .Id("9E1A675F-3073-4D78-9A22-317ECB1D88DC")
-                .Severity(Severity.Error)
-                .Detail($"TodoItem {request.Id} was not found.")
-                .Build();
+        internal const string NotFoundNotificationId = "9E1A675F-3073-4D78-9A22-317ECB1D88DC";
+        private static Notification NotFoundNotification(long id) =>
+            Notification.CreateError(NotFoundNotificationId, $"TodoItem {id} was not found.");
 
-        private static Notification NotFoundWhenSavingNotification(UpdateTodoItemRequest request) =>
-            new NotificationBuilder()
-                .Id("8FD46D5D-1CB3-4ECB-B27B-724813A0406C")
-                .Severity(Severity.Error)
-                .Detail($"TodoItem {request.Id} was not found when saving.")
-                .Build();
+        internal const string NotFoundWhenSavingNotificationId = "8FD46D5D-1CB3-4ECB-B27B-724813A0406C";
+        private static Notification NotFoundWhenSavingNotification(long id) =>
+            Notification.CreateError(NotFoundWhenSavingNotificationId, $"TodoItem {id} was not found when saving.");
 
+        internal const string TodoItemWasNotProvidedNotificationId = "DC02BFB8-F28D-4CA7-8EFB-74A4E89C1558";
         private static Notification TodoItemWasNotProvidedNotification() =>
-            new NotificationBuilder()
-                .Id("DC02BFB8-F28D-4CA7-8EFB-74A4E89C1558")
-                .Severity(Severity.Error)
-                .Detail("TodoItem was not provided.")
-                .Build();
+            Notification.CreateError(TodoItemWasNotProvidedNotificationId, "TodoItem was not provided.");
     }
 }
