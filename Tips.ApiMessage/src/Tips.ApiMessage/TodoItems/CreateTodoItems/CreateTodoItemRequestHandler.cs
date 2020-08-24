@@ -32,7 +32,6 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
         private static Response<TodoItem> Created(TodoItemEntity todoItemEntity) =>
             new Response<TodoItem>
             {
-                Notifications = null,
                 Status = (int) HttpStatusCode.Created,
                 Result = TodoItemMapper.ItemToResponse(todoItemEntity)
             };

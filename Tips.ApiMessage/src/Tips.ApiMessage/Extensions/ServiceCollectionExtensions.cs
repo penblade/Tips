@@ -11,6 +11,7 @@ using Tips.ApiMessage.TodoItems.DeleteTodoItems;
 using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
 using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Rules;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
 namespace Tips.ApiMessage.Extensions
@@ -27,6 +28,8 @@ namespace Tips.ApiMessage.Extensions
             services.AddSingleton(config);
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
+
+            services.AddScoped(typeof(ITodoItemRulesEngine), typeof(TodoItemRulesEngine));
 
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, Response<IEnumerable<TodoItem>>>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, Response<TodoItem>>), typeof(GetTodoItemRequestHandler));

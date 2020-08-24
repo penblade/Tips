@@ -24,18 +24,8 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
             return NoContent();
         }
 
-        private static Response NoContent() =>
-            new Response
-            {
-                Notifications = null,
-                Status = (int) HttpStatusCode.NoContent,
-            };
+        private static Response NoContent() => new Response { Status = (int) HttpStatusCode.NoContent };
 
-        private static Response NotFound() =>
-            new Response
-            {
-                Notifications = null,
-                Status = (int) HttpStatusCode.NotFound,
-            };
+        private static Response NotFound() => new Response { Status = (int) HttpStatusCode.NotFound };
     }
 }

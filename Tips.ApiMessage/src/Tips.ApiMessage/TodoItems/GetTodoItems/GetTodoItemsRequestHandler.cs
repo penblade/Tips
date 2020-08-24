@@ -28,7 +28,6 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
         private static Response<IEnumerable<TodoItem>> Ok(IEnumerable<TodoItem> todoItems) =>
             new Response<IEnumerable<TodoItem>>
             {
-                Notifications = null,
                 Status = (int) HttpStatusCode.OK,
                 Result = todoItems
             };

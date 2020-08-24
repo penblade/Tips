@@ -1,10 +1,9 @@
 ﻿namespace Tips.ApiMessage.Contracts
 {
-    public enum Severity
+    public class Severity
     {
-        NotSet,
-        Error,
-        Info,
-        Warning
+        public const string Error = "Error";
+        public const string Info = "Info";
+        public const string Warning = "Warning";
     }
 }
