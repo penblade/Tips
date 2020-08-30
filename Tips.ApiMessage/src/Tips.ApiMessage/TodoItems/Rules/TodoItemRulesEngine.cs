@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.Rules
@@ -13,19 +14,33 @@ namespace Tips.ApiMessage.TodoItems.Rules
         //     Add info/warning/error messages per rules.
         // Map the source to the target and modify data in the target as necessary.
         //     Do not modify the source.  Add helper/relational/reference objects as necessary.
+        //     Depend on the source data, not the current state of the response
+        //     to avoid side effects as you move rules around.
         //     For each modification add info/warning/error messages per rules.
-        // The following is very basic.  I may create another article later for complex ETL.
+        // The following is very basic.
+
+        // For more complex ETL each rule refactored into it's own class that
+        //     implements a standard Process method defined in an interface
+        //     following the strategy pattern.
+        //     public void Process(Request request, Response response) { ... }
+        //     You want both the request and response passed in 
+
+        // The rules engine then simplifies to accept a rules factory via
+        //     constructor injection, loops through each rule calling the
+        //     Process method, and then returns the final response.
         public List<Notification> ProcessRules(SaveTodoItemRequest request, TodoItemEntity todoItemEntity)
+        {
+            var notifications = Process(request);
+            TodoItemMapper.Map(request.TodoItem, todoItemEntity);
+            return notifications;
+        }
+
+        private static List<Notification> Process(SaveTodoItemRequest request)
         {
             var notifications = new List<Notification>();
             if (string.IsNullOrEmpty(request.TodoItem.Name)) notifications.Add(TodoItemNameWasNotProvidedNotification());
             if (string.IsNullOrEmpty(request.TodoItem.Description)) notifications.Add(TodoItemDescriptionWasNotProvidedNotification());
             if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3) notifications.Add(TodoItemPriorityIsNotInRangeNotification());
-
-            todoItemEntity.Name = request.TodoItem.Name;
-            todoItemEntity.Description = request.TodoItem.Description;
-            todoItemEntity.Priority = request.TodoItem.Priority;
-            todoItemEntity.IsComplete = request.TodoItem.IsComplete;
 
             return notifications;
         }

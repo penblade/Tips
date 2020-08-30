@@ -26,7 +26,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
             new Response<TodoItem>
             {
                 Status = (int) HttpStatusCode.OK,
-                Result = TodoItemMapper.ItemToResponse(todoItemEntity)
+                Result = TodoItemMapper.Map(todoItemEntity)
             };
 
         private static Response<TodoItem> NotFound() => new Response<TodoItem> { Status = (int) HttpStatusCode.NotFound };

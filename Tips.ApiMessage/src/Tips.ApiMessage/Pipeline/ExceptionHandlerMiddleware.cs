@@ -32,18 +32,8 @@ namespace Tips.ApiMessage.Pipeline
             catch (Exception exception)
             {
                 var problemDetails = CreateProblemDetails(_configuration.UrnName);
-
-                using var scope = _logger.BeginScope(nameof(ExceptionHandlerMiddleware));
-                _logger.LogError(CreateLogMessageForProblemDetails(JsonSerializer.Serialize(problemDetails)), problemDetails);
-                _logger.LogError(exception, CreateLogMessageForUncaughtException(), exception);
-
-                // Add same headers returned by the built-in exception handler.
-                context.Response.Headers["Cache-Control"] = "no-cache";
-                context.Response.Headers["Pragma"] = "no-cache";
-                context.Response.Headers["Expires"] = "-1";
-                context.Response.StatusCode = problemDetails.Status ?? 0;
-                context.Response.ContentType = "application/problem+json";
-                await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
+                LogError(problemDetails, exception);
+                await WriteResponse(context, problemDetails);
             }
         }
 
@@ -56,13 +46,31 @@ namespace Tips.ApiMessage.Pipeline
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
                 Title = "Internal Server Error",
-                Status = (int) HttpStatusCode.InternalServerError,
+                Status = (int)HttpStatusCode.InternalServerError,
                 Detail = "Internal Server Error",
                 Instance = $"urn:{urnName}:error:{uncaughtExceptionId}"
             };
 
             problemDetails.Extensions["traceId"] = Tracking.TraceId;
             return problemDetails;
+        }
+
+        private void LogError(ProblemDetails problemDetails, Exception exception)
+        {
+            using var scope = _logger.BeginScope(nameof(ExceptionHandlerMiddleware));
+            _logger.LogError(CreateLogMessageForProblemDetails(JsonSerializer.Serialize(problemDetails)), problemDetails);
+            _logger.LogError(exception, CreateLogMessageForUncaughtException(), exception);
+        }
+
+        private static async Task WriteResponse(HttpContext context, ProblemDetails problemDetails)
+        {
+            // Add same headers returned by the built-in exception handler.
+            context.Response.Headers["Cache-Control"] = "no-cache";
+            context.Response.Headers["Pragma"] = "no-cache";
+            context.Response.Headers["Expires"] = "-1";
+            context.Response.StatusCode = problemDetails.Status ?? 0;
+            context.Response.ContentType = "application/problem+json";
+            await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
         }
 
         private static string CreateLogMessageForUncaughtException() => @$"TraceId: {Tracking.TraceId} | UncaughtException{Environment.NewLine}An unhandled exception has occurred while executing the request.{Environment.NewLine}";

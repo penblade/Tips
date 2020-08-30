@@ -25,11 +25,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var todoItemEntity = new TodoItemEntity
-            {
-                IsComplete = request.TodoItem.IsComplete,
-                Name = request.TodoItem.Name
-            };
+            var todoItemEntity = TodoItemMapper.Map(request.TodoItem);
 
             var notifications = _todoItemRulesEngine.ProcessRules(request, todoItemEntity);
 
@@ -48,7 +44,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             new Response<TodoItem>
             {
                 Status = (int) HttpStatusCode.Created,
-                Result = TodoItemMapper.ItemToResponse(todoItemEntity)
+                Result = TodoItemMapper.Map(todoItemEntity)
             };
     }
 }

@@ -22,7 +22,6 @@ namespace Tips.ApiMessage.Extensions
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
-            // Bind the configuration to 
             var config = new AppConfiguration();
             configuration.Bind(nameof(AppConfiguration), config);
             services.AddSingleton(config);
