@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.TodoItems.Context;
+﻿using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Models;
 
@@ -28,33 +26,45 @@ namespace Tips.ApiMessage.TodoItems.Rules
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
         //     Process method, and then returns the final response.
-        public List<Notification> ProcessRules(SaveTodoItemRequest request, TodoItemEntity todoItemEntity)
+        public void ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response)
         {
-            var notifications = Process(request);
-            TodoItemMapper.Map(request.TodoItem, todoItemEntity);
-            return notifications;
+            TodoItemNameWasNotProvidedRule(request, response);
+            TodoItemDescriptionWasNotProvidedRule(request, response);
+            TodoItemPriorityIsNotInRangeRule(request, response);
+            MapTodoItemRule(request, response);
         }
 
-        private static List<Notification> Process(SaveTodoItemRequest request)
+        private static void TodoItemNameWasNotProvidedRule(SaveTodoItemRequest request, Response response)
         {
-            var notifications = new List<Notification>();
-            if (string.IsNullOrEmpty(request.TodoItem.Name)) notifications.Add(TodoItemNameWasNotProvidedNotification());
-            if (string.IsNullOrEmpty(request.TodoItem.Description)) notifications.Add(TodoItemDescriptionWasNotProvidedNotification());
-            if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3) notifications.Add(TodoItemPriorityIsNotInRangeNotification());
-
-            return notifications;
+            if (string.IsNullOrEmpty(request.TodoItem.Name))
+                response.Add(TodoItemNameWasNotProvidedNotification());
         }
 
         internal const string TodoItemNameWasNotProvidedNotificationId = "148877DF-F147-413F-97AA-F306A36BCBE1";
         private static Notification TodoItemNameWasNotProvidedNotification() =>
             Notification.CreateError(TodoItemNameWasNotProvidedNotificationId, "TodoItem Name was not provided.");
 
+        private static void TodoItemDescriptionWasNotProvidedRule(SaveTodoItemRequest request, Response response)
+        {
+            if (string.IsNullOrEmpty(request.TodoItem.Description))
+                response.Add(TodoItemDescriptionWasNotProvidedNotification());
+        }
+
         internal const string TodoItemDescriptionWasNotProvidedNotificationId = "54BD317D-60CD-4BDE-B52D-CF7D0A1D9D38";
         private static Notification TodoItemDescriptionWasNotProvidedNotification() =>
             Notification.CreateError(TodoItemDescriptionWasNotProvidedNotificationId, "TodoItem Description was not provided.");
 
+        private static void TodoItemPriorityIsNotInRangeRule(SaveTodoItemRequest request, Response response)
+        {
+            if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3)
+                response.Add(TodoItemPriorityIsNotInRangeNotification());
+        }
+
         internal const string TodoItemPriorityIsNotInRangeNotificationId = "C5E1E6F4-D241-4D82-A4C5-832E3C6C1816";
         private static Notification TodoItemPriorityIsNotInRangeNotification() =>
             Notification.CreateError(TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 3.");
+
+        private static void MapTodoItemRule(SaveTodoItemRequest request, Response<TodoItem> response) =>
+            response.Result = GenericMapper.Map<TodoItem, TodoItem>(request.TodoItem);
     }
 }

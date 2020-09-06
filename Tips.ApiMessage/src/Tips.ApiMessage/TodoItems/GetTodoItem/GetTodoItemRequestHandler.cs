@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
@@ -17,18 +16,18 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
 
         public async Task<Response<TodoItem>> Handle(GetTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var todoItem = await _context.TodoItems.FindAsync(request.Id);
+            var response = new Response<TodoItem>();
+            var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
 
-            return todoItem != null ? Found(todoItem) : NotFound();
-        }
-
-        private static Response<TodoItem> Found(TodoItemEntity todoItemEntity) =>
-            new Response<TodoItem>
+            if (todoItemEntity != null)
             {
-                Status = (int) HttpStatusCode.OK,
-                Result = TodoItemMapper.Map(todoItemEntity)
-            };
+                response.SetStatusToOk();
+                response.Result = GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity);
+                return response;
+            }
 
-        private static Response<TodoItem> NotFound() => new Response<TodoItem> { Status = (int) HttpStatusCode.NotFound };
+            response.SetStatusToNotFound();
+            return response;
+        }
     }
 }

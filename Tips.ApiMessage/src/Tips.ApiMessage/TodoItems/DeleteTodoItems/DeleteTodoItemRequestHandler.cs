@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
@@ -15,17 +14,19 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
 
         public async Task<Response> Handle(DeleteTodoItemRequest request, CancellationToken cancellationToken)
         {
+            var response = new Response();
             var todoItem = await _context.TodoItems.FindAsync(request.Id);
-            if (todoItem == null) return NotFound();
+            if (todoItem == null)
+            {
+                response.SetStatusToNotFound();
+                return response;
+            }
 
             _context.TodoItems.Remove(todoItem);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return NoContent();
+            response.SetStatusToNoContent();
+            return response;
         }
-
-        private static Response NoContent() => new Response { Status = (int) HttpStatusCode.NoContent };
-
-        private static Response NotFound() => new Response { Status = (int) HttpStatusCode.NotFound };
     }
 }

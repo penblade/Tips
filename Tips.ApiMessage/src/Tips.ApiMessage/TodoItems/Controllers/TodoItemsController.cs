@@ -33,7 +33,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTodoItems([FromServices] IRequestHandler<GetTodoItemsRequest, Response<IEnumerable<TodoItem>>> handler,
+        public async Task<IActionResult> GetTodoItems([FromServices] IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>> handler,
             bool withDetails, CancellationToken cancellationToken)
         {
             var request = new GetTodoItemsRequest();

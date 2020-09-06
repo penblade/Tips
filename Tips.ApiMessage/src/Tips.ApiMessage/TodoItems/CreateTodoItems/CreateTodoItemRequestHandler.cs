@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
@@ -25,26 +22,31 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var todoItemEntity = TodoItemMapper.Map(request.TodoItem);
+            // Query. Apply all validation and modification rules.  These rules can only query the database.
+            var response = new Response<TodoItem>();
+            _todoItemRulesEngine.ProcessRules(request, response);
 
-            var notifications = _todoItemRulesEngine.ProcessRules(request, todoItemEntity);
+            if (response.HasErrors())
+            {
+                response.SetStatusToBadRequest();
+                return response;
+            }
 
-            if (notifications.Any(x => x.Severity == Notification.SeverityType.Error)) return BadRequest(notifications);
+            // Command.  Save the data.
+            var todoItem = await Save(request, cancellationToken);
+
+            response.SetStatusToCreated();
+            response.Result = todoItem;
+            return response;
+        }
+
+        private async Task<TodoItem> Save(SaveTodoItemRequest request, CancellationToken cancellationToken)
+        {
+            var todoItemEntity = GenericMapper.Map<TodoItem, TodoItemEntity>(request.TodoItem);
 
             await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Created(todoItemEntity);
+            return GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity);
         }
-
-        private static Response<TodoItem> BadRequest(List<Notification> notifications) =>
-            new Response<TodoItem> { Notifications = notifications ?? new List<Notification>(), Status = (int)HttpStatusCode.BadRequest };
-
-        private static Response<TodoItem> Created(TodoItemEntity todoItemEntity) =>
-            new Response<TodoItem>
-            {
-                Status = (int) HttpStatusCode.Created,
-                Result = TodoItemMapper.Map(todoItemEntity)
-            };
     }
 }

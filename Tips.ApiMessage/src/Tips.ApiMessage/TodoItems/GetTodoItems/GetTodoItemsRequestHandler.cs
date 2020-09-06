@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -12,24 +11,21 @@ using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.GetTodoItems
 {
-    public class GetTodoItemsRequestHandler : IRequestHandler<GetTodoItemsRequest, Response<IEnumerable<TodoItem>>>
+    public class GetTodoItemsRequestHandler : IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>
     {
         private readonly TodoContext _context;
 
         public GetTodoItemsRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response<IEnumerable<TodoItem>>> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken)
+        public async Task<Response<List<TodoItem>>> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken)
         {
-            var todoItems = await _context.TodoItems.Select(x => TodoItemMapper.Map(x)).ToListAsync(cancellationToken);
+            var response = new Response<List<TodoItem>>();
+            var todoItems = await _context.TodoItems.Select(todoItemEntity => GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity))
+                .ToListAsync(cancellationToken);
 
-            return Ok(todoItems);
+            response.SetStatusToOk();
+            response.Result = todoItems;
+            return response;
         }
-
-        private static Response<IEnumerable<TodoItem>> Ok(IEnumerable<TodoItem> todoItems) =>
-            new Response<IEnumerable<TodoItem>>
-            {
-                Status = (int) HttpStatusCode.OK,
-                Result = todoItems
-            };
     }
 }

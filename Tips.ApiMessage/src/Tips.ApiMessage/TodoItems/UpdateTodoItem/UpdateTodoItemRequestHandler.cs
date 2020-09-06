@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Models;
 using Tips.ApiMessage.TodoItems.Rules;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
@@ -24,15 +23,37 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            if (request?.TodoItem == null) return BadRequest(TodoItemWasNotProvidedNotification());
-            if (request.Id != request.TodoItem.Id) return BadRequest(NotSameIdNotification(request.Id, request.TodoItem.Id));
+            var response = new Response<TodoItem>();
+
+            if (request?.TodoItem == null)
+            {
+                response.Add(TodoItemWasNotProvidedNotification());
+                response.SetStatusToBadRequest();
+                return response;
+            }
+
+            if (request.Id != request.TodoItem.Id)
+            {
+                response.Add(NotSameIdNotification(request.Id, request.TodoItem.Id));
+                response.SetStatusToBadRequest();
+                return response;
+            }
 
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
-            if (todoItemEntity == null) return NotFound(NotFoundNotification(request.Id));
+            if (todoItemEntity == null)
+            {
+                response.Add(NotFoundNotification(request.Id));
+                response.SetStatusToNotFound();
+                return response;
+            }
 
-            var notifications = _todoItemRulesEngine.ProcessRules(request, todoItemEntity);
+            _todoItemRulesEngine.ProcessRules(request, response);
 
-            if (notifications.Any(x => x.Severity == Notification.SeverityType.Error)) return BadRequest(notifications);
+            if (response.HasErrors())
+            {
+                response.SetStatusToBadRequest();
+                return response;
+            }
 
             try
             {
@@ -40,23 +61,16 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(request.Id))
             {
-                return NotFound(NotFoundWhenSavingNotification(request.Id));
+                response.Add(NotFoundWhenSavingNotification(request.Id));
+                response.SetStatusToNotFound();
+                return response;
             }
 
-            return NoContent();
+            response.SetStatusToNoContent();
+            return response;
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
-
-        private static Response BadRequest(Notification notification) => BadRequest(new List<Notification> {notification});
-
-        private static Response BadRequest(List<Notification> notifications) =>
-            new Response { Notifications = notifications ?? new List<Notification>(), Status = (int)HttpStatusCode.BadRequest };
-
-        private static Response NotFound(Notification notification) =>
-            new Response { Notifications = new List<Notification> { notification }, Status = (int)HttpStatusCode.NotFound };
-
-        private static Response NoContent() => new Response { Status = (int)HttpStatusCode.NoContent };
 
         internal const string NotSameIdNotificationId = "38EFC3AD-7A84-4D49-85F5-E325125A6EE1";
         private static Notification NotSameIdNotification(long requestId, long todoItemId) =>
