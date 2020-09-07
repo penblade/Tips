@@ -38,7 +38,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new GetTodoItemsRequest();
 
-            var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+            var response = await Handle(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -58,7 +58,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new GetTodoItemRequest { Id = id };
 
-            var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+            var response = await Handle(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -83,7 +83,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new UpdateTodoItemRequest { Id = id, TodoItem = todoItem };
 
-            var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+            var response = await Handle(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -107,7 +107,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new CreateTodoItemRequest { TodoItem = todoItem };
 
-            var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+            var response = await Handle(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -129,7 +129,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new DeleteTodoItemRequest { Id = id };
 
-            var response = await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+            var response = await Handle(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -139,6 +139,9 @@ namespace Tips.ApiMessage.TodoItems.Controllers
                 _ => UnhandledHttpStatusCode(response)
             };
         }
+
+        private Task<TResponse> Handle<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
+            _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
 
         private static IActionResult UnhandledHttpStatusCode(Response response) => throw new Exception($"HttpStatusCode {response.Status} was not handled.");
     }
