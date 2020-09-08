@@ -20,7 +20,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
         public async Task<Response<List<TodoItem>>> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken)
         {
             var response = new Response<List<TodoItem>>();
-            var todoItems = await _context.TodoItems.Select(todoItemEntity => GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity))
+            var todoItems = await _context.TodoItems.Select(todoItemEntity => TodoItemMapper.MapToTodoItem(todoItemEntity))
                 .ToListAsync(cancellationToken);
 
             response.SetStatusToOk();

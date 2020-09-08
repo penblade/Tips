@@ -42,11 +42,12 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         private async Task<TodoItem> Save(SaveTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var todoItemEntity = GenericMapper.Map<TodoItem, TodoItemEntity>(request.TodoItem);
+            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(request.TodoItem);
 
             await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity);
+
+            return TodoItemMapper.MapToTodoItem(todoItemEntity);
         }
     }
 }

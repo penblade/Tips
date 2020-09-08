@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Models;
 using Tips.ApiMessage.TodoItems.Rules;
 
@@ -57,6 +58,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
             try
             {
+                TodoItemMapper.MapToTodoItemEntity(response.Result, todoItemEntity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(request.Id))

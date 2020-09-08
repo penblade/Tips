@@ -22,7 +22,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
             if (todoItemEntity != null)
             {
                 response.SetStatusToOk();
-                response.Result = GenericMapper.Map<TodoItemEntity, TodoItem>(todoItemEntity);
+                response.Result = TodoItemMapper.MapToTodoItem(todoItemEntity);
                 return response;
             }
 
