@@ -38,69 +38,14 @@ namespace Tips.ApiMessage.TodoItems.Rules
                 IsComplete = request.TodoItem.IsComplete
             };
 
-            TodoItemNameRule(request, response);
-            TodoItemDescriptionRule(request, response);
-            TodoItemPriorityRule(request, response);
+            var todoItemNameRule = new TodoItemNameRule();
+            todoItemNameRule.Process(request, response);
+
+            var todoItemDescriptionRule = new TodoItemDescriptionRule();
+            todoItemDescriptionRule.Process(request, response);
+
+            var todoItemPriorityRule = new TodoItemPriorityRule();
+            todoItemPriorityRule.Process(request, response);
         }
-
-        private static void TodoItemNameRule(SaveTodoItemRequest request, Response<TodoItem> response)
-        {
-            Guard.AgainstNull(request, "request");
-            Guard.AgainstNull(request.TodoItem, "request.TodoItem");
-            Guard.AgainstNull(response, "response");
-            Guard.AgainstNull(response.Result, "response.Result");
-
-            if (string.IsNullOrEmpty(request.TodoItem.Name))
-            {
-                response.Add(TodoItemNameWasNotProvidedNotification());
-                return;
-            }
-
-            response.Result.Name = request.TodoItem.Name;
-        }
-
-        internal const string TodoItemNameWasNotProvidedNotificationId = "148877DF-F147-413F-97AA-F306A36BCBE1";
-        private static Notification TodoItemNameWasNotProvidedNotification() =>
-            Notification.CreateError(TodoItemNameWasNotProvidedNotificationId, "TodoItem Name was not provided.");
-
-        private static void TodoItemDescriptionRule(SaveTodoItemRequest request, Response<TodoItem> response)
-        {
-            Guard.AgainstNull(request, "request");
-            Guard.AgainstNull(request.TodoItem, "request.TodoItem");
-            Guard.AgainstNull(response, "response");
-            Guard.AgainstNull(response.Result, "response.Result");
-
-            if (string.IsNullOrEmpty(request.TodoItem.Description))
-            {
-                response.Add(TodoItemDescriptionWasNotProvidedNotification());
-                return;
-            }
-
-            response.Result.Description = request.TodoItem.Description;
-        }
-
-        internal const string TodoItemDescriptionWasNotProvidedNotificationId = "54BD317D-60CD-4BDE-B52D-CF7D0A1D9D38";
-        private static Notification TodoItemDescriptionWasNotProvidedNotification() =>
-            Notification.CreateError(TodoItemDescriptionWasNotProvidedNotificationId, "TodoItem Description was not provided.");
-
-        private static void TodoItemPriorityRule(SaveTodoItemRequest request, Response<TodoItem> response)
-        {
-            Guard.AgainstNull(request, "request");
-            Guard.AgainstNull(request.TodoItem, "request.TodoItem");
-            Guard.AgainstNull(response, "response");
-            Guard.AgainstNull(response.Result, "response.Result");
-
-            if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3)
-            {
-                response.Add(TodoItemPriorityIsNotInRangeNotification());
-                return;
-            }
-
-            response.Result.Priority = request.TodoItem.Priority;
-        }
-
-        internal const string TodoItemPriorityIsNotInRangeNotificationId = "C5E1E6F4-D241-4D82-A4C5-832E3C6C1816";
-        private static Notification TodoItemPriorityIsNotInRangeNotification() =>
-            Notification.CreateError(TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 3.");
     }
 }

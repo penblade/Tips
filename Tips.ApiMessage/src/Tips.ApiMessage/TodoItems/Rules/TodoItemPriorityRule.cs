@@ -1,0 +1,23 @@
+﻿using Tips.ApiMessage.Contracts;
+using Tips.ApiMessage.TodoItems.Models;
+
+namespace Tips.ApiMessage.TodoItems.Rules
+{
+    internal class TodoItemPriorityRule : BaseRule
+    {
+        protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
+        {
+            if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3)
+            {
+                response.Add(TodoItemPriorityIsNotInRangeNotification());
+                return;
+            }
+
+            response.Result.Priority = request.TodoItem.Priority;
+        }
+
+        internal const string TodoItemPriorityIsNotInRangeNotificationId = "C5E1E6F4-D241-4D82-A4C5-832E3C6C1816";
+        private static Notification TodoItemPriorityIsNotInRangeNotification() =>
+            Notification.CreateError(TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 3.");
+    }
+}
