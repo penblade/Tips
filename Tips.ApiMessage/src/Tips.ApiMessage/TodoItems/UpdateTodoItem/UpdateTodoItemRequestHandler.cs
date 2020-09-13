@@ -11,15 +11,17 @@ using Tips.ApiMessage.TodoItems.Rules;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
-    public class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
+    internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly TodoContext _context;
         private readonly ITodoItemRulesEngine _todoItemRulesEngine;
+        private readonly IRulesFactory _rulesFactory;
 
-        public UpdateTodoItemRequestHandler(TodoContext context, ITodoItemRulesEngine todoItemRulesEngine)
+        public UpdateTodoItemRequestHandler(TodoContext context, ITodoItemRulesEngine todoItemRulesEngine, IRulesFactory rulesFactory)
         {
             _context = context;
             _todoItemRulesEngine = todoItemRulesEngine;
+            _rulesFactory = rulesFactory;
         }
 
         public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
@@ -48,7 +50,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
                 return response;
             }
 
-            _todoItemRulesEngine.ProcessRules(request, response);
+            _todoItemRulesEngine.ProcessRules(request, response, _rulesFactory.Create());
 
             if (response.HasErrors())
             {

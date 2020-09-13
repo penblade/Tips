@@ -9,22 +9,24 @@ using Tips.ApiMessage.TodoItems.Rules;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
-    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
+    internal class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {
         private readonly TodoContext _context;
         private readonly ITodoItemRulesEngine _todoItemRulesEngine;
+        private readonly IRulesFactory _rulesFactory;
 
-        public CreateTodoItemRequestHandler(TodoContext context, ITodoItemRulesEngine todoItemRulesEngine)
+        public CreateTodoItemRequestHandler(TodoContext context, ITodoItemRulesEngine todoItemRulesEngine, IRulesFactory rulesFactory)
         {
             _context = context;
             _todoItemRulesEngine = todoItemRulesEngine;
+            _rulesFactory = rulesFactory;
         }
 
         public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
             // Query. Apply all validation and modification rules.  These rules can only query the database.
             var response = new Response<TodoItem>();
-            _todoItemRulesEngine.ProcessRules(request, response);
+            _todoItemRulesEngine.ProcessRules(request, response, _rulesFactory.Create());
 
             if (response.HasErrors())
             {

@@ -1,7 +1,7 @@
 ﻿using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Models;
 
-namespace Tips.ApiMessage.TodoItems.Rules
+namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
     internal class TodoItemNameRule : BaseRule
     {

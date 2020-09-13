@@ -28,6 +28,7 @@ namespace Tips.ApiMessage.Extensions
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 
+            services.AddScoped(typeof(IRulesFactory), typeof(SaveRulesFactory));
             services.AddScoped(typeof(ITodoItemRulesEngine), typeof(TodoItemRulesEngine));
 
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>), typeof(GetTodoItemsRequestHandler));

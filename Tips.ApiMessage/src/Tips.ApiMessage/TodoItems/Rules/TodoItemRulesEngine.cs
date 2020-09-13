@@ -1,4 +1,5 @@
-﻿using Tips.ApiMessage.Contracts;
+﻿using System.Collections.Generic;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Infrastructure;
 using Tips.ApiMessage.TodoItems.Models;
 
@@ -26,26 +27,15 @@ namespace Tips.ApiMessage.TodoItems.Rules
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
         //     Process method, and then returns the final response.
-        public void ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response)
+        public void ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response, IEnumerable<BaseRule> rules)
         {
-            Guard.AgainstNull(request, "request");
-            Guard.AgainstNull(request.TodoItem, "request.TodoItem");
             Guard.AgainstNull(response, "response");
+            response.Result = new TodoItem();
 
-            response.Result = new TodoItem
+            foreach (var rule in rules)
             {
-                Id = request.TodoItem.Id,
-                IsComplete = request.TodoItem.IsComplete
-            };
-
-            var todoItemNameRule = new TodoItemNameRule();
-            todoItemNameRule.Process(request, response);
-
-            var todoItemDescriptionRule = new TodoItemDescriptionRule();
-            todoItemDescriptionRule.Process(request, response);
-
-            var todoItemPriorityRule = new TodoItemPriorityRule();
-            todoItemPriorityRule.Process(request, response);
+                rule.Process(request, response);
+            }
         }
     }
 }
