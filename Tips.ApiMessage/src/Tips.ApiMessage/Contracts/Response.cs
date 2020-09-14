@@ -24,5 +24,7 @@ namespace Tips.ApiMessage.Contracts
         public void SetStatusToNoContent() => Status = (int) HttpStatusCode.NoContent;
         public void SetStatusToNotFound() => Status = (int) HttpStatusCode.NotFound;
         public void SetStatusToOk() => Status = (int) HttpStatusCode.OK;
+
+        public bool IsStatusNotSet() => Status == 0;
     }
 }

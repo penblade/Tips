@@ -13,26 +13,24 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
     {
         private readonly TodoContext _context;
         private readonly IRulesEngine _todoItemRulesEngine;
-        private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _rulesFactory;
+        private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _saveRulesFactory;
 
-        public CreateTodoItemRequestHandler(TodoContext context, IRulesEngine todoItemRulesEngine, IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> rulesFactory)
+        public CreateTodoItemRequestHandler(TodoContext context, IRulesEngine todoItemRulesEngine,
+            IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> saveRulesFactory)
         {
             _context = context;
             _todoItemRulesEngine = todoItemRulesEngine;
-            _rulesFactory = rulesFactory;
+            _saveRulesFactory = saveRulesFactory;
         }
 
         public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
             // Query. Apply all validation and modification rules.  These rules can only query the database.
             var response = new Response<TodoItem>();
-            _todoItemRulesEngine.Process(request, response, _rulesFactory.Create());
+            _todoItemRulesEngine.Process(request, response, _saveRulesFactory.Create());
 
-            if (response.HasErrors())
-            {
-                response.SetStatusToBadRequest();
-                return response;
-            }
+            if (response.HasErrors()) response.SetStatusToBadRequest();
+            if (response.HasErrors()) return response;
 
             // Command.  Save the data.
             var todoItem = await Save(request, cancellationToken);

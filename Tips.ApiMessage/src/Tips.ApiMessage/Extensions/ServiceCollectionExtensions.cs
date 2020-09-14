@@ -13,6 +13,7 @@ using Tips.ApiMessage.TodoItems.GetTodoItems;
 using Tips.ApiMessage.TodoItems.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 using Tips.ApiMessage.TodoItems.Rules.SaveRules;
+using Tips.ApiMessage.TodoItems.Rules.UpdateRules;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
 namespace Tips.ApiMessage.Extensions
@@ -30,6 +31,7 @@ namespace Tips.ApiMessage.Extensions
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 
             services.AddScoped(typeof(IRulesFactory<SaveTodoItemRequest, Response<TodoItem>>), typeof(SaveRulesFactory));
+            services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>>), typeof(UpdateRulesFactory));
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>), typeof(GetTodoItemsRequestHandler));

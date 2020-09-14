@@ -6,7 +6,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
     internal class TodoItemPriorityRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
     {
-        public TodoItemPriorityRule() => RequiredRules.Add(typeof(TodoItemDefaultsRule));
+        public TodoItemPriorityRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
         protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
         {

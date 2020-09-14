@@ -8,11 +8,16 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
     internal abstract class BaseRule<TRequest, TResponse>
     {
         protected List<Type> RequiredRules { get; } = new List<Type>();
+        public bool ContinueProcessing { get; protected set; } = true;
 
         // Template method pattern
         // https://en.wikipedia.org/wiki/Template_method_pattern
-        public void Process(TRequest request, TResponse response, List<Type> processedRules)
+        public void Process(TRequest request, TResponse response, IEnumerable<Type> processedRules)
         {
+            Guard.AgainstNull(request, nameof(request));
+            Guard.AgainstNull(response, nameof(response));
+            Guard.AgainstNull(processedRules, nameof(processedRules));
+
             if (!AllRequiredRulesHaveBeenProcessed(processedRules)) ThrowMissingRulesException();
 
             ProcessRule(request, response);
@@ -24,11 +29,8 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
             throw new Exception($"Missing required rules: {message}");
         }
 
-        private bool AllRequiredRulesHaveBeenProcessed(IEnumerable<Type> processedRules)
-        {
-            Guard.AgainstNull(processedRules, nameof(processedRules));
-            return RequiredRules.All(requiredRule => processedRules.Any(processedRule => processedRule == requiredRule));
-        }
+        private bool AllRequiredRulesHaveBeenProcessed(IEnumerable<Type> processedRules) =>
+            RequiredRules.All(requiredRule => processedRules.Any(processedRule => processedRule == requiredRule));
 
         protected abstract void ProcessRule(TRequest request, TResponse response);
     }

@@ -32,6 +32,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
             {
                 rule.Process(request, response, processedRules);
                 processedRules.Add(rule.GetType());
+                if (!rule.ContinueProcessing) return;
             }
         }
     }

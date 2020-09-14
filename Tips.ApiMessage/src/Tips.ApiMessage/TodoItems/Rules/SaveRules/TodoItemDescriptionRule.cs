@@ -6,7 +6,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
     internal class TodoItemDescriptionRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
     {
-        public TodoItemDescriptionRule() => RequiredRules.Add(typeof(TodoItemDefaultsRule));
+        public TodoItemDescriptionRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
         protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
         {

@@ -9,7 +9,8 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public IEnumerable<BaseRule<SaveTodoItemRequest, Response<TodoItem>>> Create()
         {
-            yield return new TodoItemDefaultsRule();
+            yield return new RequestRule();
+            yield return new ResponseRule();
             yield return new TodoItemNameRule();
             yield return new TodoItemDescriptionRule();
             yield return new TodoItemPriorityRule();
