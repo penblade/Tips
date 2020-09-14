@@ -7,8 +7,11 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
         {
-            response.Result.Id = request.TodoItem.Id;
-            response.Result.IsComplete = request.TodoItem.IsComplete;
+            response.Result = new TodoItem
+            {
+                Id = request.TodoItem.Id,
+                IsComplete = request.TodoItem.IsComplete
+            };
         }
     }
 }

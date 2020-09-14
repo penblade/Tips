@@ -5,6 +5,8 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
     internal class TodoItemNameRule : BaseRule
     {
+        public TodoItemNameRule() => RequiredRules.Add(typeof(TodoItemDefaultsRule));
+
         protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
         {
             if (string.IsNullOrEmpty(request.TodoItem.Name))

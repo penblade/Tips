@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.Infrastructure;
 using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.Rules
@@ -29,12 +29,11 @@ namespace Tips.ApiMessage.TodoItems.Rules
         //     Process method, and then returns the final response.
         public void ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response, IEnumerable<BaseRule> rules)
         {
-            Guard.AgainstNull(response, "response");
-            response.Result = new TodoItem();
-
+            var processedRules = new List<Type>();
             foreach (var rule in rules)
             {
-                rule.Process(request, response);
+                rule.Process(request, response, processedRules);
+                processedRules.Add(rule.GetType());
             }
         }
     }
