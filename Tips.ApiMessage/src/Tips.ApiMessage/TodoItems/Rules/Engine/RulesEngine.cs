@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.TodoItems.Models;
 
-namespace Tips.ApiMessage.TodoItems.Rules
+namespace Tips.ApiMessage.TodoItems.Rules.Engine
 {
-    internal class TodoItemRulesEngine : ITodoItemRulesEngine
+    internal class RulesEngine : IRulesEngine
     {
         // With complex Extract/Transform/Load (ETL) operations, mapping isn't necessarily 1-1 and adjustments must be done.
         // A rules engine can separate concerns for ETL from the domain object.
@@ -27,7 +25,7 @@ namespace Tips.ApiMessage.TodoItems.Rules
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
         //     Process method, and then returns the final response.
-        public void ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response, IEnumerable<BaseRule> rules)
+        public void Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
         {
             var processedRules = new List<Type>();
             foreach (var rule in rules)

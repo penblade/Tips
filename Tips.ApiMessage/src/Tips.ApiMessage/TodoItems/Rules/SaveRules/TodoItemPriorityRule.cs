@@ -1,9 +1,10 @@
 ﻿using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemPriorityRule : BaseRule
+    internal class TodoItemPriorityRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
     {
         public TodoItemPriorityRule() => RequiredRules.Add(typeof(TodoItemDefaultsRule));
 

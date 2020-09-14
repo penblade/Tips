@@ -1,9 +1,10 @@
 ﻿using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemNameRule : BaseRule
+    internal class TodoItemNameRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
     {
         public TodoItemNameRule() => RequiredRules.Add(typeof(TodoItemDefaultsRule));
 

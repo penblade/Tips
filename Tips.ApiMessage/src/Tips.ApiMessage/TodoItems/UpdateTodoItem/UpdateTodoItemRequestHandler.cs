@@ -7,17 +7,17 @@ using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Models;
-using Tips.ApiMessage.TodoItems.Rules;
+using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
     internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly TodoContext _context;
-        private readonly ITodoItemRulesEngine _todoItemRulesEngine;
-        private readonly IRulesFactory _rulesFactory;
+        private readonly IRulesEngine _todoItemRulesEngine;
+        private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _rulesFactory;
 
-        public UpdateTodoItemRequestHandler(TodoContext context, ITodoItemRulesEngine todoItemRulesEngine, IRulesFactory rulesFactory)
+        public UpdateTodoItemRequestHandler(TodoContext context, IRulesEngine todoItemRulesEngine, IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> rulesFactory)
         {
             _context = context;
             _todoItemRulesEngine = todoItemRulesEngine;
@@ -50,7 +50,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
                 return response;
             }
 
-            _todoItemRulesEngine.ProcessRules(request, response, _rulesFactory.Create());
+            _todoItemRulesEngine.Process(request, response, _rulesFactory.Create());
 
             if (response.HasErrors())
             {
