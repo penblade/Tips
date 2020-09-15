@@ -13,6 +13,8 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
                 Id = request.TodoItem.Id,
                 IsComplete = request.TodoItem.IsComplete
             };
+
+            RulePassed();
         }
     }
 }

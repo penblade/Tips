@@ -13,10 +13,12 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
             if (string.IsNullOrEmpty(request.TodoItem.Name))
             {
                 response.Add(TodoItemNameWasNotProvidedNotification());
+                RuleFailed();
                 return;
             }
 
             response.Result.Name = request.TodoItem.Name;
+            RulePassed();
         }
 
         internal const string TodoItemNameWasNotProvidedNotificationId = "148877DF-F147-413F-97AA-F306A36BCBE1";

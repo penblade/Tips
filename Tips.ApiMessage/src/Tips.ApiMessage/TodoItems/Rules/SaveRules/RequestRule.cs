@@ -11,8 +11,12 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
             if (request.TodoItem == null)
             {
                 response.Add(TodoItemWasNotProvidedNotification());
+                RuleFailed();
                 ContinueProcessing = false;
+                return;
             }
+
+            RulePassed();
         }
 
         internal const string TodoItemWasNotProvidedNotificationId = "DC02BFB8-F28D-4CA7-8EFB-74A4E89C1558";

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Tips.ApiMessage.TodoItems.Rules.Engine
 {
@@ -27,11 +26,11 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
         //     Process method, and then returns the final response.
         public void Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
         {
-            var processedRules = new List<Type>();
+            var processedRules = new List<BaseRule<TRequest, TResponse>>();
             foreach (var rule in rules)
             {
                 rule.Process(request, response, processedRules);
-                processedRules.Add(rule.GetType());
+                processedRules.Add(rule);
                 if (!rule.ContinueProcessing) return;
             }
         }

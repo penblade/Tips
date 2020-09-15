@@ -33,31 +33,34 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
         {
             var response = new Response<TodoItem>();
 
-            _rulesEngine.Process(request, response, _updateRulesFactory.Create().ToList());
-            if (response.HasErrors() && response.IsStatusNotSet()) response.SetStatusToBadRequest();
-            if (response.HasErrors()) return response;
-
-            _rulesEngine.Process(request, response, _saveRulesFactory.Create().ToList());
-            if (response.HasErrors() && response.IsStatusNotSet()) response.SetStatusToBadRequest();
-            if (response.HasErrors()) return response;
+            if (ProcessRules(request, response, _updateRulesFactory.Create().ToList())) return response;
+            if (ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return response;
 
             // Command.  Save the data.
-            return await Save(request, response, cancellationToken);
+            return await Save(response, cancellationToken);
         }
 
-        private async Task<Response> Save(UpdateTodoItemRequest request, Response<TodoItem> response, CancellationToken cancellationToken)
+        private bool ProcessRules<TRequest>(TRequest request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItem>>> rules)
+        {
+            _rulesEngine.Process(request, response, rules);
+            var rulesFailed = rules.Any(rule => rule.Failed);
+            if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
+            return rulesFailed;
+        }
+
+        private async Task<Response> Save(Response<TodoItem> response, CancellationToken cancellationToken)
         {
             TodoItemEntity todoItemEntity;
             try
             {
-                todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
+                todoItemEntity = await _context.TodoItems.FindAsync(response.Result.Id);
 
                 TodoItemMapper.MapToTodoItemEntity(response.Result, todoItemEntity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
-            catch (DbUpdateConcurrencyException) when (!TodoItemExists(request.Id))
+            catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Result.Id))
             {
-                response.Add(NotFoundWhenSavingNotification(request.Id));
+                response.Add(NotFoundWhenSavingNotification(response.Result.Id));
                 response.SetStatusToNotFound();
                 return response;
             }

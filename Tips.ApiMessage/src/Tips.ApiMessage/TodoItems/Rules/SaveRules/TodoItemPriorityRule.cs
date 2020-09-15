@@ -13,10 +13,12 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
             if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3)
             {
                 response.Add(TodoItemPriorityIsNotInRangeNotification());
+                RuleFailed();
                 return;
             }
 
             response.Result.Priority = request.TodoItem.Priority;
+            RulePassed();
         }
 
         internal const string TodoItemPriorityIsNotInRangeNotificationId = "C5E1E6F4-D241-4D82-A4C5-832E3C6C1816";

@@ -20,7 +20,11 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
                 response.Add(NotFoundNotification(request.Id));
                 response.SetStatusToNotFound();
                 ContinueProcessing = false;
+                RuleFailed();
+                return;
             }
+
+            RulePassed();
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);

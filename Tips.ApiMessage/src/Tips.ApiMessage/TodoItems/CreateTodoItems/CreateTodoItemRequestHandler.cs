@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
@@ -27,22 +28,27 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
         {
             // Query. Apply all validation and modification rules.  These rules can only query the database.
             var response = new Response<TodoItem>();
-            _todoItemRulesEngine.Process(request, response, _saveRulesFactory.Create());
 
-            if (response.HasErrors()) response.SetStatusToBadRequest();
-            if (response.HasErrors()) return response;
+            var saveRules = _saveRulesFactory.Create().ToList();
+            _todoItemRulesEngine.Process(request, response, saveRules);
+
+            if (saveRules.Any(rule => rule.Failed))
+            {
+                response.SetStatusToBadRequest();
+                return response;
+            }
 
             // Command.  Save the data.
-            var todoItem = await Save(request, cancellationToken);
+            var todoItem = await Save(response, cancellationToken);
 
             response.SetStatusToCreated();
             response.Result = todoItem;
             return response;
         }
 
-        private async Task<TodoItem> Save(SaveTodoItemRequest request, CancellationToken cancellationToken)
+        private async Task<TodoItem> Save(Response<TodoItem> response, CancellationToken cancellationToken)
         {
-            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(request.TodoItem);
+            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(response.Result);
 
             await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

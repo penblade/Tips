@@ -13,7 +13,10 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
             {
                 response.Add(NotSameIdNotification(request.Id, request.TodoItem.Id));
                 ContinueProcessing = false;
+                RuleFailed();
+                return;
             }
+            RulePassed();
         }
 
         internal const string NotSameIdNotificationId = "38EFC3AD-7A84-4D49-85F5-E325125A6EE1";
