@@ -34,6 +34,9 @@ namespace Tips.ApiMessage.Extensions
             services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>>), typeof(UpdateRulesFactory));
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 
+            services.AddScoped(typeof(ICreateTodoItemRepository), typeof(CreateTodoItemRepository));
+            services.AddScoped(typeof(IUpdateTodoItemRepository), typeof(UpdateTodoItemRepository));
+
             services.AddScoped(typeof(IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>), typeof(GetTodoItemsRequestHandler));
             services.AddScoped(typeof(IRequestHandler<GetTodoItemRequest, Response<TodoItem>>), typeof(GetTodoItemRequestHandler));
             services.AddScoped(typeof(IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>), typeof(CreateTodoItemRequestHandler));

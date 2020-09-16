@@ -2,11 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
-using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 
@@ -14,30 +11,32 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
     internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
-        private readonly TodoContext _context;
         private readonly IRulesEngine _rulesEngine;
         private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _saveRulesFactory;
         private readonly IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> _updateRulesFactory;
+        private readonly IUpdateTodoItemRepository _updateTodoItemRepository;
 
-        public UpdateTodoItemRequestHandler(TodoContext context, IRulesEngine rulesEngine,
+        public UpdateTodoItemRequestHandler(IRulesEngine rulesEngine,
             IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> saveRulesFactory,
-            IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> updateRulesFactory)
+            IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> updateRulesFactory,
+            IUpdateTodoItemRepository updateTodoItemRepository)
         {
-            _context = context;
             _rulesEngine = rulesEngine;
             _saveRulesFactory = saveRulesFactory;
             _updateRulesFactory = updateRulesFactory;
+            _updateTodoItemRepository = updateTodoItemRepository;
         }
 
         public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
             var response = new Response<TodoItem>();
 
+            // Query. Apply all validation and modification rules.  These rules can only query the database.
             if (ProcessRules(request, response, _updateRulesFactory.Create().ToList())) return response;
             if (ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return response;
 
             // Command.  Save the data.
-            return await Save(response, cancellationToken);
+            return await _updateTodoItemRepository.Save(response, cancellationToken);
         }
 
         private bool ProcessRules<TRequest>(TRequest request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItem>>> rules)
@@ -47,34 +46,5 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
             return rulesFailed;
         }
-
-        private async Task<Response> Save(Response<TodoItem> response, CancellationToken cancellationToken)
-        {
-            TodoItemEntity todoItemEntity;
-            try
-            {
-                todoItemEntity = await _context.TodoItems.FindAsync(response.Result.Id);
-
-                TodoItemMapper.MapToTodoItemEntity(response.Result, todoItemEntity);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Result.Id))
-            {
-                response.Add(NotFoundWhenSavingNotification(response.Result.Id));
-                response.SetStatusToNotFound();
-                return response;
-            }
-
-            response.Result = TodoItemMapper.MapToTodoItem(todoItemEntity);
-            response.SetStatusToNoContent();
-            return response;
-        }
-
-        private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
-
-        internal const string NotFoundWhenSavingNotificationId = "8FD46D5D-1CB3-4ECB-B27B-724813A0406C";
-
-        private static Notification NotFoundWhenSavingNotification(long id) =>
-            Notification.CreateError(NotFoundWhenSavingNotificationId, $"TodoItem {id} was not found when saving.");
     }
 }
