@@ -5,9 +5,9 @@ using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class SaveRulesFactory : IRulesFactory<SaveTodoItemRequest, Response<TodoItem>>
+    internal class SaveRulesFactory : IRulesFactory<Request<TodoItem>, Response<TodoItem>>
     {
-        public IEnumerable<BaseRule<SaveTodoItemRequest, Response<TodoItem>>> Create()
+        public IEnumerable<BaseRule<Request<TodoItem>, Response<TodoItem>>> Create()
         {
             yield return new RequestRule();
             yield return new ResponseRule();

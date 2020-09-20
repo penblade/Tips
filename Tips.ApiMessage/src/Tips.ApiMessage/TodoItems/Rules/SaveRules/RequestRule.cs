@@ -4,11 +4,11 @@ using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class RequestRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
+    internal class RequestRule : BaseRule<Request<TodoItem>, Response<TodoItem>>
     {
-        protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
+        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItem> response)
         {
-            if (request.TodoItem == null)
+            if (request.Item == null)
             {
                 response.Add(TodoItemWasNotProvidedNotification());
                 RuleFailed();

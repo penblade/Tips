@@ -1,8 +1,9 @@
-﻿using Tips.ApiMessage.TodoItems.Models;
+﻿using Tips.ApiMessage.Contracts;
+using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
-    public class CreateTodoItemRequest : SaveTodoItemRequest
+    public class CreateTodoItemRequest : Request<TodoItem>
     {
     }
 }

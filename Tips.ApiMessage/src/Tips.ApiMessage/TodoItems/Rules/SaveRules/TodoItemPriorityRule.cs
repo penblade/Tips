@@ -4,20 +4,20 @@ using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemPriorityRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
+    internal class TodoItemPriorityRule : BaseRule<Request<TodoItem>, Response<TodoItem>>
     {
         public TodoItemPriorityRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
-        protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
+        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItem> response)
         {
-            if (request.TodoItem.Priority < 1 || request.TodoItem.Priority > 3)
+            if (request.Item.Priority < 1 || request.Item.Priority > 3)
             {
                 response.Add(TodoItemPriorityIsNotInRangeNotification());
                 RuleFailed();
                 return;
             }
 
-            response.Result.Priority = request.TodoItem.Priority;
+            response.Result.Priority = request.Item.Priority;
             RulePassed();
         }
 

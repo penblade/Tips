@@ -30,7 +30,7 @@ namespace Tips.ApiMessage.Extensions
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 
-            services.AddScoped(typeof(IRulesFactory<SaveTodoItemRequest, Response<TodoItem>>), typeof(SaveRulesFactory));
+            services.AddScoped(typeof(IRulesFactory<Request<TodoItem>, Response<TodoItem>>), typeof(SaveRulesFactory));
             services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>>), typeof(UpdateRulesFactory));
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 

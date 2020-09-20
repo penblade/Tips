@@ -12,12 +12,12 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
     internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly IRulesEngine _rulesEngine;
-        private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _saveRulesFactory;
+        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItem>> _saveRulesFactory;
         private readonly IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> _updateRulesFactory;
         private readonly IUpdateTodoItemRepository _updateTodoItemRepository;
 
         public UpdateTodoItemRequestHandler(IRulesEngine rulesEngine,
-            IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> saveRulesFactory,
+            IRulesFactory<Request<TodoItem>, Response<TodoItem>> saveRulesFactory,
             IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> updateRulesFactory,
             IUpdateTodoItemRepository updateTodoItemRepository)
         {

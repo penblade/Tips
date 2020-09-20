@@ -4,20 +4,20 @@ using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemDescriptionRule : BaseRule<SaveTodoItemRequest, Response<TodoItem>>
+    internal class TodoItemDescriptionRule : BaseRule<Request<TodoItem>, Response<TodoItem>>
     {
         public TodoItemDescriptionRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
-        protected override void ProcessRule(SaveTodoItemRequest request, Response<TodoItem> response)
+        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItem> response)
         {
-            if (string.IsNullOrEmpty(request.TodoItem.Description))
+            if (string.IsNullOrEmpty(request.Item.Description))
             {
                 response.Add(TodoItemDescriptionWasNotProvidedNotification());
                 RuleFailed();
                 return;
             }
 
-            response.Result.Description = request.TodoItem.Description;
+            response.Result.Description = request.Item.Description;
             RulePassed();
         }
 

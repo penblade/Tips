@@ -9,9 +9,9 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
     {
         protected override void ProcessRule(UpdateTodoItemRequest request, Response<TodoItem> response)
         {
-            if (request.Id != request.TodoItem.Id)
+            if (request.Id != request.Item.Id)
             {
-                response.Add(NotSameIdNotification(request.Id, request.TodoItem.Id));
+                response.Add(NotSameIdNotification(request.Id, request.Item.Id));
                 ContinueProcessing = false;
                 RuleFailed();
                 return;

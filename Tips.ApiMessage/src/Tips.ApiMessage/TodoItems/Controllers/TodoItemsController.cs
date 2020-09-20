@@ -81,7 +81,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         public async Task<IActionResult> UpdateTodoItem([FromServices] IRequestHandler<UpdateTodoItemRequest, Response> handler,
             bool withDetails, long id, TodoItem todoItem, CancellationToken cancellationToken)
         {
-            var request = new UpdateTodoItemRequest { Id = id, TodoItem = todoItem };
+            var request = new UpdateTodoItemRequest { Id = id, Item = todoItem };
 
             var response = await Handle(handler, request, cancellationToken);
 
@@ -105,7 +105,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         public async Task<IActionResult> CreateTodoItem([FromServices] IRequestHandler<CreateTodoItemRequest, Response<TodoItem>> handler,
             bool withDetails, TodoItem todoItem, CancellationToken cancellationToken)
         {
-            var request = new CreateTodoItemRequest { TodoItem = todoItem };
+            var request = new CreateTodoItemRequest { Item = todoItem };
 
             var response = await Handle(handler, request, cancellationToken);
 

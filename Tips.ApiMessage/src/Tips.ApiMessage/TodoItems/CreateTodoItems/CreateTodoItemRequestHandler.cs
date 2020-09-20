@@ -12,11 +12,11 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
     internal class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {
         private readonly IRulesEngine _todoItemRulesEngine;
-        private readonly IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> _saveRulesFactory;
+        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItem>> _saveRulesFactory;
         private readonly ICreateTodoItemRepository _createTodoItemRepository;
 
         public CreateTodoItemRequestHandler(IRulesEngine todoItemRulesEngine,
-            IRulesFactory<SaveTodoItemRequest, Response<TodoItem>> saveRulesFactory,
+            IRulesFactory<Request<TodoItem>, Response<TodoItem>> saveRulesFactory,
             ICreateTodoItemRepository createTodoItemRepository)
         {
             _todoItemRulesEngine = todoItemRulesEngine;
@@ -35,7 +35,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             return await _createTodoItemRepository.Save(response, cancellationToken);
         }
 
-        private bool ProcessRules(SaveTodoItemRequest request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<SaveTodoItemRequest, Response<TodoItem>>> rules)
+        private bool ProcessRules(Request<TodoItem> request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItem>>> rules)
         {
             _todoItemRulesEngine.Process(request, response, rules);
             var rulesFailed = rules.Any(rule => rule.Failed);
