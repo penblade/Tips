@@ -1,4 +1,4 @@
-﻿namespace Tips.ApiMessage.TodoItems.Context
+﻿namespace Tips.ApiMessage.TodoItems.Context.Models
 {
     public class TodoItemEntity
     {

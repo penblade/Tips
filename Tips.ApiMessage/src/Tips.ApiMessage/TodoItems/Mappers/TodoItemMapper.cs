@@ -1,6 +1,7 @@
 ﻿using Tips.ApiMessage.Infrastructure;
 using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Context.Models;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 
 namespace Tips.ApiMessage.TodoItems.Mappers
 {

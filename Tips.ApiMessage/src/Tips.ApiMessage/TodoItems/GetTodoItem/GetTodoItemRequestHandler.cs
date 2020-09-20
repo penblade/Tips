@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Mappers;
-using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.GetTodoItem
 {

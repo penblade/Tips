@@ -1,4 +1,4 @@
-﻿namespace Tips.ApiMessage.TodoItems.Models
+﻿namespace Tips.ApiMessage.TodoItems.Endpoint.Models
 {
     public class TodoItem
     {

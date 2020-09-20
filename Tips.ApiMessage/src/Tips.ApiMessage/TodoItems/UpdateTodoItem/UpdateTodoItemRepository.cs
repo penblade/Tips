@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Context.Models;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Mappers;
-using Tips.ApiMessage.TodoItems.Models;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {

@@ -9,9 +9,9 @@ using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
 using Tips.ApiMessage.TodoItems.DeleteTodoItems;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
-using Tips.ApiMessage.TodoItems.Models;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
 namespace Tips.ApiMessage.TodoItems.Controllers

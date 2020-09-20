@@ -1,5 +1,5 @@
 ﻿using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 

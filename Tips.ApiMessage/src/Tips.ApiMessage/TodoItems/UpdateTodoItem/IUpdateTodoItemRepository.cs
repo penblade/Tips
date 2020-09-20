@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.TodoItems.Models;
+using Tips.ApiMessage.TodoItems.Endpoint.Models;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
