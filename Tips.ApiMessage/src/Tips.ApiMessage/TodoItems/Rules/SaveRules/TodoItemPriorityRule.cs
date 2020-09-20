@@ -17,7 +17,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
                 return;
             }
 
-            response.Result.Priority = request.Item.Priority;
+            response.Item.Priority = request.Item.Priority;
             RulePassed();
         }
 

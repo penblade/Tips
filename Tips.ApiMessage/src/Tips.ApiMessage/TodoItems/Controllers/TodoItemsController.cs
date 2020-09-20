@@ -43,7 +43,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             return response.Status switch
             {
                 (int) HttpStatusCode.OK when withDetails => Ok(response),
-                (int) HttpStatusCode.OK => Ok(response.Result),
+                (int) HttpStatusCode.OK => Ok(response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
         }
@@ -64,7 +64,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             {
                 (int) HttpStatusCode.NotFound => NotFound(),
                 (int) HttpStatusCode.OK when withDetails => Ok(response),
-                (int) HttpStatusCode.OK => Ok(response.Result),
+                (int) HttpStatusCode.OK => Ok(response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
         }
@@ -112,8 +112,8 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             return response.Status switch
             {
                 (int) HttpStatusCode.BadRequest => BadRequest(response),
-                (int) HttpStatusCode.Created when withDetails => CreatedAtAction(nameof(GetTodoItem), new { id = response.Result.Id }, response),
-                (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.Result.Id }, response.Result),
+                (int) HttpStatusCode.Created when withDetails => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response),
+                (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
         }

@@ -20,19 +20,19 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             TodoItemEntity todoItemEntity;
             try
             {
-                todoItemEntity = await _context.TodoItems.FindAsync(response.Result.Id);
+                todoItemEntity = await _context.TodoItems.FindAsync(response.Item.Id);
 
-                TodoItemMapper.MapToTodoItemEntity(response.Result, todoItemEntity);
+                TodoItemMapper.MapToTodoItemEntity(response.Item, todoItemEntity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
-            catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Result.Id))
+            catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Item.Id))
             {
-                response.Add(NotFoundWhenSavingNotification(response.Result.Id));
+                response.Add(NotFoundWhenSavingNotification(response.Item.Id));
                 response.SetStatusToNotFound();
                 return response;
             }
 
-            response.Result = TodoItemMapper.MapToTodoItem(todoItemEntity);
+            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
             response.SetStatusToNoContent();
             return response;
         }

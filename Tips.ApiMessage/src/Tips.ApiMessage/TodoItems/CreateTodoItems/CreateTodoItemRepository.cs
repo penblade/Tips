@@ -15,12 +15,12 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public async Task<Response<TodoItem>> Save(Response<TodoItem> response, CancellationToken cancellationToken)
         {
-            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(response.Result);
+            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(response.Item);
 
             await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            response.Result = TodoItemMapper.MapToTodoItem(todoItemEntity);
+            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
             response.SetStatusToCreated();
             return response;
         }

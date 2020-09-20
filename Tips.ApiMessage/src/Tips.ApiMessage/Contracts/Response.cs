@@ -5,9 +5,9 @@ using Tips.ApiMessage.Pipeline;
 
 namespace Tips.ApiMessage.Contracts
 {
-    public class Response<TResult> : Response
+    public class Response<TItem> : Response
     {
-        public TResult Result { get; set; }
+        public TItem Item { get; set; }
     }
 
     public class Response

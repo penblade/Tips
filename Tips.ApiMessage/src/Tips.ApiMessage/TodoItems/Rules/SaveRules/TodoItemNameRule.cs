@@ -17,7 +17,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
                 return;
             }
 
-            response.Result.Name = request.Item.Name;
+            response.Item.Name = request.Item.Name;
             RulePassed();
         }
 

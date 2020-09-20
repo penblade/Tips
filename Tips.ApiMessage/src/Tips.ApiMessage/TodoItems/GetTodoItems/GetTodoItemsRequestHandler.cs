@@ -24,7 +24,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItems
                 .ToListAsync(cancellationToken);
 
             response.SetStatusToOk();
-            response.Result = todoItems;
+            response.Item = todoItems;
             return response;
         }
     }

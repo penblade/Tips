@@ -17,7 +17,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
                 return;
             }
 
-            response.Result.Description = request.Item.Description;
+            response.Item.Description = request.Item.Description;
             RulePassed();
         }
 
