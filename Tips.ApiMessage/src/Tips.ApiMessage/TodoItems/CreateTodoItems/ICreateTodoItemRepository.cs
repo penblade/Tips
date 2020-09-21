@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.TodoItems.Endpoint.Models;
+using Tips.ApiMessage.TodoItems.Context.Models;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
     internal interface ICreateTodoItemRepository
     {
-        Task<Response<TodoItem>> Save(Response<TodoItem> response, CancellationToken cancellationToken);
+        Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken);
     }
 }

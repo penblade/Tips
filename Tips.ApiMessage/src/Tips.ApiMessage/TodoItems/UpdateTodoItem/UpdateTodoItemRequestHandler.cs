@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
+using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 
@@ -12,13 +13,13 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
     internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly IRulesEngine _rulesEngine;
-        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItem>> _saveRulesFactory;
-        private readonly IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> _updateRulesFactory;
+        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;
+        private readonly IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>> _updateRulesFactory;
         private readonly IUpdateTodoItemRepository _updateTodoItemRepository;
 
         public UpdateTodoItemRequestHandler(IRulesEngine rulesEngine,
-            IRulesFactory<Request<TodoItem>, Response<TodoItem>> saveRulesFactory,
-            IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>> updateRulesFactory,
+            IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> saveRulesFactory,
+            IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>> updateRulesFactory,
             IUpdateTodoItemRepository updateTodoItemRepository)
         {
             _rulesEngine = rulesEngine;
@@ -29,17 +30,19 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<TodoItem>();
+            var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
             if (ProcessRules(request, response, _updateRulesFactory.Create().ToList())) return response;
             if (ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return response;
 
             // Command.  Save the data.
-            return await _updateTodoItemRepository.Save(response, cancellationToken);
+            await _updateTodoItemRepository.Save(response, cancellationToken);
+
+            return response;
         }
 
-        private bool ProcessRules<TRequest>(TRequest request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItem>>> rules)
+        private bool ProcessRules<TRequest>(TRequest request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItemEntity>>> rules)
         {
             _rulesEngine.Process(request, response, rules);
             var rulesFailed = rules.Any(rule => rule.Failed);

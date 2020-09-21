@@ -4,7 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
+using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
+using Tips.ApiMessage.TodoItems.Mappers;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
@@ -12,11 +14,11 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
     internal class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {
         private readonly IRulesEngine _todoItemRulesEngine;
-        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItem>> _saveRulesFactory;
+        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;
         private readonly ICreateTodoItemRepository _createTodoItemRepository;
 
         public CreateTodoItemRequestHandler(IRulesEngine todoItemRulesEngine,
-            IRulesFactory<Request<TodoItem>, Response<TodoItem>> saveRulesFactory,
+            IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> saveRulesFactory,
             ICreateTodoItemRepository createTodoItemRepository)
         {
             _todoItemRulesEngine = todoItemRulesEngine;
@@ -26,16 +28,26 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public async Task<Response<TodoItem>> Handle(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<TodoItem>();
+            var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
             if (ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return null;
 
             // Command.  Save the data.
-            return await _createTodoItemRepository.Save(response, cancellationToken);
+            await _createTodoItemRepository.Save(response, cancellationToken);
+
+            return MapToResponseTodoItem(response);
         }
 
-        private bool ProcessRules(Request<TodoItem> request, Response<TodoItem> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItem>>> rules)
+        private static Response<TodoItem> MapToResponseTodoItem(Response<TodoItemEntity> response) =>
+            new Response<TodoItem>
+            {
+                Item = TodoItemMapper.MapToTodoItem(response.Item),
+                Notifications = response.Notifications,
+                Status = response.Status
+            };
+
+        private bool ProcessRules(Request<TodoItem> request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>> rules)
         {
             _todoItemRulesEngine.Process(request, response, rules);
             var rulesFailed = rules.Any(rule => rule.Failed);

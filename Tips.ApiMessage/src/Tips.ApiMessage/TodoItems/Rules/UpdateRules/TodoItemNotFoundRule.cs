@@ -1,19 +1,19 @@
 ﻿using System.Linq;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Endpoint.Models;
+using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
 namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
 {
-    internal class TodoItemNotFoundRule : BaseRule<UpdateTodoItemRequest, Response<TodoItem>>
+    internal class TodoItemNotFoundRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
     {
         private readonly TodoContext _context;
 
         public TodoItemNotFoundRule(TodoContext context) => _context = context;
 
-        protected override void ProcessRule(UpdateTodoItemRequest request, Response<TodoItem> response)
+        protected override void ProcessRule(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
         {
             if (!TodoItemExists(request.Id))
             {

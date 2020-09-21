@@ -6,6 +6,7 @@ using Tips.ApiMessage.Configuration;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.Pipeline;
 using Tips.ApiMessage.TodoItems.Context;
+using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.CreateTodoItems;
 using Tips.ApiMessage.TodoItems.DeleteTodoItems;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
@@ -30,8 +31,8 @@ namespace Tips.ApiMessage.Extensions
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 
-            services.AddScoped(typeof(IRulesFactory<Request<TodoItem>, Response<TodoItem>>), typeof(SaveRulesFactory));
-            services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItem>>), typeof(UpdateRulesFactory));
+            services.AddScoped(typeof(IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>>), typeof(SaveRulesFactory));
+            services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(UpdateRulesFactory));
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 
             services.AddScoped(typeof(ICreateTodoItemRepository), typeof(CreateTodoItemRepository));

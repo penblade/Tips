@@ -1,14 +1,15 @@
 ﻿using Tips.ApiMessage.Contracts;
+using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
 
 namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemNameRule : BaseRule<Request<TodoItem>, Response<TodoItem>>
+    internal class TodoItemNameRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
         public TodoItemNameRule() => RequiredRules.AddRange(new []{typeof(RequestRule), typeof(ResponseRule)});
 
-        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItem> response)
+        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             if (string.IsNullOrEmpty(request.Item.Name))
             {

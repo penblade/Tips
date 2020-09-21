@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Endpoint.Models;
-using Tips.ApiMessage.TodoItems.Mappers;
+using Tips.ApiMessage.TodoItems.Context.Models;
 
 namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
@@ -13,16 +12,12 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public CreateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task<Response<TodoItem>> Save(Response<TodoItem> response, CancellationToken cancellationToken)
+        public async Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken)
         {
-            var todoItemEntity = TodoItemMapper.MapToTodoItemEntity(response.Item);
-
-            await _context.TodoItems.AddAsync(todoItemEntity, cancellationToken);
+            await _context.TodoItems.AddAsync(response.Item, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
             response.SetStatusToCreated();
-            return response;
         }
     }
 }

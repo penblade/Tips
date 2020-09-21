@@ -1,5 +1,4 @@
 ﻿using Tips.ApiMessage.Infrastructure;
-using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
 
@@ -7,16 +6,7 @@ namespace Tips.ApiMessage.TodoItems.Mappers
 {
     internal static class TodoItemMapper
     {
-        public static TodoItemEntity MapToTodoItemEntity(TodoItem source)
-        {
-            Guard.AgainstNull(source, nameof(source));
-
-            var target = new TodoItemEntity();
-            MapToTodoItemEntity(source, target);
-            return target;
-        }
-
-        public static void MapToTodoItemEntity(TodoItem source, TodoItemEntity target)
+        public static void MapToTodoItemEntity(TodoItemEntity source, TodoItemEntity target)
         {
             Guard.AgainstNull(source, nameof(source));
             Guard.AgainstNull(target, nameof(target));
@@ -26,6 +16,7 @@ namespace Tips.ApiMessage.TodoItems.Mappers
             target.Description = source.Description;
             target.Priority = source.Priority;
             target.IsComplete = source.IsComplete;
+            target.Reviewer = source.Reviewer;
         }
 
         public static TodoItem MapToTodoItem(TodoItemEntity source)

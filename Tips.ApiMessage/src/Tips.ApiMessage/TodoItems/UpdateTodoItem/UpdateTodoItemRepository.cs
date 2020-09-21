@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Context.Models;
-using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Mappers;
 
 namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
@@ -16,13 +15,12 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         public UpdateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task<Response> Save(Response<TodoItem> response, CancellationToken cancellationToken)
+        public async Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken)
         {
             TodoItemEntity todoItemEntity;
             try
             {
                 todoItemEntity = await _context.TodoItems.FindAsync(response.Item.Id);
-
                 TodoItemMapper.MapToTodoItemEntity(response.Item, todoItemEntity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
@@ -30,12 +28,11 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             {
                 response.Add(NotFoundWhenSavingNotification(response.Item.Id));
                 response.SetStatusToNotFound();
-                return response;
+                return;
             }
 
-            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
+            response.Item = todoItemEntity;
             response.SetStatusToNoContent();
-            return response;
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);

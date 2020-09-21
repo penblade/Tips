@@ -21,6 +21,8 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
 
             if (AllRequiredRulesHavePassed(processedRules))
                 ProcessRule(request, response);
+            else
+                RuleSkipped();
         }
 
         private bool AllRequiredRulesHavePassed(IEnumerable<BaseRule<TRequest, TResponse>> processedRules) =>
@@ -28,12 +30,15 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
 
         protected abstract void ProcessRule(TRequest request, TResponse response);
 
+        public bool Skipped => _status == RuleStatusType.Skipped;
         public bool Failed => _status == RuleStatusType.Failed;
         public bool Passed => _status == RuleStatusType.Passed;
+
+        protected void RuleSkipped() => _status = RuleStatusType.Skipped;
         protected void RuleFailed() => _status = RuleStatusType.Failed;
         protected void RulePassed() => _status = RuleStatusType.Passed;
 
         private RuleStatusType _status = RuleStatusType.NotProcessed;
-        private enum RuleStatusType { NotProcessed, Failed, Passed }
+        private enum RuleStatusType { NotProcessed, Skipped, Failed, Passed }
     }
 }
