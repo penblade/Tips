@@ -1,4 +1,5 @@
-﻿using Tips.ApiMessage.Contracts;
+﻿using System.Threading.Tasks;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
@@ -9,17 +10,18 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public TodoItemNameRule() => RequiredRules.AddRange(new []{typeof(RequestRule), typeof(ResponseRule)});
 
-        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             if (string.IsNullOrEmpty(request.Item.Name))
             {
                 response.Add(TodoItemNameWasNotProvidedNotification());
                 RuleFailed();
-                return;
+                return Task.CompletedTask;
             }
 
             response.Item.Name = request.Item.Name;
             RulePassed();
+            return Task.CompletedTask;
         }
 
         internal const string TodoItemNameWasNotProvidedNotificationId = "148877DF-F147-413F-97AA-F306A36BCBE1";

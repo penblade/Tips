@@ -1,4 +1,5 @@
-﻿using Tips.ApiMessage.Contracts;
+﻿using System.Threading.Tasks;
+using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context.Models;
 using Tips.ApiMessage.TodoItems.Endpoint.Models;
 using Tips.ApiMessage.TodoItems.Rules.Engine;
@@ -9,7 +10,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public TodoItemReviewerRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule), typeof(TodoItemPriorityRule) });
 
-        protected override void ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             response.Item.Reviewer = request.Item.Priority switch
             {
@@ -24,10 +25,11 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
                 response.Add(TodoItemReviewerIsNullNotification());
                 response.SetStatusToBadRequest();
                 RuleFailed();
-                return;
+                return Task.CompletedTask;
             }
 
             RulePassed();
+            return Task.CompletedTask;
         }
 
         internal const string TodoItemReviewerIsNullNotificationId = "1FC6B1C0-B72A-4F2F-ADBC-C059382D4363";

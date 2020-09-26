@@ -140,8 +140,8 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             };
         }
 
-        private Task<TResponse> Handle<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
-            _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+        private async Task<TResponse> Handle<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
+            await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
 
         private static IActionResult UnhandledHttpStatusCode(Response response) => throw new Exception($"HttpStatusCode {response.Status} was not handled.");
     }

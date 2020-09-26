@@ -31,7 +31,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
             var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            if (ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return null;
+            if (await ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return null;
 
             // Command.  Save the data.
             await _createTodoItemRepository.Save(response, cancellationToken);
@@ -47,9 +47,9 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
                 Status = response.Status
             };
 
-        private bool ProcessRules(Request<TodoItem> request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>> rules)
+        private async Task<bool> ProcessRules(Request<TodoItem> request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>> rules)
         {
-            _todoItemRulesEngine.Process(request, response, rules);
+            await _todoItemRulesEngine.Process(request, response, rules);
             var rulesFailed = rules.Any(rule => rule.Failed);
             if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
             return rulesFailed;

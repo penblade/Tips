@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Tips.ApiMessage.Infrastructure;
 
 namespace Tips.ApiMessage.TodoItems.Rules.Engine
@@ -13,14 +14,14 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
 
         // Template method pattern
         // https://en.wikipedia.org/wiki/Template_method_pattern
-        public void Process(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
+        public async Task Process(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
         {
             Guard.AgainstNull(request, nameof(request));
             Guard.AgainstNull(response, nameof(response));
             Guard.AgainstNull(processedRules, nameof(processedRules));
 
             if (AllRequiredRulesHavePassed(processedRules))
-                ProcessRule(request, response);
+                await ProcessRule(request, response);
             else
                 RuleSkipped();
         }
@@ -28,7 +29,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
         private bool AllRequiredRulesHavePassed(IEnumerable<BaseRule<TRequest, TResponse>> processedRules) =>
             RequiredRules.All(requiredRule => processedRules.Any(processedRule => processedRule.GetType() == requiredRule && processedRule.Passed));
 
-        protected abstract void ProcessRule(TRequest request, TResponse response);
+        protected abstract Task ProcessRule(TRequest request, TResponse response);
 
         public bool Skipped => _status == RuleStatusType.Skipped;
         public bool Failed => _status == RuleStatusType.Failed;

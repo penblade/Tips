@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Tips.ApiMessage.TodoItems.Rules.Engine
 {
@@ -24,12 +25,12 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
         //     Process method, and then returns the final response.
-        public void Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
+        public async Task Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
         {
             var processedRules = new List<BaseRule<TRequest, TResponse>>();
             foreach (var rule in rules)
             {
-                rule.Process(request, response, processedRules);
+                await rule.Process(request, response, processedRules);
                 processedRules.Add(rule);
                 if (!rule.ContinueProcessing) return;
             }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
 using Tips.ApiMessage.TodoItems.Context.Models;
@@ -13,7 +14,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
 
         public TodoItemNotFoundRule(TodoContext context) => _context = context;
 
-        protected override void ProcessRule(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
+        protected override Task ProcessRule(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
         {
             if (!TodoItemExists(request.Id))
             {
@@ -21,10 +22,11 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
                 response.SetStatusToNotFound();
                 ContinueProcessing = false;
                 RuleFailed();
-                return;
+                return Task.CompletedTask;
             }
 
             RulePassed();
+            return Task.CompletedTask;
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
