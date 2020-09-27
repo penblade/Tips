@@ -33,8 +33,7 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTodoItems([FromServices] IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>> handler,
-            bool withDetails, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetTodoItems([FromServices] IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>> handler, CancellationToken cancellationToken)
         {
             var request = new GetTodoItemsRequest();
 
@@ -42,7 +41,6 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
 
             return response.Status switch
             {
-                (int) HttpStatusCode.OK when withDetails => Ok(response),
                 (int) HttpStatusCode.OK => Ok(response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
@@ -53,8 +51,7 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTodoItem([FromServices] IRequestHandler<GetTodoItemRequest, Response<TodoItem>> handler,
-            bool withDetails, long id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetTodoItem([FromServices] IRequestHandler<GetTodoItemRequest, Response<TodoItem>> handler, long id, CancellationToken cancellationToken)
         {
             var request = new GetTodoItemRequest { Id = id };
 
@@ -63,7 +60,6 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
             return response.Status switch
             {
                 (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.OK when withDetails => Ok(response),
                 (int) HttpStatusCode.OK => Ok(response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
@@ -72,14 +68,13 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTodoItem([FromServices] IRequestHandler<UpdateTodoItemRequest, Response> handler,
-            bool withDetails, long id, TodoItem todoItem, CancellationToken cancellationToken)
+            long id, TodoItem todoItem, CancellationToken cancellationToken)
         {
             var request = new UpdateTodoItemRequest { Id = id, Item = todoItem };
 
@@ -89,7 +84,6 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
             {
                 (int) HttpStatusCode.BadRequest => BadRequest(response),
                 (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.NoContent when withDetails => Ok(response),
                 (int) HttpStatusCode.NoContent => NoContent(),
                 _ => UnhandledHttpStatusCode(response)
             };
@@ -103,7 +97,7 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTodoItem([FromServices] IRequestHandler<CreateTodoItemRequest, Response<TodoItem>> handler,
-            bool withDetails, TodoItem todoItem, CancellationToken cancellationToken)
+            TodoItem todoItem, CancellationToken cancellationToken)
         {
             var request = new CreateTodoItemRequest { Item = todoItem };
 
@@ -112,7 +106,6 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
             return response.Status switch
             {
                 (int) HttpStatusCode.BadRequest => BadRequest(response),
-                (int) HttpStatusCode.Created when withDetails => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response),
                 (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };
@@ -120,12 +113,10 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteTodoItem([FromServices] IRequestHandler<DeleteTodoItemRequest, Response> handler,
-            bool withDetails, long id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteTodoItem([FromServices] IRequestHandler<DeleteTodoItemRequest, Response> handler, long id, CancellationToken cancellationToken)
         {
             var request = new DeleteTodoItemRequest { Id = id };
 
@@ -134,7 +125,6 @@ namespace Tips.ApiMessage.TodoItems.Endpoint
             return response.Status switch
             {
                 (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.NoContent when withDetails => Ok(response),
                 (int) HttpStatusCode.NoContent => NoContent(),
                 _ => UnhandledHttpStatusCode(response)
             };
