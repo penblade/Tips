@@ -5,6 +5,6 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
 {
     internal interface IRulesEngine
     {
-        Task Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules);
+        Task ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules);
     }
 }

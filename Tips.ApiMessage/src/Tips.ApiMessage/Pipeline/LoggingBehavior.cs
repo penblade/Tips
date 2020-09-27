@@ -10,11 +10,11 @@ namespace Tips.ApiMessage.Pipeline
         private readonly ILogger<LoggingBehavior> _logger;
         public LoggingBehavior(ILogger<LoggingBehavior> logger) => _logger = logger;
 
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> nextAsync)
         {
             using var scope = _logger.BeginScope(request);
             _logger.LogInformation(CreateLogMessageForRequest(JsonSerializer.Serialize(request)), request);
-            var response = await next();
+            var response = await nextAsync();
             _logger.LogInformation(CreateLogMessageForResponse(JsonSerializer.Serialize(response)), response);
             return response;
         }

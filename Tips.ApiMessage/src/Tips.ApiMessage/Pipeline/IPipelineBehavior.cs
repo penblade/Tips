@@ -7,6 +7,6 @@ namespace Tips.ApiMessage.Pipeline
 
     public interface IPipelineBehavior
     {
-        public Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next);
+        public Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> nextAsync);
     }
 }

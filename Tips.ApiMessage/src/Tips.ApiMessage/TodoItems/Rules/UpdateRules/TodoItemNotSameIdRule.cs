@@ -8,7 +8,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
 {
     internal class TodoItemNotSameIdRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
     {
-        protected override Task ProcessRule(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
+        protected override Task ProcessRuleAsync(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
         {
             if (request.Id != request.Item.Id)
             {

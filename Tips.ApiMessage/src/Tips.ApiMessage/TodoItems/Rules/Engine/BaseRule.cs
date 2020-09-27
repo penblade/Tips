@@ -14,14 +14,14 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
 
         // Template method pattern
         // https://en.wikipedia.org/wiki/Template_method_pattern
-        public async Task Process(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
+        public async Task ProcessAsync(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
         {
             Guard.AgainstNull(request, nameof(request));
             Guard.AgainstNull(response, nameof(response));
             Guard.AgainstNull(processedRules, nameof(processedRules));
 
             if (AllRequiredRulesHavePassed(processedRules))
-                await ProcessRule(request, response);
+                await ProcessRuleAsync(request, response);
             else
                 RuleSkipped();
         }
@@ -29,7 +29,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
         private bool AllRequiredRulesHavePassed(IEnumerable<BaseRule<TRequest, TResponse>> processedRules) =>
             RequiredRules.All(requiredRule => processedRules.Any(processedRule => processedRule.GetType() == requiredRule && processedRule.Passed));
 
-        protected abstract Task ProcessRule(TRequest request, TResponse response);
+        protected abstract Task ProcessRuleAsync(TRequest request, TResponse response);
 
         public bool Skipped => _status == RuleStatusType.Skipped;
         public bool Failed => _status == RuleStatusType.Failed;

@@ -12,7 +12,7 @@ namespace Tips.ApiMessage.TodoItems.DeleteTodoItems
 
         public DeleteTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response> Handle(DeleteTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response> HandleAsync(DeleteTodoItemRequest request, CancellationToken cancellationToken)
         {
             var response = new Response();
             var todoItem = await _context.TodoItems.FindAsync(request.Id);

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.ApiMessage.Contracts;
 using Tips.ApiMessage.TodoItems.Context;
@@ -15,7 +14,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.UpdateRules
 
         public TodoItemNotFoundRule(TodoContext context) => _context = context;
 
-        protected override async Task ProcessRule(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
+        protected override async Task ProcessRuleAsync(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
         {
             if (!await TodoItemExists(request.Id))
             {

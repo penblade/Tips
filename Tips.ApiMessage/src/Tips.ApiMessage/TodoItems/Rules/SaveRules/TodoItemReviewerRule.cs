@@ -10,8 +10,9 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public TodoItemReviewerRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule), typeof(TodoItemPriorityRule) });
 
-        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
+            // This would be a database lookup, but simplified for this example.
             response.Item.Reviewer = request.Item.Priority switch
             {
                 1 => "Peter",

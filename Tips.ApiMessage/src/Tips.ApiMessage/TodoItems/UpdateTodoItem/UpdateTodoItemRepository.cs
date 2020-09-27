@@ -15,7 +15,7 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 
         public UpdateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken)
+        public async Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken)
         {
             TodoItemEntity todoItemEntity;
             try

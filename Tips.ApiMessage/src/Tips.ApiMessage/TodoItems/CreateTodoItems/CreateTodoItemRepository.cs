@@ -12,7 +12,7 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 
         public CreateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken)
+        public async Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken)
         {
             await _context.TodoItems.AddAsync(response.Item, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

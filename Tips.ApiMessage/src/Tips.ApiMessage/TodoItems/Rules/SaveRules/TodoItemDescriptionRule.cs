@@ -10,7 +10,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public TodoItemDescriptionRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
-        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             if (string.IsNullOrEmpty(request.Item.Description))
             {

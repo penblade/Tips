@@ -14,7 +14,7 @@ using Tips.ApiMessage.TodoItems.GetTodoItem;
 using Tips.ApiMessage.TodoItems.GetTodoItems;
 using Tips.ApiMessage.TodoItems.UpdateTodoItem;
 
-namespace Tips.ApiMessage.TodoItems.Controllers
+namespace Tips.ApiMessage.TodoItems.Endpoint
 {
     // Initially created based on the Tutorial: Create a web API with ASP.NET Core
     // https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-3.1&tabs=visual-studio
@@ -38,7 +38,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new GetTodoItemsRequest();
 
-            var response = await Handle(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -58,7 +58,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new GetTodoItemRequest { Id = id };
 
-            var response = await Handle(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -83,7 +83,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new UpdateTodoItemRequest { Id = id, Item = todoItem };
 
-            var response = await Handle(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -107,7 +107,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new CreateTodoItemRequest { Item = todoItem };
 
-            var response = await Handle(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -129,7 +129,7 @@ namespace Tips.ApiMessage.TodoItems.Controllers
         {
             var request = new DeleteTodoItemRequest { Id = id };
 
-            var response = await Handle(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request, cancellationToken);
 
             return response.Status switch
             {
@@ -140,8 +140,8 @@ namespace Tips.ApiMessage.TodoItems.Controllers
             };
         }
 
-        private async Task<TResponse> Handle<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
-            await _loggingBehavior.Handle(request, cancellationToken, () => handler.Handle(request, cancellationToken));
+        private async Task<TResponse> HandleAsync<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
+            await _loggingBehavior.HandleAsync(request, cancellationToken, () => handler.HandleAsync(request, cancellationToken));
 
         private static IActionResult UnhandledHttpStatusCode(Response response) => throw new Exception($"HttpStatusCode {response.Status} was not handled.");
     }

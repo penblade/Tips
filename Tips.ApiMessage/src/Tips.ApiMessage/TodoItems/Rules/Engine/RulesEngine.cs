@@ -17,20 +17,20 @@ namespace Tips.ApiMessage.TodoItems.Rules.Engine
         // The following is very basic.
 
         // For more complex ETL each rule refactored into it's own class that
-        //     implements a standard Process method defined in an interface
+        //     implements a standard ProcessAsync method defined in an interface
         //     following the strategy pattern.
-        //     public void Process(Request request, Response response) { ... }
+        //     public void ProcessAsync(Request request, Response response) { ... }
         //     You want both the request and response passed in 
 
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
-        //     Process method, and then returns the final response.
-        public async Task Process<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
+        //     ProcessAsync method, and then returns the final response.
+        public async Task ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
         {
             var processedRules = new List<BaseRule<TRequest, TResponse>>();
             foreach (var rule in rules)
             {
-                await rule.Process(request, response, processedRules);
+                await rule.ProcessAsync(request, response, processedRules);
                 processedRules.Add(rule);
                 if (!rule.ContinueProcessing) return;
             }

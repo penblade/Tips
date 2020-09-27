@@ -28,23 +28,23 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
             _updateTodoItemRepository = updateTodoItemRepository;
         }
 
-        public async Task<Response> Handle(UpdateTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response> HandleAsync(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
             var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            if (await ProcessRules(request, response, _updateRulesFactory.Create().ToList())) return response;
-            if (await ProcessRules(request, response, _saveRulesFactory.Create().ToList())) return response;
+            if (await ProcessRulesAsync(request, response, _updateRulesFactory.Create().ToList())) return response;
+            if (await ProcessRulesAsync(request, response, _saveRulesFactory.Create().ToList())) return response;
 
             // Command.  Save the data.
-            await _updateTodoItemRepository.Save(response, cancellationToken);
+            await _updateTodoItemRepository.SaveAsync(response, cancellationToken);
 
             return response;
         }
 
-        private async Task<bool> ProcessRules<TRequest>(TRequest request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItemEntity>>> rules)
+        private async Task<bool> ProcessRulesAsync<TRequest>(TRequest request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItemEntity>>> rules)
         {
-            await _rulesEngine.Process(request, response, rules);
+            await _rulesEngine.ProcessAsync(request, response, rules);
             var rulesFailed = rules.Any(rule => rule.Failed);
             if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
             return rulesFailed;

@@ -7,6 +7,6 @@ namespace Tips.ApiMessage.TodoItems.UpdateTodoItem
 {
     internal interface IUpdateTodoItemRepository
     {
-        Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken);
+        Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken);
     }
 }

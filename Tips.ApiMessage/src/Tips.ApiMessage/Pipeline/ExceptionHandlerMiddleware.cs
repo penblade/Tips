@@ -33,7 +33,7 @@ namespace Tips.ApiMessage.Pipeline
             {
                 var problemDetails = CreateProblemDetails(_configuration.UrnName);
                 LogError(problemDetails, exception);
-                await WriteResponse(context, problemDetails);
+                await WriteResponseAsync(context, problemDetails);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Tips.ApiMessage.Pipeline
             _logger.LogError(exception, CreateLogMessageForUncaughtException(), exception);
         }
 
-        private static async Task WriteResponse(HttpContext context, ProblemDetails problemDetails)
+        private static async Task WriteResponseAsync(HttpContext context, ProblemDetails problemDetails)
         {
             // Add same headers returned by the built-in exception handler.
             context.Response.Headers["Cache-Control"] = "no-cache";

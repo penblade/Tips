@@ -14,7 +14,7 @@ namespace Tips.ApiMessage.TodoItems.GetTodoItem
 
         public GetTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response<TodoItem>> Handle(GetTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response<TodoItem>> HandleAsync(GetTodoItemRequest request, CancellationToken cancellationToken)
         {
             var response = new Response<TodoItem>();
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);

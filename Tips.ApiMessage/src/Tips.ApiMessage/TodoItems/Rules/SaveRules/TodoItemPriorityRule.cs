@@ -10,7 +10,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
     {
         public TodoItemPriorityRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
-        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             if (request.Item.Priority < 1 || request.Item.Priority > 3)
             {

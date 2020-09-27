@@ -8,7 +8,7 @@ namespace Tips.ApiMessage.TodoItems.Rules.SaveRules
 {
     internal class ResponseRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
-        protected override Task ProcessRule(Request<TodoItem> request, Response<TodoItemEntity> response)
+        protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
             response.Item = new TodoItemEntity
             {

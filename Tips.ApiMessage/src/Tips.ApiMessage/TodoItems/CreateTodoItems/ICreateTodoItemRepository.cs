@@ -7,6 +7,6 @@ namespace Tips.ApiMessage.TodoItems.CreateTodoItems
 {
     internal interface ICreateTodoItemRepository
     {
-        Task Save(Response<TodoItemEntity> response, CancellationToken cancellationToken);
+        Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken);
     }
 }
