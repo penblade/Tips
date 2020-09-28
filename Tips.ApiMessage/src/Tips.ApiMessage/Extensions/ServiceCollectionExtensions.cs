@@ -2,20 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tips.ApiMessage.Configuration;
-using Tips.ApiMessage.Contracts;
-using Tips.ApiMessage.Pipeline;
-using Tips.ApiMessage.TodoItems.Context;
-using Tips.ApiMessage.TodoItems.Context.Models;
-using Tips.ApiMessage.TodoItems.CreateTodoItems;
-using Tips.ApiMessage.TodoItems.DeleteTodoItems;
-using Tips.ApiMessage.TodoItems.Endpoint.Models;
-using Tips.ApiMessage.TodoItems.GetTodoItem;
-using Tips.ApiMessage.TodoItems.GetTodoItems;
-using Tips.ApiMessage.TodoItems.Rules.Engine;
-using Tips.ApiMessage.TodoItems.Rules.SaveRules;
-using Tips.ApiMessage.TodoItems.Rules.UpdateRules;
-using Tips.ApiMessage.TodoItems.UpdateTodoItem;
+using Tips.Pipeline;
+using Tips.Rules;
+using Tips.TodoItems.Context;
+using Tips.TodoItems.Context.Models;
+using Tips.TodoItems.Handlers.CreateTodoItems;
+using Tips.TodoItems.Handlers.DeleteTodoItems;
+using Tips.TodoItems.Handlers.GetTodoItem;
+using Tips.TodoItems.Handlers.GetTodoItems;
+using Tips.TodoItems.Handlers.UpdateTodoItem;
+using Tips.TodoItems.Models;
+using Tips.TodoItems.Rules.SaveRules;
+using Tips.TodoItems.Rules.UpdateRules;
 
 namespace Tips.ApiMessage.Extensions
 {
@@ -25,8 +23,8 @@ namespace Tips.ApiMessage.Extensions
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
-            var config = new AppConfiguration();
-            configuration.Bind(nameof(AppConfiguration), config);
+            var config = new ExceptionHandlerMiddlewareConfiguration();
+            configuration.Bind(nameof(ExceptionHandlerMiddlewareConfiguration), config);
             services.AddSingleton(config);
 
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
