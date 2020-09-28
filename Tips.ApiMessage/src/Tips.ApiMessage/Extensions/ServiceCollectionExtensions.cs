@@ -33,6 +33,16 @@ namespace Tips.ApiMessage.Extensions
             services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(UpdateRulesFactory));
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(RequestRule));
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(ResponseRule));
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemNameRule));
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemDescriptionRule));
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemPriorityRule));
+            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemReviewerRule));
+
+            services.AddScoped(typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotSameIdRule));
+            services.AddScoped(typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotFoundRule));
+
             services.AddScoped(typeof(ICreateTodoItemRepository), typeof(CreateTodoItemRepository));
             services.AddScoped(typeof(IUpdateTodoItemRepository), typeof(UpdateTodoItemRepository));
 

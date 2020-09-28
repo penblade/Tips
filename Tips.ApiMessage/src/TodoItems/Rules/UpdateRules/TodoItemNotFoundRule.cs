@@ -8,7 +8,7 @@ using Tips.TodoItems.Handlers.UpdateTodoItem;
 
 namespace Tips.TodoItems.Rules.UpdateRules
 {
-    internal class TodoItemNotFoundRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
+    public class TodoItemNotFoundRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
     {
         private readonly TodoContext _context;
 

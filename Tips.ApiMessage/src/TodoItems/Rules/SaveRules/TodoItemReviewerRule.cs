@@ -6,7 +6,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemReviewerRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
+    public class TodoItemReviewerRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
         public TodoItemReviewerRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule), typeof(TodoItemPriorityRule) });
 

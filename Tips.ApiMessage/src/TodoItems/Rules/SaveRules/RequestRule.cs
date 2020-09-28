@@ -6,7 +6,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Rules.SaveRules
 {
-    internal class RequestRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
+    public class RequestRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
         protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {

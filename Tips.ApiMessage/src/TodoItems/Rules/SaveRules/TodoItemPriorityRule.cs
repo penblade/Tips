@@ -6,7 +6,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Rules.SaveRules
 {
-    internal class TodoItemPriorityRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
+    public class TodoItemPriorityRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
         public TodoItemPriorityRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 
