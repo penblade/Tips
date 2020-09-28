@@ -3,7 +3,7 @@ using Tips.TodoItems.Context.Models;
 
 namespace Tips.TodoItems.Context
 {
-    public class TodoContext : DbContext
+    internal class TodoContext : DbContext
     {
         public TodoContext(DbContextOptions<TodoContext> options) : base(options)
         {

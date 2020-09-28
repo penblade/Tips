@@ -5,7 +5,7 @@ using Tips.TodoItems.Context;
 
 namespace Tips.TodoItems.Handlers.DeleteTodoItems
 {
-    public class DeleteTodoItemRequestHandler : IRequestHandler<DeleteTodoItemRequest, Response>
+    internal class DeleteTodoItemRequestHandler : IRequestHandler<DeleteTodoItemRequest, Response>
     {
         private readonly TodoContext _context;
 

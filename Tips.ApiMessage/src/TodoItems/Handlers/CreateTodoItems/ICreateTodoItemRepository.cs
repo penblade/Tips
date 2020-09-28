@@ -5,7 +5,7 @@ using Tips.TodoItems.Context.Models;
 
 namespace Tips.TodoItems.Handlers.CreateTodoItems
 {
-    public interface ICreateTodoItemRepository
+    internal interface ICreateTodoItemRepository
     {
         Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken);
     }

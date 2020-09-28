@@ -6,7 +6,7 @@ using Tips.TodoItems.Handlers.UpdateTodoItem;
 
 namespace Tips.TodoItems.Rules.UpdateRules
 {
-    public class TodoItemNotSameIdRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
+    internal class TodoItemNotSameIdRule : BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>
     {
         protected override Task ProcessRuleAsync(UpdateTodoItemRequest request, Response<TodoItemEntity> response)
         {

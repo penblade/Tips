@@ -2,7 +2,7 @@
 
 namespace Tips.TodoItems.Infrastructure
 {
-    public static class Guard
+    internal static class Guard
     {
         public static void AgainstNull(object input, string parameterName)
         {

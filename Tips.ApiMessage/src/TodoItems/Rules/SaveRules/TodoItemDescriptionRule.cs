@@ -6,7 +6,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Rules.SaveRules
 {
-    public class TodoItemDescriptionRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
+    internal class TodoItemDescriptionRule : BaseRule<Request<TodoItem>, Response<TodoItemEntity>>
     {
         public TodoItemDescriptionRule() => RequiredRules.AddRange(new[] { typeof(RequestRule), typeof(ResponseRule) });
 

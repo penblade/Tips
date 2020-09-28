@@ -6,7 +6,7 @@ using Tips.TodoItems.Context.Models;
 
 namespace Tips.TodoItems.Handlers.CreateTodoItems
 {
-    public class CreateTodoItemRepository : ICreateTodoItemRepository
+    internal class CreateTodoItemRepository : ICreateTodoItemRepository
     {
         private readonly TodoContext _context;
 

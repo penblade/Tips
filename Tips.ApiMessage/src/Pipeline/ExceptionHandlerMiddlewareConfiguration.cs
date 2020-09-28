@@ -1,6 +1,6 @@
 ﻿namespace Tips.Pipeline
 {
-    public class ExceptionHandlerMiddlewareConfiguration
+    internal class ExceptionHandlerMiddlewareConfiguration
     {
         public string UrnName { get; set; }
     }

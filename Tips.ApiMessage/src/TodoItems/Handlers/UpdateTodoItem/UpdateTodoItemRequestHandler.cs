@@ -9,7 +9,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Handlers.UpdateTodoItem
 {
-    public class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
+    internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly IRulesEngine _rulesEngine;
         private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Tips.Rules
 {
-    public class RulesEngine : IRulesEngine
+    internal class RulesEngine : IRulesEngine
     {
         // With complex Extract/Transform/Load (ETL) operations, mapping isn't necessarily 1-1 and adjustments must be done.
         // A rules engine can separate concerns for ETL from the domain object.

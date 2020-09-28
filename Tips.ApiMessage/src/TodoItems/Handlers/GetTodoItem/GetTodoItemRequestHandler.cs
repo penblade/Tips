@@ -7,7 +7,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Handlers.GetTodoItem
 {
-    public class GetTodoItemRequestHandler : IRequestHandler<GetTodoItemRequest, Response<TodoItem>>
+    internal class GetTodoItemRequestHandler : IRequestHandler<GetTodoItemRequest, Response<TodoItem>>
     {
         private readonly TodoContext _context;
 

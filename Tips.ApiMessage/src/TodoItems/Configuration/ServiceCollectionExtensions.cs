@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tips.Pipeline;
 using Tips.Rules;
@@ -15,23 +14,16 @@ using Tips.TodoItems.Models;
 using Tips.TodoItems.Rules.SaveRules;
 using Tips.TodoItems.Rules.UpdateRules;
 
-namespace Tips.ApiMessage.Extensions
+namespace Tips.TodoItems.Configuration
 {
     public static class ServiceCollectionExtensions
     {
-        public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterDependenciesForTodoItems(this IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
-            var config = new ExceptionHandlerMiddlewareConfiguration();
-            configuration.Bind(nameof(ExceptionHandlerMiddlewareConfiguration), config);
-            services.AddSingleton(config);
-
-            services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
-
             services.AddScoped(typeof(IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>>), typeof(SaveRulesFactory));
             services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(UpdateRulesFactory));
-            services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
 
             services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(RequestRule));
             services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(ResponseRule));

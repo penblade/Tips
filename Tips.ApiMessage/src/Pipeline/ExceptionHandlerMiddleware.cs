@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Tips.Pipeline
 {
     // Inspiration: https://code-maze.com/global-error-handling-aspnetcore/#builtinmiddleware
-    public class ExceptionHandlerMiddleware
+    internal class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;

@@ -8,7 +8,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Rules.SaveRules
 {
-    public class SaveRulesFactory : IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>>
+    internal class SaveRulesFactory : IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>>
     {
         private readonly IServiceProvider _serviceProvider;
 

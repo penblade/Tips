@@ -10,7 +10,7 @@ using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Handlers.CreateTodoItems
 {
-    public class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
+    internal class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {
         private readonly IRulesEngine _todoItemRulesEngine;
         private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;

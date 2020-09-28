@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Tips.Pipeline
 {
-    public class LoggingBehavior : IPipelineBehavior
+    internal class LoggingBehavior : IPipelineBehavior
     {
         private readonly ILogger<LoggingBehavior> _logger;
         public LoggingBehavior(ILogger<LoggingBehavior> logger) => _logger = logger;

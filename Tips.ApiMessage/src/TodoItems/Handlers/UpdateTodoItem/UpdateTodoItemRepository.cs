@@ -9,7 +9,7 @@ using Tips.TodoItems.Mappers;
 
 namespace Tips.TodoItems.Handlers.UpdateTodoItem
 {
-    public class UpdateTodoItemRepository : IUpdateTodoItemRepository
+    internal class UpdateTodoItemRepository : IUpdateTodoItemRepository
     {
         private readonly TodoContext _context;
 

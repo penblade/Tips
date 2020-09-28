@@ -5,7 +5,7 @@ using Tips.TodoItems.Context.Models;
 
 namespace Tips.TodoItems.Handlers.UpdateTodoItem
 {
-    public interface IUpdateTodoItemRepository
+    internal interface IUpdateTodoItemRepository
     {
         Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken);
     }

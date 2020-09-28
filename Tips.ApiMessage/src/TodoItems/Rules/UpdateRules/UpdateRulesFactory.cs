@@ -8,7 +8,7 @@ using Tips.TodoItems.Handlers.UpdateTodoItem;
 
 namespace Tips.TodoItems.Rules.UpdateRules
 {
-    public class UpdateRulesFactory : IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>
+    internal class UpdateRulesFactory : IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>
     {
         private readonly IServiceProvider _serviceProvider;
 
