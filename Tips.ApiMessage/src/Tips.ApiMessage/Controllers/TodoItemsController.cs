@@ -104,7 +104,7 @@ namespace Tips.ApiMessage.Controllers
 
             return response.Status switch
             {
-                (int) HttpStatusCode.BadRequest => BadRequest(response),
+                (int) HttpStatusCode.BadRequest => BadRequest(new Response { Notifications = response.Notifications}),
                 (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response.Item),
                 _ => UnhandledHttpStatusCode(response)
             };

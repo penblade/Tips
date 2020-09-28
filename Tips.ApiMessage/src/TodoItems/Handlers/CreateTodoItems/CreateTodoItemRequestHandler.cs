@@ -30,7 +30,7 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            if (await ProcessRulesAsync(request, response, _saveRulesFactory.Create().ToList())) return null;
+            if (await ProcessRulesAsync(request, response, _saveRulesFactory.Create().ToList())) return MapToResponseTodoItem(response);
 
             // Command.  Save the data.
             await _createTodoItemRepository.SaveAsync(response, cancellationToken);
