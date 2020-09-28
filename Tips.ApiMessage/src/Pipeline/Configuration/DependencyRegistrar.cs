@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Tips.Pipeline.Configuration
 {
-    public static class ServiceCollectionExtensions
+    public static class DependencyRegistrar
     {
-        public static void RegisterDependenciesForPipeline(this IServiceCollection services, IConfiguration configuration)
+        public static void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(IPipelineBehavior), typeof(LoggingBehavior));
 

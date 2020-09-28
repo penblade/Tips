@@ -16,9 +16,9 @@ using Tips.TodoItems.Rules.UpdateRules;
 
 namespace Tips.TodoItems.Configuration
 {
-    public static class ServiceCollectionExtensions
+    public static class DependencyRegistrar
     {
-        public static void RegisterDependenciesForTodoItems(this IServiceCollection services)
+        public static void Register(IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 

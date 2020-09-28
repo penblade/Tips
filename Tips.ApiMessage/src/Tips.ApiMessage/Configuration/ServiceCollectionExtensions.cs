@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tips.Pipeline.Configuration;
-using Tips.Rules.Configuration;
-using Tips.TodoItems.Configuration;
 
 namespace Tips.ApiMessage.Configuration
 {
@@ -10,9 +7,9 @@ namespace Tips.ApiMessage.Configuration
     {
         public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterDependenciesForRules();
-            services.RegisterDependenciesForPipeline(configuration);
-            services.RegisterDependenciesForTodoItems();
+            Rules.Configuration.DependencyRegistrar.Register(services);
+            Pipeline.Configuration.DependencyRegistrar.Register(services, configuration);
+            TodoItems.Configuration.DependencyRegistrar.Register(services);
         }
     }
 }

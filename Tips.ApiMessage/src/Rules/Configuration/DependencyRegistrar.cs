@@ -2,9 +2,9 @@
 
 namespace Tips.Rules.Configuration
 {
-    public static class ServiceCollectionExtensions
+    public static class DependencyRegistrar
     {
-        public static void RegisterDependenciesForRules(this IServiceCollection services)
+        public static void Register(IServiceCollection services)
         {
             services.AddScoped(typeof(IRulesEngine), typeof(RulesEngine));
         }
