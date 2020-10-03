@@ -22,9 +22,6 @@ namespace Tips.TodoItems.Configuration
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
-            services.AddScoped(typeof(IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>>), typeof(SaveRulesFactory));
-            services.AddScoped(typeof(IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(UpdateRulesFactory));
-
             services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(RequestRule));
             services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(ResponseRule));
             services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemNameRule));
