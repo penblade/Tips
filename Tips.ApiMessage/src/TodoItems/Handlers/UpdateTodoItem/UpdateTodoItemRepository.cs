@@ -26,20 +26,18 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Item.Id))
             {
-                response.Add(NotFoundWhenSavingNotification(response.Item.Id));
-                response.SetStatusToNotFound();
+                response.Add(TodoItemNotFoundWhenSavingNotification(response.Item.Id));
                 return;
             }
 
             response.Item = todoItemEntity;
-            response.SetStatusToNoContent();
         }
 
         private bool TodoItemExists(long id) => _context.TodoItems.Any(e => e.Id == id);
 
-        internal const string NotFoundWhenSavingNotificationId = "8FD46D5D-1CB3-4ECB-B27B-724813A0406C";
+        internal const string TodoItemNotFoundWhenSavingNotificationId = "8FD46D5D-1CB3-4ECB-B27B-724813A0406C";
 
-        private static Notification NotFoundWhenSavingNotification(long id) =>
-            Notification.CreateError(NotFoundWhenSavingNotificationId, $"TodoItem {id} was not found when saving.");
+        private static Notification TodoItemNotFoundWhenSavingNotification(long id) =>
+            NotFoundNotification.Create(TodoItemNotFoundWhenSavingNotificationId, $"TodoItem {id} was not found when saving.");
     }
 }

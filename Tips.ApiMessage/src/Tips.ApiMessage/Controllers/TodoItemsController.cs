@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,11 +37,8 @@ namespace Tips.ApiMessage.Controllers
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            return response.Status switch
-            {
-                (int) HttpStatusCode.OK => Ok(response.Item),
-                _ => UnhandledHttpStatusCode(response)
-            };
+            response.Status = (int) HttpStatusCode.OK;
+            return Ok(response.Item);
         }
 
         // GET: api/TodoItems/5
@@ -56,12 +52,10 @@ namespace Tips.ApiMessage.Controllers
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            return response.Status switch
-            {
-                (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.OK => Ok(response.Item),
-                _ => UnhandledHttpStatusCode(response)
-            };
+            if (response.IsNotFound()) return NotFound();
+
+            response.Status = (int) HttpStatusCode.OK;
+            return Ok(response.Item);
         }
 
         // PUT: api/TodoItems/5
@@ -79,13 +73,15 @@ namespace Tips.ApiMessage.Controllers
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            return response.Status switch
+            if (response.IsNotFound()) return NotFound();
+
+            if (response.HasErrors())
             {
-                (int) HttpStatusCode.BadRequest => BadRequest(response),
-                (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.NoContent => NoContent(),
-                _ => UnhandledHttpStatusCode(response)
-            };
+                response.Status = (int) HttpStatusCode.BadRequest;
+                return BadRequest(MapToResponseWithNoItem(response));
+            }
+
+            return NoContent();
         }
 
         // POST: api/TodoItems
@@ -102,12 +98,14 @@ namespace Tips.ApiMessage.Controllers
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            return response.Status switch
+            if (response.HasErrors())
             {
-                (int) HttpStatusCode.BadRequest => BadRequest(new Response { Notifications = response.Notifications, Status = response.Status }),
-                (int) HttpStatusCode.Created => CreatedAtAction(nameof(GetTodoItem), new { id = response.Item.Id }, response.Item),
-                _ => UnhandledHttpStatusCode(response)
-            };
+                response.Status = (int)HttpStatusCode.BadRequest;
+                return BadRequest(MapToResponseWithNoItem(response));
+            }
+
+            response.Status = (int)HttpStatusCode.Created;
+            return CreatedAtAction(nameof(GetTodoItem), new {id = response.Item.Id}, response.Item);
         }
 
         // DELETE: api/TodoItems/5
@@ -121,17 +119,14 @@ namespace Tips.ApiMessage.Controllers
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            return response.Status switch
-            {
-                (int) HttpStatusCode.NotFound => NotFound(),
-                (int) HttpStatusCode.NoContent => NoContent(),
-                _ => UnhandledHttpStatusCode(response)
-            };
+            if (response.IsNotFound()) return NotFound();
+
+            return NoContent();
         }
 
         private async Task<TResponse> HandleAsync<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
             await _loggingBehavior.HandleAsync(request, cancellationToken, () => handler.HandleAsync(request, cancellationToken));
 
-        private static IActionResult UnhandledHttpStatusCode(Response response) => throw new Exception($"HttpStatusCode {response.Status} was not handled.");
+        private static Response MapToResponseWithNoItem(Response response) => new Response { Notifications = response.Notifications, Status = response.Status };
     }
 }

@@ -16,8 +16,6 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
         {
             await _context.TodoItems.AddAsync(response.Item, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-
-            response.SetStatusToCreated();
         }
     }
 }

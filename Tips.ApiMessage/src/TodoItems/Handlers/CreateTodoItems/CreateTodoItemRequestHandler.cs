@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Tips.Pipeline;
@@ -30,28 +29,13 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            if (await ProcessRulesAsync(request, response, _saveRulesFactory.Create().ToList())) return MapToResponseTodoItem(response);
+            await _todoItemRulesEngine.ProcessAsync(request, response, _saveRulesFactory.Create().ToList());
+            if (response.HasErrors()) return ResponseMapper.MapToResponseWithTodoItem(response);
 
             // Command.  Save the data.
             await _createTodoItemRepository.SaveAsync(response, cancellationToken);
 
-            return MapToResponseTodoItem(response);
-        }
-
-        private static Response<TodoItem> MapToResponseTodoItem(Response<TodoItemEntity> response) =>
-            new Response<TodoItem>
-            {
-                Item = TodoItemMapper.MapToTodoItem(response.Item),
-                Notifications = response.Notifications,
-                Status = response.Status
-            };
-
-        private async Task<bool> ProcessRulesAsync(Request<TodoItem> request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>> rules)
-        {
-            await _todoItemRulesEngine.ProcessAsync(request, response, rules);
-            var rulesFailed = rules.Any(rule => rule.Failed);
-            if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
-            return rulesFailed;
+            return ResponseMapper.MapToResponseWithTodoItem(response);
         }
     }
 }

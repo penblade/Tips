@@ -24,7 +24,6 @@ namespace Tips.TodoItems.Rules.SaveRules
             if (string.IsNullOrEmpty(response.Item.Reviewer))
             {
                 response.Add(TodoItemReviewerIsNullNotification());
-                response.SetStatusToBadRequest();
                 RuleFailed();
                 return Task.CompletedTask;
             }

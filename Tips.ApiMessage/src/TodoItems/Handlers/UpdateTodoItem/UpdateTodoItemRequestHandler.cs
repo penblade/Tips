@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Tips.Pipeline;
@@ -32,21 +31,16 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
             var response = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            if (await ProcessRulesAsync(request, response, _updateRulesFactory.Create().ToList())) return response;
-            if (await ProcessRulesAsync(request, response, _saveRulesFactory.Create().ToList())) return response;
+            await _rulesEngine.ProcessAsync(request, response, _updateRulesFactory.Create().ToList());
+            if (response.HasErrors()) return response;
+            
+            await _rulesEngine.ProcessAsync(request, response, _saveRulesFactory.Create().ToList());
+            if (response.HasErrors()) return response;
 
             // Command.  Save the data.
             await _updateTodoItemRepository.SaveAsync(response, cancellationToken);
 
             return response;
-        }
-
-        private async Task<bool> ProcessRulesAsync<TRequest>(TRequest request, Response<TodoItemEntity> response, IReadOnlyCollection<BaseRule<TRequest, Response<TodoItemEntity>>> rules)
-        {
-            await _rulesEngine.ProcessAsync(request, response, rules);
-            var rulesFailed = rules.Any(rule => rule.Failed);
-            if (rulesFailed && response.IsStatusNotSet()) response.SetStatusToBadRequest();
-            return rulesFailed;
         }
     }
 }

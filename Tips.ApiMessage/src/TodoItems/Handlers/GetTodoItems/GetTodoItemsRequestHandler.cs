@@ -22,7 +22,6 @@ namespace Tips.TodoItems.Handlers.GetTodoItems
             var todoItems = await _context.TodoItems.Select(todoItemEntity => TodoItemMapper.MapToTodoItem(todoItemEntity))
                 .ToListAsync(cancellationToken);
 
-            response.SetStatusToOk();
             response.Item = todoItems;
             return response;
         }

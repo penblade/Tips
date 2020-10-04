@@ -18,15 +18,18 @@ namespace Tips.TodoItems.Handlers.GetTodoItem
             var response = new Response<TodoItem>();
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
 
-            if (todoItemEntity != null)
+            if (todoItemEntity == null)
             {
-                response.SetStatusToOk();
-                response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
+                response.Add(TodoItemNotFoundNotification(request.Id)); 
                 return response;
             }
 
-            response.SetStatusToNotFound();
+            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
             return response;
         }
+
+        internal const string TodoItemNotFoundNotificationId = "D2B34535-0896-491B-9E6A-6D9F6575DD9E";
+        private static Notification TodoItemNotFoundNotification(long id) =>
+            NotFoundNotification.Create(TodoItemNotFoundNotificationId, $"TodoItem {id} was not found.");
     }
 }
