@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Tips.Pipeline;
 
 namespace Tips.Middleware
 {
@@ -13,13 +14,13 @@ namespace Tips.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-        private readonly ExceptionHandlerMiddlewareConfiguration _configuration;
+        private readonly IProblemDetailFactory _problemDetailFactory;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger, ExceptionHandlerMiddlewareConfiguration configuration)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger, IProblemDetailFactory problemDetailFactory)
         {
             _next = next;
             _logger = logger;
-            _configuration = configuration;
+            _problemDetailFactory = problemDetailFactory;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -30,28 +31,10 @@ namespace Tips.Middleware
             }
             catch (Exception exception)
             {
-                var problemDetails = CreateProblemDetails(_configuration.UrnName);
+                var problemDetails = _problemDetailFactory.InternalServerError();
                 LogError(problemDetails, exception);
                 await WriteResponseAsync(context, problemDetails);
             }
-        }
-
-        private static ProblemDetails CreateProblemDetails(string urnName)
-        {
-            const string uncaughtExceptionId = "D1537B75-D85A-48CF-8A02-DF6C614C3198";
-
-            // ProblemDetails implements the RF7807 standards.
-            var problemDetails = new ProblemDetails
-            {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                Title = "Internal Server Error",
-                Status = (int)HttpStatusCode.InternalServerError,
-                Detail = "Internal Server Error",
-                Instance = $"urn:{urnName}:error:{uncaughtExceptionId}"
-            };
-
-            problemDetails.Extensions["traceId"] = Tracking.TraceId;
-            return problemDetails;
         }
 
         private void LogError(ProblemDetails problemDetails, Exception exception)

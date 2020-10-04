@@ -11,8 +11,6 @@ namespace Tips.Pipeline
     public class Response
     {
         public List<Notification> Notifications { get; set; } = new List<Notification>();
-        public int Status { get; set; }
-        public string TraceId => Tracking.TraceId;
 
         public void Add(Notification notification) => Notifications.Add(notification);
         public bool HasErrors() => Notifications.Any(notification => notification.Severity == Notification.SeverityType.Error);

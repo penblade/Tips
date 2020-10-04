@@ -1,6 +1,6 @@
 ﻿namespace Tips.Middleware
 {
-    internal class ExceptionHandlerMiddlewareConfiguration
+    internal class ProblemDetailConfiguration
     {
         public string UrnName { get; set; }
     }

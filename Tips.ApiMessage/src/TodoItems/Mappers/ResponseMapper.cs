@@ -10,8 +10,7 @@ namespace Tips.TodoItems.Mappers
             new Response<TodoItem>
             {
                 Item = TodoItemMapper.MapToTodoItem(response.Item),
-                Notifications = response.Notifications,
-                Status = response.Status
+                Notifications = response.Notifications
             };
     }
 }
