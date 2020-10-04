@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace Tips.Pipeline
+namespace Tips.Middleware
 {
     public static class ApplicationBuilderExtensions
     {

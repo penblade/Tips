@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Tips.Pipeline
+namespace Tips.Middleware
 {
     // Inspiration: https://code-maze.com/global-error-handling-aspnetcore/#builtinmiddleware
     internal class ExceptionHandlerMiddleware

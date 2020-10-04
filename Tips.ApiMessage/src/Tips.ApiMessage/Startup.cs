@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tips.ApiMessage.Configuration;
-using Tips.Pipeline;
+using Tips.Middleware;
 
 namespace Tips.ApiMessage
 {

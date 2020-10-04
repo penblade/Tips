@@ -1,4 +1,4 @@
-﻿namespace Tips.Pipeline
+﻿namespace Tips.Middleware
 {
     internal class ExceptionHandlerMiddlewareConfiguration
     {

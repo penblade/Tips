@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline", "Pipeline\Pipeli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoItems", "TodoItems\TodoItems.csproj", "{3DDA8281-B65D-4984-A84C-DF9C88375722}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware", "Middleware\Middleware.csproj", "{227773D8-E81A-4F11-B803-375DF3AA4F26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3DDA8281-B65D-4984-A84C-DF9C88375722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DDA8281-B65D-4984-A84C-DF9C88375722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DDA8281-B65D-4984-A84C-DF9C88375722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227773D8-E81A-4F11-B803-375DF3AA4F26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227773D8-E81A-4F11-B803-375DF3AA4F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227773D8-E81A-4F11-B803-375DF3AA4F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227773D8-E81A-4F11-B803-375DF3AA4F26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

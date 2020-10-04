@@ -7,8 +7,9 @@ namespace Tips.ApiMessage.Configuration
     {
         public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            Middleware.Configuration.DependencyRegistrar.Register(services, configuration);
+            Pipeline.Configuration.DependencyRegistrar.Register(services);
             Rules.Configuration.DependencyRegistrar.Register(services);
-            Pipeline.Configuration.DependencyRegistrar.Register(services, configuration);
             TodoItems.Configuration.DependencyRegistrar.Register(services);
         }
     }
