@@ -70,7 +70,7 @@ namespace Tips.ApiMessage.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTodoItem(
             [FromServices] IRequestHandler<UpdateTodoItemRequest, Response> handler,
-            [FromServices] IProblemDetailFactory problemDetailFactory,
+            [FromServices] IProblemDetailsFactory problemDetailsFactory,
             long id, TodoItem todoItem, CancellationToken cancellationToken)
         {
             var request = new UpdateTodoItemRequest { Id = id, Item = todoItem };
@@ -79,7 +79,7 @@ namespace Tips.ApiMessage.Controllers
 
             if (response.IsNotFound()) return NotFound();
 
-            if (response.HasErrors()) return BadRequest(problemDetailFactory.BadRequest(response.Notifications));
+            if (response.HasErrors()) return BadRequest(problemDetailsFactory.BadRequest(response.Notifications));
 
             return NoContent();
         }
@@ -93,14 +93,14 @@ namespace Tips.ApiMessage.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTodoItem(
             [FromServices] IRequestHandler<CreateTodoItemRequest, Response<TodoItem>> handler,
-            [FromServices] IProblemDetailFactory problemDetailFactory,
+            [FromServices] IProblemDetailsFactory problemDetailsFactory,
             TodoItem todoItem, CancellationToken cancellationToken)
         {
             var request = new CreateTodoItemRequest { Item = todoItem };
 
             var response = await HandleAsync(handler, request, cancellationToken);
 
-            if (response.HasErrors()) return BadRequest(problemDetailFactory.BadRequest(response.Notifications));
+            if (response.HasErrors()) return BadRequest(problemDetailsFactory.BadRequest(response.Notifications));
 
             return CreatedAtAction(nameof(GetTodoItem), new {id = response.Item.Id}, response.Item);
         }

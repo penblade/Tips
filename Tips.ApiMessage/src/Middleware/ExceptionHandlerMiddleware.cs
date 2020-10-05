@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -14,13 +13,13 @@ namespace Tips.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-        private readonly IProblemDetailFactory _problemDetailFactory;
+        private readonly IProblemDetailsFactory _problemDetailsFactory;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger, IProblemDetailFactory problemDetailFactory)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger, IProblemDetailsFactory problemDetailsFactory)
         {
             _next = next;
             _logger = logger;
-            _problemDetailFactory = problemDetailFactory;
+            _problemDetailsFactory = problemDetailsFactory;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -31,7 +30,7 @@ namespace Tips.Middleware
             }
             catch (Exception exception)
             {
-                var problemDetails = _problemDetailFactory.InternalServerError();
+                var problemDetails = _problemDetailsFactory.InternalServerError();
                 LogError(problemDetails, exception);
                 await WriteResponseAsync(context, problemDetails);
             }

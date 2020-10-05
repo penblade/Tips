@@ -33,6 +33,8 @@ namespace Tips.ApiMessage
 
             app.UseHttpsRedirection();
 
+            app.UseApiKeyHandlerMiddleware();
+
             app.UseRouting();
 
             app.UseAuthorization();

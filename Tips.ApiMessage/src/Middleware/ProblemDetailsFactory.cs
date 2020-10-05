@@ -5,11 +5,11 @@ using Tips.Pipeline;
 
 namespace Tips.Middleware
 {
-    internal class ProblemDetailFactory : IProblemDetailFactory
+    internal class ProblemDetailsFactory : IProblemDetailsFactory
     {
-        private readonly ProblemDetailConfiguration _configuration;
+        private readonly ProblemDetailsConfiguration _configuration;
 
-        public ProblemDetailFactory(ProblemDetailConfiguration configuration) => _configuration = configuration;
+        public ProblemDetailsFactory(ProblemDetailsConfiguration configuration) => _configuration = configuration;
 
         public ProblemDetailsWithNotifications BadRequest(List<Notification> notifications)
         {

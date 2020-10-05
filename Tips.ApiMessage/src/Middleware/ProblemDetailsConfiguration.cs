@@ -1,6 +1,6 @@
 ﻿namespace Tips.Middleware
 {
-    internal class ProblemDetailConfiguration
+    internal class ProblemDetailsConfiguration
     {
         public string UrnName { get; set; }
     }

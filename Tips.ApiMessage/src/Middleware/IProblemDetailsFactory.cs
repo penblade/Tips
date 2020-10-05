@@ -4,7 +4,7 @@ using Tips.Pipeline;
 
 namespace Tips.Middleware
 {
-    public interface IProblemDetailFactory
+    public interface IProblemDetailsFactory
     {
         ProblemDetailsWithNotifications BadRequest(List<Notification> notifications);
         ProblemDetails InternalServerError();
