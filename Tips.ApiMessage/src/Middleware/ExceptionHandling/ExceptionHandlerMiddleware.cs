@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Tips.Middleware.ErrorHandling;
 using Tips.Pipeline;
 
-namespace Tips.Middleware
+namespace Tips.Middleware.ExceptionHandling
 {
     // Inspiration: https://code-maze.com/global-error-handling-aspnetcore/#builtinmiddleware
     internal class ExceptionHandlerMiddleware

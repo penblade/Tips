@@ -1,4 +1,4 @@
-﻿namespace Tips.Middleware
+﻿namespace Tips.Middleware.ErrorHandling
 {
     internal class ProblemDetailsConfiguration
     {

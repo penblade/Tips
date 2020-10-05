@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tips.ApiMessage.Configuration;
-using Tips.Middleware;
+using Tips.Middleware.Extensions;
 
 namespace Tips.ApiMessage
 {
@@ -29,20 +29,15 @@ namespace Tips.ApiMessage
         {
             loggerFactory.AddLog4Net();
 
-            app.ConfigureExceptionHandler();
-
-            app.UseHttpsRedirection();
-
-            app.UseApiKeyHandlerMiddleware();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.ConfigureExceptionHandler()
+                .UseHttpsRedirection()
+                .UseApiKeyHandlerMiddleware()
+                .UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
         }
     }
 }

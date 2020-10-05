@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tips.Middleware;
+using Tips.Middleware.ErrorHandling;
 using Tips.Pipeline;
 using Tips.TodoItems.Handlers.CreateTodoItems;
 using Tips.TodoItems.Handlers.DeleteTodoItems;

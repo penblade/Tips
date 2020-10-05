@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tips.Middleware.ErrorHandling;
 using Tips.Middleware.Security;
 
 namespace Tips.Middleware.Configuration

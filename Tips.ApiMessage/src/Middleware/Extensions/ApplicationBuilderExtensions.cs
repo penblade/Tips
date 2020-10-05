@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Tips.Middleware.ExceptionHandling;
 using Tips.Middleware.Security;
 
-namespace Tips.Middleware
+namespace Tips.Middleware.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

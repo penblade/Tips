@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tips.Pipeline;
 
-namespace Tips.Middleware
+namespace Tips.Middleware.ErrorHandling
 {
     public interface IProblemDetailsFactory
     {

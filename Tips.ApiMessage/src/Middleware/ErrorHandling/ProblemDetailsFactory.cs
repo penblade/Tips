@@ -3,7 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Tips.Pipeline;
 
-namespace Tips.Middleware
+namespace Tips.Middleware.ErrorHandling
 {
     internal class ProblemDetailsFactory : IProblemDetailsFactory
     {
