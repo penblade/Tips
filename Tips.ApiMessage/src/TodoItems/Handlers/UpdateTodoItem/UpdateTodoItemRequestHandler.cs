@@ -28,19 +28,20 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
 
         public async Task<Response> HandleAsync(UpdateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<TodoItemEntity>();
+            var todoItemResponse = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            await _rulesEngine.ProcessAsync(request, response, _updateRulesFactory.Create().ToList());
-            if (response.HasErrors()) return response;
-            
-            await _rulesEngine.ProcessAsync(request, response, _saveRulesFactory.Create().ToList());
-            if (response.HasErrors()) return response;
+            await _rulesEngine.ProcessAsync(request, todoItemResponse, _updateRulesFactory.Create().ToList());
+            if (todoItemResponse.HasErrors()) return new Response(todoItemResponse.Notifications);
+
+            // Only process the save rules if the update rules passed with no errors.
+            await _rulesEngine.ProcessAsync(request, todoItemResponse, _saveRulesFactory.Create().ToList());
+            if (todoItemResponse.HasErrors()) return new Response(todoItemResponse.Notifications);
 
             // Command.  Save the data.
-            await _updateTodoItemRepository.SaveAsync(response, cancellationToken);
+            await _updateTodoItemRepository.SaveAsync(todoItemResponse, cancellationToken);
 
-            return response;
+            return new Response(todoItemResponse.Notifications);
         }
     }
 }

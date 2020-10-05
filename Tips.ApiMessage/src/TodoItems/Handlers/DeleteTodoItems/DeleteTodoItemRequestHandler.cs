@@ -13,19 +13,14 @@ namespace Tips.TodoItems.Handlers.DeleteTodoItems
 
         public async Task<Response> HandleAsync(DeleteTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response();
-
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
-            if (todoItemEntity == null)
-            {
-                response.Add(TodoItemNotFoundNotification(request.Id));
-                return response;
-            }
+
+            if (todoItemEntity == null) return new Response(TodoItemNotFoundNotification(request.Id));
 
             _context.TodoItems.Remove(todoItemEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return response;
+            return new Response();
         }
 
         internal const string NotFoundNotificationId = "44799F8F-C7CE-4392-8709-2824899E486C";

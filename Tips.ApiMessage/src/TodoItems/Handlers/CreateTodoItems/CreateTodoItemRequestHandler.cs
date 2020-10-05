@@ -26,16 +26,16 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
 
         public async Task<Response<TodoItem>> HandleAsync(CreateTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<TodoItemEntity>();
+            var todoItemEntityResponse = new Response<TodoItemEntity>();
 
             // Query. Apply all validation and modification rules.  These rules can only query the database.
-            await _todoItemRulesEngine.ProcessAsync(request, response, _saveRulesFactory.Create().ToList());
-            if (response.HasErrors()) return ResponseMapper.MapToResponseWithTodoItem(response);
+            await _todoItemRulesEngine.ProcessAsync(request, todoItemEntityResponse, _saveRulesFactory.Create().ToList());
+            if (todoItemEntityResponse.HasErrors()) return new Response<TodoItem>(todoItemEntityResponse.Notifications);
 
             // Command.  Save the data.
-            await _createTodoItemRepository.SaveAsync(response, cancellationToken);
+            await _createTodoItemRepository.SaveAsync(todoItemEntityResponse, cancellationToken);
 
-            return ResponseMapper.MapToResponseWithTodoItem(response);
+            return new Response<TodoItem>(todoItemEntityResponse.Notifications, TodoItemMapper.MapToTodoItem(todoItemEntityResponse.Item));
         }
     }
 }

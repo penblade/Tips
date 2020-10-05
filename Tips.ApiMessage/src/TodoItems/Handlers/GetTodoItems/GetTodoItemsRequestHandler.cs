@@ -18,12 +18,10 @@ namespace Tips.TodoItems.Handlers.GetTodoItems
 
         public async Task<Response<List<TodoItem>>> HandleAsync(GetTodoItemsRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<List<TodoItem>>();
             var todoItems = await _context.TodoItems.Select(todoItemEntity => TodoItemMapper.MapToTodoItem(todoItemEntity))
                 .ToListAsync(cancellationToken);
 
-            response.Item = todoItems;
-            return response;
+            return new Response<List<TodoItem>>(todoItems);
         }
     }
 }

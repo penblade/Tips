@@ -15,17 +15,11 @@ namespace Tips.TodoItems.Handlers.GetTodoItem
 
         public async Task<Response<TodoItem>> HandleAsync(GetTodoItemRequest request, CancellationToken cancellationToken)
         {
-            var response = new Response<TodoItem>();
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
 
-            if (todoItemEntity == null)
-            {
-                response.Add(TodoItemNotFoundNotification(request.Id)); 
-                return response;
-            }
-
-            response.Item = TodoItemMapper.MapToTodoItem(todoItemEntity);
-            return response;
+            return todoItemEntity == null
+                ? new Response<TodoItem>(TodoItemNotFoundNotification(request.Id))
+                : new Response<TodoItem>(TodoItemMapper.MapToTodoItem(todoItemEntity));
         }
 
         internal const string TodoItemNotFoundNotificationId = "D2B34535-0896-491B-9E6A-6D9F6575DD9E";
