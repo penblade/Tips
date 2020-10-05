@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Tips.ApiMessage.Configuration
+namespace Tips.Api.Configuration
 {
     public static class ServiceCollectionExtensions
     {

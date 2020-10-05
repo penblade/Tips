@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Tips.ApiMessage
+namespace Tips.Api
 {
     public class Program
     {

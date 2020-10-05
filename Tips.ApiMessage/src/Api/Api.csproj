@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>Tips.ApiMessage.Program</StartupObject>
+    <StartupObject>Tips.Api.Program</StartupObject>
     <Nullable>annotations</Nullable>
+    <AssemblyName>Tips.Api</AssemblyName>
+    <RootNamespace>Tips.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +12,7 @@ using Tips.TodoItems.Handlers.GetTodoItems;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
 
-namespace Tips.ApiMessage.Controllers
+namespace Tips.Api.Controllers
 {
     // Initially created based on the Tutorial: Create a web API with ASP.NET Core
     // https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-3.1&tabs=visual-studio

@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Tips.ApiMessage.Configuration;
+using Tips.Api.Configuration;
 using Tips.Middleware.Extensions;
 
-namespace Tips.ApiMessage
+namespace Tips.Api
 {
     public class Startup
     {
