@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tips.Api.Configuration;
 using Tips.Middleware.Extensions;
+using Tips.Security.Extensions;
 
 namespace Tips.Api
 {

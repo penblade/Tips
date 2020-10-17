@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tips.Middleware.Security
+namespace Tips.Security
 {
-    public class ApiKey
+    internal class ApiKey
     {
         public int Id { get; set; }
         public string Owner { get; set; }

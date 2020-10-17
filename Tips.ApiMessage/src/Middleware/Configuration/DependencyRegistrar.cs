@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tips.Middleware.ErrorHandling;
-using Tips.Middleware.Security;
 
 namespace Tips.Middleware.Configuration
 {
@@ -9,10 +8,6 @@ namespace Tips.Middleware.Configuration
     {
         public static void Register(IServiceCollection services, IConfiguration configuration)
         {
-            var apiKeyConfiguration = new ApiKeyConfiguration();
-            configuration.Bind(nameof(ApiKeyConfiguration), apiKeyConfiguration);
-            services.AddSingleton(apiKeyConfiguration);
-
             // Middleware must be injected as a singleton.
             var problemDetailsConfiguration = new ProblemDetailsConfiguration();
             configuration.Bind(nameof(ProblemDetailsConfiguration), problemDetailsConfiguration);

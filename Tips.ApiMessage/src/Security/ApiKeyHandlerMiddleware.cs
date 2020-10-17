@@ -4,14 +4,14 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Tips.Middleware.Security
+namespace Tips.Security
 {
     public class ApiKeyHandlerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ApiKeyConfiguration _apiKeyConfiguration;
 
-        public ApiKeyHandlerMiddleware(RequestDelegate next, ApiKeyConfiguration apiKeyConfiguration)
+        internal  ApiKeyHandlerMiddleware(RequestDelegate next, ApiKeyConfiguration apiKeyConfiguration)
         {
             _next = next;
             _apiKeyConfiguration = apiKeyConfiguration;

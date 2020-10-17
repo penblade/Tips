@@ -23,8 +23,8 @@
     <ProjectReference Include="..\Middleware\Middleware.csproj" />
     <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
     <ProjectReference Include="..\Rules\Rules.csproj" />
+    <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\TodoItems\TodoItems.csproj" />
   </ItemGroup>
-
 
 </Project>
