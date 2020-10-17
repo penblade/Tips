@@ -2,7 +2,7 @@
 
 namespace Tips.Security
 {
-    internal class ApiKey
+    public class ApiKey
     {
         public int Id { get; set; }
         public string Owner { get; set; }

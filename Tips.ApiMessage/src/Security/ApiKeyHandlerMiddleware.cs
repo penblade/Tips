@@ -11,7 +11,7 @@ namespace Tips.Security
         private readonly RequestDelegate _next;
         private readonly ApiKeyConfiguration _apiKeyConfiguration;
 
-        internal  ApiKeyHandlerMiddleware(RequestDelegate next, ApiKeyConfiguration apiKeyConfiguration)
+        public ApiKeyHandlerMiddleware(RequestDelegate next, ApiKeyConfiguration apiKeyConfiguration)
         {
             _next = next;
             _apiKeyConfiguration = apiKeyConfiguration;

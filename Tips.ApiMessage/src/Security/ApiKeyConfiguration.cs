@@ -2,7 +2,7 @@
 
 namespace Tips.Security
 {
-    internal class ApiKeyConfiguration
+    public class ApiKeyConfiguration
     {
         public string ApiHeader { get; set; }
         public IEnumerable<ApiKey> ApiKeys { get; set; }
