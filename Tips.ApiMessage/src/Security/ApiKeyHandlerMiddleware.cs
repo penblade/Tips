@@ -1,23 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Tips.Security
 {
     public class ApiKeyHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ApiKeyHandlerMiddleware> _logger;
         private readonly IApiKeyRepository _apiKeyRepository;
 
-        public ApiKeyHandlerMiddleware(RequestDelegate next, ILogger<ApiKeyHandlerMiddleware> logger, IApiKeyRepository apiKeyRepository)
+        public ApiKeyHandlerMiddleware(RequestDelegate next, IApiKeyRepository apiKeyRepository)
         {
             _next = next;
-            _logger = logger;
             _apiKeyRepository = apiKeyRepository;
         }
 
@@ -35,8 +33,7 @@ namespace Tips.Security
             }
             else if (ApiKeyHasDuplicates(apiKeysFromHeaders))
             {
-                _logger.LogError(CreateDuplicateApiKeyError(apiKeysFromHeaders));
-                context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                throw new Exception(CreateDuplicateApiKeyError(apiKeysFromHeaders));
             }
         }
 
@@ -46,7 +43,7 @@ namespace Tips.Security
 
         private static string CreateDuplicateApiKeyError(IEnumerable<ApiKey> apiKeysFromHeaders)
         {
-            return "The following ApiKey's share the same api key.  Fix immediately!!! | " +
+            return "The following ApiKey's share the same id.  Fix immediately!!! | " +
                    $"{string.Join(", ", apiKeysFromHeaders.Select(apiKey => apiKey.Owner))}";
         }
     }
