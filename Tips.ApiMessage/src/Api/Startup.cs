@@ -33,6 +33,7 @@ namespace Tips.Api
             app.ConfigureExceptionHandler()
                 .UseHttpsRedirection()
                 .UseApiKeyHandlerMiddleware()
+                .ConfigureHttpInfoLogger()
                 .UseRouting()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>

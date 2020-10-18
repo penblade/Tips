@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
+    <ProjectReference Include="..\Security\Security.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,8 @@ namespace Tips.Security.Configuration
             var apiKeyConfiguration = new ApiKeyConfiguration();
             configuration.Bind(nameof(ApiKeyConfiguration), apiKeyConfiguration);
             services.AddSingleton(apiKeyConfiguration);
+
+            services.AddSingleton(typeof(IApiKeyRepository), typeof(ApiRepository));
         }
     }
 }
