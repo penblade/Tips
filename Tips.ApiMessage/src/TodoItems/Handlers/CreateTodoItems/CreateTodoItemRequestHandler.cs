@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tips.Pipeline;
+using Tips.Pipeline.Extensions;
 using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Mappers;
@@ -38,12 +39,20 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             if (todoItemEntityResponse.HasErrors()) return new Response<TodoItem>(todoItemEntityResponse.Notifications);
 
             // Command.  Save the data.
-            _logger.LogInformation(CreateLogMessage(JsonSerializer.Serialize(todoItemEntityResponse)));
             await _createTodoItemRepository.SaveAsync(todoItemEntityResponse, cancellationToken);
+
+            LogTodoItemEntityResponse(todoItemEntityResponse);
 
             return new Response<TodoItem>(todoItemEntityResponse.Notifications, TodoItemMapper.MapToTodoItem(todoItemEntityResponse.Item));
         }
 
-        private static string CreateLogMessage(string response) => @$"TraceId: {Tracking.TraceId} | Created: {LogFormatter.FormatForLogging(response)}";
+        private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
+        {
+            using (_logger.BeginScopeWithApiTraceId())
+            using (_logger.BeginScopeWithApiScope("Created TodoItemEntity"))
+            {
+                _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse));
+            }
+        }
     }
 }
