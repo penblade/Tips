@@ -48,6 +48,7 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
 
         private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Created TodoItemEntity"))
             {

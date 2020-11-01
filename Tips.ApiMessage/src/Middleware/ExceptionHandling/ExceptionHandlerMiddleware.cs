@@ -40,6 +40,7 @@ namespace Tips.Middleware.ExceptionHandling
 
         private void LogError(HttpContext context, ProblemDetails problemDetails, Exception exception)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Internal Server Error"))
             {

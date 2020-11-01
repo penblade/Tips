@@ -22,6 +22,7 @@ namespace Tips.Pipeline.Logging
 
         private void LogRequest<TRequest>(TRequest request)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Request"))
             {
@@ -31,6 +32,7 @@ namespace Tips.Pipeline.Logging
 
         private void LogResponse<TResponse>(TResponse response)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Response"))
             {

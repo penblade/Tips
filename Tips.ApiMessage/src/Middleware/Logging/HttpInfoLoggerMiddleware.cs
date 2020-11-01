@@ -34,6 +34,7 @@ namespace Tips.Middleware.Logging
         {
             var apiKeyOwner = _apiKeyRepository.GetApiKeyFromHeaders(context)?.Owner;
 
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Processing Request"))
             {
@@ -43,6 +44,7 @@ namespace Tips.Middleware.Logging
 
         private void LogResponse(HttpContext context)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Returning Response"))
             {

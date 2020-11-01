@@ -53,6 +53,7 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
 
         private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
         {
+            using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
             using (_logger.BeginScopeWithApiScope("Updated TodoItemEntity"))
             {
