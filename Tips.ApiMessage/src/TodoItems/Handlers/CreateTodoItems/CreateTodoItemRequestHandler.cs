@@ -48,9 +48,12 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
 
         private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
         {
+            const string scope = "Created TodoItemEntity";
             using (_logger.BeginScopeWithApiTraceParentId())
+            using (_logger.BeginScopeWithApiTraceParentStateString())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Created TodoItemEntity"))
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse));
             }

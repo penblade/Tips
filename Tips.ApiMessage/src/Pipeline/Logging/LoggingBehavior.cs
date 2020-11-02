@@ -22,9 +22,12 @@ namespace Tips.Pipeline.Logging
 
         private void LogRequest<TRequest>(TRequest request)
         {
+            const string scope = "Request";
             using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Request"))
+            using (_logger.BeginScopeWithApiTraceParentStateString())
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogInformation("{Request}", JsonSerializer.Serialize(request));
             }
@@ -32,9 +35,12 @@ namespace Tips.Pipeline.Logging
 
         private void LogResponse<TResponse>(TResponse response)
         {
+            const string scope = "Response";
             using (_logger.BeginScopeWithApiTraceParentId())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Response"))
+            using (_logger.BeginScopeWithApiTraceParentStateString())
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogInformation("{Response}", JsonSerializer.Serialize(response));
             }

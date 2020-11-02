@@ -34,9 +34,12 @@ namespace Tips.Middleware.Logging
         {
             var apiKeyOwner = _apiKeyRepository.GetApiKeyFromHeaders(context)?.Owner;
 
+            const string scope = "Processing Request";
             using (_logger.BeginScopeWithApiTraceParentId())
+            using (_logger.BeginScopeWithApiTraceParentStateString())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Processing Request"))
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogRequest(context, apiKeyOwner);
             }
@@ -44,9 +47,12 @@ namespace Tips.Middleware.Logging
 
         private void LogResponse(HttpContext context)
         {
+            const string scope = "Returning Response";
             using (_logger.BeginScopeWithApiTraceParentId())
+            using (_logger.BeginScopeWithApiTraceParentStateString())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Returning Response"))
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogResponse(context);
             }

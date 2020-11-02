@@ -40,9 +40,12 @@ namespace Tips.Middleware.ExceptionHandling
 
         private void LogError(HttpContext context, ProblemDetails problemDetails, Exception exception)
         {
+            const string scope = "Internal Server Error";
             using (_logger.BeginScopeWithApiTraceParentId())
+            using (_logger.BeginScopeWithApiTraceParentStateString())
             using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiScope("Internal Server Error"))
+            using (_logger.BeginScopeWithApiTraceStateString(scope))
+            using (_logger.BeginScopeWithApiScope(scope))
             {
                 _logger.LogError("{ProblemDetails}", JsonSerializer.Serialize(problemDetails));
                 _logger.LogError(exception, "Uncaught Exception");
