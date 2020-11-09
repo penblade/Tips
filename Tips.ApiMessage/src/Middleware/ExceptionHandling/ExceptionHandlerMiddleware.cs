@@ -38,21 +38,6 @@ namespace Tips.Middleware.ExceptionHandling
             }
         }
 
-        private void LogError(HttpContext context, ProblemDetails problemDetails, Exception exception)
-        {
-            const string scope = "Internal Server Error";
-            using (_logger.BeginScopeWithApiTraceParentId())
-            using (_logger.BeginScopeWithApiTraceParentStateString())
-            using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiTraceStateString(scope))
-            using (_logger.BeginScopeWithApiScope(scope))
-            {
-                _logger.LogError("{ProblemDetails}", JsonSerializer.Serialize(problemDetails));
-                _logger.LogError(exception, "Uncaught Exception");
-                _logger.LogResponse(context);
-            }
-        }
-
         private static async Task WriteResponseAsync(HttpContext context, ProblemDetails problemDetails)
         {
             // Add same headers returned by the built-in exception handler.
@@ -62,6 +47,16 @@ namespace Tips.Middleware.ExceptionHandling
             context.Response.StatusCode = problemDetails.Status ?? 0;
             context.Response.ContentType = "application/problem+json";
             await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
+        }
+
+        private void LogError(HttpContext context, ProblemDetails problemDetails, Exception exception)
+        {
+            _logger.LogAction("Internal Server Error", () =>
+            {
+                _logger.LogError("{ProblemDetails}", JsonSerializer.Serialize(problemDetails));
+                _logger.LogError(exception, "Uncaught Exception");
+                _logger.LogResponse(context);
+            });
         }
     }
 }

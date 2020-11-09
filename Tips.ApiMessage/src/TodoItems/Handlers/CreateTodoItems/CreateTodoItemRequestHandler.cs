@@ -46,17 +46,8 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             return new Response<TodoItem>(todoItemEntityResponse.Notifications, TodoItemMapper.MapToTodoItem(todoItemEntityResponse.Item));
         }
 
-        private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
-        {
-            const string scope = "Created TodoItemEntity";
-            using (_logger.BeginScopeWithApiTraceParentId())
-            using (_logger.BeginScopeWithApiTraceParentStateString())
-            using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiTraceStateString(scope))
-            using (_logger.BeginScopeWithApiScope(scope))
-            {
-                _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse));
-            }
-        }
+        private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse) =>
+            _logger.LogAction("Created TodoItemEntity", () =>
+                _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse)));
     }
 }

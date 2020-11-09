@@ -1,6 +1,4 @@
-﻿using System;
-using System.Buffers.Text;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,17 +51,8 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
             return new Response(todoItemEntityResponse.Notifications);
         }
 
-        private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse)
-        {
-            const string scope = "Updated TodoItemEntity";
-            using (_logger.BeginScopeWithApiTraceParentId())
-            using (_logger.BeginScopeWithApiTraceParentStateString())
-            using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiTraceStateString(scope))
-            using (_logger.BeginScopeWithApiScope(scope))
-            {
-                _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse));
-            }
-        }
+        private void LogTodoItemEntityResponse(Response<TodoItemEntity> todoItemEntityResponse) =>
+            _logger.LogAction("Updated TodoItemEntity", () =>
+                _logger.LogInformation("{TodoItemEntityResponse}", JsonSerializer.Serialize(todoItemEntityResponse)));
     }
 }

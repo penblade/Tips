@@ -16,34 +16,13 @@ namespace Tips.Pipeline.Logging
             LogRequest(request);
             var response = await nextAsync();
             LogResponse(response);
-
             return response;
         }
 
-        private void LogRequest<TRequest>(TRequest request)
-        {
-            const string scope = "Request";
-            using (_logger.BeginScopeWithApiTraceParentId())
-            using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiTraceParentStateString())
-            using (_logger.BeginScopeWithApiTraceStateString(scope))
-            using (_logger.BeginScopeWithApiScope(scope))
-            {
-                _logger.LogInformation("{Request}", JsonSerializer.Serialize(request));
-            }
-        }
+        private void LogRequest<TRequest>(TRequest request) =>
+            _logger.LogAction("Request", () => _logger.LogInformation("{Request}", JsonSerializer.Serialize(request)));
 
-        private void LogResponse<TResponse>(TResponse response)
-        {
-            const string scope = "Response";
-            using (_logger.BeginScopeWithApiTraceParentId())
-            using (_logger.BeginScopeWithApiTraceId())
-            using (_logger.BeginScopeWithApiTraceParentStateString())
-            using (_logger.BeginScopeWithApiTraceStateString(scope))
-            using (_logger.BeginScopeWithApiScope(scope))
-            {
-                _logger.LogInformation("{Response}", JsonSerializer.Serialize(response));
-            }
-        }
+        private void LogResponse<TResponse>(TResponse response) =>
+            _logger.LogAction("Response", () => _logger.LogInformation("{Response}", JsonSerializer.Serialize(response)));
     }
 }
