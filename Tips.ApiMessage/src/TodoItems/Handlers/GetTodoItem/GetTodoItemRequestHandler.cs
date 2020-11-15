@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Tips.Pipeline;
 using Tips.TodoItems.Context;
 using Tips.TodoItems.Mappers;
@@ -13,7 +12,7 @@ namespace Tips.TodoItems.Handlers.GetTodoItem
 
         public GetTodoItemRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response<TodoItem>> HandleAsync(GetTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response<TodoItem>> HandleAsync(GetTodoItemRequest request)
         {
             var todoItemEntity = await _context.TodoItems.FindAsync(request.Id);
 

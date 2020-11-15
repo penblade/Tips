@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tips.Pipeline.Extensions;
@@ -11,7 +10,7 @@ namespace Tips.Pipeline.Logging
         private readonly ILogger<LoggingBehavior> _logger;
         public LoggingBehavior(ILogger<LoggingBehavior> logger) => _logger = logger;
 
-        public async Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> nextAsync)
+        public async Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request, RequestHandlerDelegate<TResponse> nextAsync)
         {
             LogRequest(request);
             var response = await nextAsync();

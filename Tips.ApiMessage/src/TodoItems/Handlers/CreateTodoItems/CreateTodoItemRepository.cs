@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Tips.Pipeline;
 using Tips.TodoItems.Context;
 using Tips.TodoItems.Context.Models;
@@ -12,10 +11,10 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
 
         public CreateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken)
+        public async Task SaveAsync(Response<TodoItemEntity> response)
         {
-            await _context.TodoItems.AddAsync(response.Item, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.TodoItems.AddAsync(response.Item);
+            await _context.SaveChangesAsync();
         }
     }
 }

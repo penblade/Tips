@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tips.Pipeline;
@@ -30,7 +29,7 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             _logger = logger;
         }
 
-        public async Task<Response<TodoItem>> HandleAsync(CreateTodoItemRequest request, CancellationToken cancellationToken)
+        public async Task<Response<TodoItem>> HandleAsync(CreateTodoItemRequest request)
         {
             var todoItemEntityResponse = new Response<TodoItemEntity>();
 
@@ -39,7 +38,7 @@ namespace Tips.TodoItems.Handlers.CreateTodoItems
             if (todoItemEntityResponse.HasErrors()) return new Response<TodoItem>(todoItemEntityResponse.Notifications);
 
             // Command.  Save the data.
-            await _createTodoItemRepository.SaveAsync(todoItemEntityResponse, cancellationToken);
+            await _createTodoItemRepository.SaveAsync(todoItemEntityResponse);
 
             LogTodoItemEntityResponse(todoItemEntityResponse);
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,12 +31,11 @@ namespace Tips.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTodoItems(
-            [FromServices] IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>> handler,
-            CancellationToken cancellationToken)
+            [FromServices] IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>> handler)
         {
             var request = new GetTodoItemsRequest();
 
-            var response = await HandleAsync(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request);
 
             return Ok(response.Item);
         }
@@ -49,11 +47,11 @@ namespace Tips.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTodoItem(
             [FromServices] IRequestHandler<GetTodoItemRequest, Response<TodoItem>> handler,
-            long id, CancellationToken cancellationToken)
+            long id)
         {
             var request = new GetTodoItemRequest { Id = id };
 
-            var response = await HandleAsync(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request);
 
             if (response.IsNotFound()) return NotFound();
 
@@ -71,11 +69,11 @@ namespace Tips.Api.Controllers
         public async Task<IActionResult> UpdateTodoItem(
             [FromServices] IRequestHandler<UpdateTodoItemRequest, Response> handler,
             [FromServices] IProblemDetailsFactory problemDetailsFactory,
-            long id, TodoItem todoItem, CancellationToken cancellationToken)
+            long id, TodoItem todoItem)
         {
             var request = new UpdateTodoItemRequest { Id = id, Item = todoItem };
 
-            var response = await HandleAsync(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request);
 
             if (response.IsNotFound()) return NotFound();
 
@@ -94,11 +92,11 @@ namespace Tips.Api.Controllers
         public async Task<IActionResult> CreateTodoItem(
             [FromServices] IRequestHandler<CreateTodoItemRequest, Response<TodoItem>> handler,
             [FromServices] IProblemDetailsFactory problemDetailsFactory,
-            TodoItem todoItem, CancellationToken cancellationToken)
+            TodoItem todoItem)
         {
             var request = new CreateTodoItemRequest { Item = todoItem };
 
-            var response = await HandleAsync(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request);
 
             if (response.HasErrors()) return BadRequest(problemDetailsFactory.BadRequest(response.Notifications));
 
@@ -112,18 +110,18 @@ namespace Tips.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteTodoItem(
             [FromServices] IRequestHandler<DeleteTodoItemRequest, Response> handler,
-            long id, CancellationToken cancellationToken)
+            long id)
         {
             var request = new DeleteTodoItemRequest { Id = id };
 
-            var response = await HandleAsync(handler, request, cancellationToken);
+            var response = await HandleAsync(handler, request);
 
             if (response.IsNotFound()) return NotFound();
 
             return NoContent();
         }
 
-        private async Task<TResponse> HandleAsync<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken) =>
-            await _loggingBehavior.HandleAsync(request, cancellationToken, () => handler.HandleAsync(request, cancellationToken));
+        private async Task<TResponse> HandleAsync<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request) =>
+            await _loggingBehavior.HandleAsync(request, () => handler.HandleAsync(request));
     }
 }

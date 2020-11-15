@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.Pipeline;
@@ -16,10 +15,10 @@ namespace Tips.TodoItems.Handlers.GetTodoItems
 
         public GetTodoItemsRequestHandler(TodoContext context) => _context = context;
 
-        public async Task<Response<List<TodoItem>>> HandleAsync(GetTodoItemsRequest request, CancellationToken cancellationToken)
+        public async Task<Response<List<TodoItem>>> HandleAsync(GetTodoItemsRequest request)
         {
             var todoItems = await _context.TodoItems.Select(todoItemEntity => TodoItemMapper.MapToTodoItem(todoItemEntity))
-                .ToListAsync(cancellationToken);
+                .ToListAsync();
 
             return new Response<List<TodoItem>>(todoItems);
         }

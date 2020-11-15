@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tips.Pipeline;
@@ -15,14 +14,14 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
 
         public UpdateTodoItemRepository(TodoContext context) => _context = context;
 
-        public async Task SaveAsync(Response<TodoItemEntity> response, CancellationToken cancellationToken)
+        public async Task SaveAsync(Response<TodoItemEntity> response)
         {
             TodoItemEntity todoItemEntity;
             try
             {
                 todoItemEntity = await _context.TodoItems.FindAsync(response.Item.Id);
                 TodoItemMapper.MapToTodoItemEntity(response.Item, todoItemEntity);
-                await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Item.Id))
             {
