@@ -7,8 +7,6 @@ namespace Tips.Pipeline.Extensions
     {
         public static void LogAction(this ILogger logger, string scope, Action method)
         {
-            using (logger.BeginScopeWithApiTraceParentId())
-            using (logger.BeginScopeWithApiTraceParentStateString())
             using (logger.BeginScopeWithApiTraceId())
             using (logger.BeginScopeWithApiTraceStateString(scope))
             using (logger.BeginScopeWithApiScope(scope))
@@ -16,12 +14,6 @@ namespace Tips.Pipeline.Extensions
                 method();
             }
         }
-
-        private static IDisposable BeginScopeWithApiTraceParentId(this ILogger logger) =>
-            logger.BeginScope("{Api.TraceParentId}", Tracking.TraceParentId);
-
-        private static IDisposable BeginScopeWithApiTraceParentStateString(this ILogger logger) =>
-            logger.BeginScope("{Api.TraceParentStateString}", Tracking.TraceParentStateString);
 
         private static IDisposable BeginScopeWithApiTraceId(this ILogger logger) =>
             logger.BeginScope("{Api.TraceId}", Tracking.TraceId);
