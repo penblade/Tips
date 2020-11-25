@@ -12,7 +12,7 @@ namespace Tips.TodoItems.Rules.SaveRules
         {
             if (request.Item == null)
             {
-                response.Add(TodoItemWasNotProvidedNotification());
+                response.Notifications.Add(TodoItemWasNotProvidedNotification());
                 RuleFailed();
                 ContinueProcessing = false;
                 return Task.CompletedTask;

@@ -18,7 +18,7 @@ namespace Tips.TodoItems.Rules.UpdateRules
         {
             if (!await TodoItemExists(request.Id))
             {
-                response.Add(TodoItemNotFoundNotification(request.Id));
+                response.Notifications.Add(TodoItemNotFoundNotification(request.Id));
                 ContinueProcessing = false;
                 RuleFailed();
                 return;

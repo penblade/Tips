@@ -12,9 +12,9 @@ namespace Tips.TodoItems.Rules.SaveRules
 
         protected override Task ProcessRuleAsync(Request<TodoItem> request, Response<TodoItemEntity> response)
         {
-            if (request.Item.Priority < 1 || request.Item.Priority > 3)
+            if (request.Item.Priority < 1 || request.Item.Priority > 4)
             {
-                response.Add(TodoItemPriorityIsNotInRangeNotification());
+                response.Notifications.Add(TodoItemPriorityIsNotInRangeNotification());
                 RuleFailed();
                 return Task.CompletedTask;
             }

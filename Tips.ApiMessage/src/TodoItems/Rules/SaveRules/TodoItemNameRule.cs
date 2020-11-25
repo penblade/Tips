@@ -14,7 +14,7 @@ namespace Tips.TodoItems.Rules.SaveRules
         {
             if (string.IsNullOrEmpty(request.Item.Name))
             {
-                response.Add(TodoItemNameWasNotProvidedNotification());
+                response.Notifications.Add(TodoItemNameWasNotProvidedNotification());
                 RuleFailed();
                 return Task.CompletedTask;
             }

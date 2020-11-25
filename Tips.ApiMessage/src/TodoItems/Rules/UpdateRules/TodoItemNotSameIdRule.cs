@@ -12,7 +12,7 @@ namespace Tips.TodoItems.Rules.UpdateRules
         {
             if (request.Id != request.Item.Id)
             {
-                response.Add(NotSameIdNotification(request.Id, request.Item.Id));
+                response.Notifications.Add(NotSameIdNotification(request.Id, request.Item.Id));
                 ContinueProcessing = false;
                 RuleFailed();
                 return Task.CompletedTask;

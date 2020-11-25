@@ -1,10 +1,14 @@
-﻿namespace Tips.Pipeline
+﻿using System.Collections.Generic;
+
+namespace Tips.Pipeline
 {
     public class Notification
     {
         public string Id { get; set; }
         public string Severity { get; set; }
         public string Detail { get; set; }
+
+        public List<Notification> Notifications { get; } = new List<Notification>();
 
         public static Notification CreateError(string id, string detail) => new Notification { Id = id, Detail = detail, Severity = SeverityType.Error };
         public static Notification CreateInfo(string id, string detail) => new Notification { Id = id, Detail = detail, Severity = SeverityType.Info };

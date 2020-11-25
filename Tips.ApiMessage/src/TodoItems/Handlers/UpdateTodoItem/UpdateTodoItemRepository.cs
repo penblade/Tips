@@ -25,7 +25,7 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
             }
             catch (DbUpdateConcurrencyException) when (!TodoItemExists(response.Item.Id))
             {
-                response.Add(TodoItemNotFoundWhenSavingNotification(response.Item.Id));
+                response.Notifications.Add(TodoItemNotFoundWhenSavingNotification(response.Item.Id));
                 return;
             }
 
