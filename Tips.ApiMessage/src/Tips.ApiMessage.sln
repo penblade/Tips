@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoItems", "TodoItems\Todo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware", "Middleware\Middleware.csproj", "{227773D8-E81A-4F11-B803-375DF3AA4F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security", "Security\Security.csproj", "{952490EA-4FDC-4B06-A9D5-242B56FBF565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security", "Security\Security.csproj", "{952490EA-4FDC-4B06-A9D5-242B56FBF565}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardClauses", "GuardClauses\GuardClauses.csproj", "{11E4F78C-7392-4BC4-8841-57A425C0B495}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{952490EA-4FDC-4B06-A9D5-242B56FBF565}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{952490EA-4FDC-4B06-A9D5-242B56FBF565}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{952490EA-4FDC-4B06-A9D5-242B56FBF565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E4F78C-7392-4BC4-8841-57A425C0B495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E4F78C-7392-4BC4-8841-57A425C0B495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E4F78C-7392-4BC4-8841-57A425C0B495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E4F78C-7392-4BC4-8841-57A425C0B495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

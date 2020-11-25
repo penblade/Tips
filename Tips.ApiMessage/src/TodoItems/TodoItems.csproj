@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GuardClauses\GuardClauses.csproj" />
     <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
     <ProjectReference Include="..\Rules\Rules.csproj" />
   </ItemGroup>

@@ -15,9 +15,9 @@ namespace Tips.Rules
         // https://en.wikipedia.org/wiki/Template_method_pattern
         public async Task ProcessAsync(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
         {
-            if (request == null) throw new ArgumentException(nameof(request));
-            if (response == null) throw new ArgumentException(nameof(response));
-            if (processedRules == null) throw new ArgumentException(nameof(processedRules));
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (response == null) throw new ArgumentNullException(nameof(response));
+            if (processedRules == null) throw new ArgumentNullException(nameof(processedRules));
 
             if (AllRequiredRulesHavePassed(processedRules))
                 await ProcessRuleAsync(request, response);

@@ -1,5 +1,5 @@
-﻿using Tips.TodoItems.Context.Models;
-using Tips.TodoItems.Infrastructure;
+﻿using Tips.GuardClauses;
+using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Models;
 
 namespace Tips.TodoItems.Mappers

@@ -33,7 +33,7 @@ namespace Tips.Security
             }
             else if (ApiKeyHasDuplicates(apiKeysFromHeaders))
             {
-                throw new Exception(CreateDuplicateApiKeyError(apiKeysFromHeaders));
+                throw new InvalidOperationException(CreateDuplicateApiKeyError(apiKeysFromHeaders));
             }
         }
 

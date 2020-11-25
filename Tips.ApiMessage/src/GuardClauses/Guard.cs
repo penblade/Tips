@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tips.TodoItems.Infrastructure
+namespace Tips.GuardClauses
 {
-    internal static class Guard
+    public static class Guard
     {
         public static void AgainstNull(object input, string parameterName)
         {
