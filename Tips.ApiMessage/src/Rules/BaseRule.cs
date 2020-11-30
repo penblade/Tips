@@ -13,7 +13,7 @@ namespace Tips.Rules
 
         // Template method pattern
         // https://en.wikipedia.org/wiki/Template_method_pattern
-        public async Task ProcessAsync(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
+        public virtual async Task ProcessAsync(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> processedRules)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (response == null) throw new ArgumentNullException(nameof(response));

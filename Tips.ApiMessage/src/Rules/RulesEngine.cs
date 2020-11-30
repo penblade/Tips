@@ -25,15 +25,17 @@ namespace Tips.Rules
         // The rules engine then simplifies to accept a rules factory via
         //     constructor injection, loops through each rule calling the
         //     ProcessAsync method, and then returns the final response.
-        public async Task ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
+        public async Task<IEnumerable<BaseRule<TRequest, TResponse>>> ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules)
         {
             var processedRules = new List<BaseRule<TRequest, TResponse>>();
             foreach (var rule in rules)
             {
                 await rule.ProcessAsync(request, response, processedRules);
                 processedRules.Add(rule);
-                if (!rule.ContinueProcessing) return;
+                if (!rule.ContinueProcessing) return processedRules;
             }
+
+            return processedRules;
         }
     }
 }
