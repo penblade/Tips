@@ -23,7 +23,7 @@ namespace Rules.Tests
 
             for (var i = 0; i < count; i++)
             {
-                services.AddScoped(typeof(BaseRule<FakeRequest, FakeResponse>), expectedRules[i].GetType());
+                services.AddScoped(typeof(IBaseRule<FakeRequest, FakeResponse>), expectedRules[i].GetType());
             }
             
             var serviceProvider = services.BuildServiceProvider();
@@ -36,9 +36,9 @@ namespace Rules.Tests
             }
         }
 
-        private static IEnumerable<BaseRule<FakeRequest, FakeResponse>> CreateFakeRules(int[] ruleIds)
+        private static IEnumerable<IBaseRule<FakeRequest, FakeResponse>> CreateFakeRules(int[] ruleIds)
         {
-            return ruleIds.Select(ruleId => (BaseRule<FakeRequest, FakeResponse>) (ruleId switch
+            return ruleIds.Select(ruleId => (IBaseRule<FakeRequest, FakeResponse>) (ruleId switch
                 {
                     1 => new FakeRule1<FakeRequest, FakeResponse>(),
                     2 => new FakeRule2<FakeRequest, FakeResponse>(),

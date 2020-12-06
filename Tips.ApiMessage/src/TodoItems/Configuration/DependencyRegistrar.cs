@@ -23,16 +23,16 @@ namespace Tips.TodoItems.Configuration
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
             // This is the order the rules will be run in.
-            services.AddScoped(typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotFoundRule));
-            services.AddScoped(typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotSameIdRule));
+            services.AddScoped(typeof(IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotFoundRule));
+            services.AddScoped(typeof(IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotSameIdRule));
 
             // This is the order the rules will be run in.
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(RequestRule));
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(ResponseRule));
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemNameRule));
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemDescriptionRule));
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemPriorityRule));
-            services.AddScoped(typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemReviewerRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(RequestRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(ResponseRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemNameRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemDescriptionRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemPriorityRule));
+            services.AddScoped(typeof(IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>), typeof(TodoItemReviewerRule));
 
             services.AddScoped(typeof(ICreateTodoItemRepository), typeof(CreateTodoItemRepository));
             services.AddScoped(typeof(IUpdateTodoItemRepository), typeof(UpdateTodoItemRepository));

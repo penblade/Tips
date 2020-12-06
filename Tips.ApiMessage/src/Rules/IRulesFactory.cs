@@ -4,6 +4,6 @@ namespace Tips.Rules
 {
     public interface IRulesFactory<TRequest, TResponse>
     {
-        IEnumerable<BaseRule<TRequest, TResponse>> Create();
+        IEnumerable<IBaseRule<TRequest, TResponse>> Create();
     }
 }

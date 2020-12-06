@@ -15,12 +15,12 @@ namespace Tips.TodoItems.Rules.SaveRules
             if (string.IsNullOrEmpty(request.Item.Name))
             {
                 response.Notifications.Add(TodoItemNameWasNotProvidedNotification());
-                RuleFailed();
+                Fail();
                 return Task.CompletedTask;
             }
 
             response.Item.Name = request.Item.Name;
-            RulePassed();
+            Pass();
             return Task.CompletedTask;
         }
 

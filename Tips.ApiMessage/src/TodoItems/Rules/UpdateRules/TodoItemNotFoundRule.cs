@@ -20,11 +20,11 @@ namespace Tips.TodoItems.Rules.UpdateRules
             {
                 response.Notifications.Add(TodoItemNotFoundNotification(request.Id));
                 ContinueProcessing = false;
-                RuleFailed();
+                Fail();
                 return;
             }
 
-            RulePassed();
+            Pass();
         }
 
         private async Task<bool> TodoItemExists(long id) => await _context.TodoItems.AnyAsync(e => e.Id == id);

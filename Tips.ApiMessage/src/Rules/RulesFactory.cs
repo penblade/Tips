@@ -10,6 +10,6 @@ namespace Tips.Rules
 
         public RulesFactory(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
-        public IEnumerable<BaseRule<TRequest, TResponse>> Create() => _serviceProvider.GetServices<BaseRule<TRequest, TResponse>>();
+        public IEnumerable<IBaseRule<TRequest, TResponse>> Create() => _serviceProvider.GetServices<IBaseRule<TRequest, TResponse>>();
     }
 }

@@ -14,6 +14,6 @@ namespace Tips.Rules
         /// <param name="response"></param>
         /// <param name="rules"></param>
         /// <returns>List of the rules that were processed.</returns>
-        Task<IEnumerable<BaseRule<TRequest, TResponse>>> ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<BaseRule<TRequest, TResponse>> rules);
+        Task ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<IBaseRule<TRequest, TResponse>> rules);
     }
 }

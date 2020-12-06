@@ -16,7 +16,7 @@ namespace Tips.TodoItems.Rules.SaveRules
                 IsComplete = request.Item.IsComplete
             };
 
-            RulePassed();
+            Pass();
             return Task.CompletedTask;
         }
     }

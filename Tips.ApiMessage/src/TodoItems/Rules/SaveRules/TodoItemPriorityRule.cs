@@ -15,12 +15,12 @@ namespace Tips.TodoItems.Rules.SaveRules
             if (request.Item.Priority < 1 || request.Item.Priority > 4)
             {
                 response.Notifications.Add(TodoItemPriorityIsNotInRangeNotification());
-                RuleFailed();
+                Fail();
                 return Task.CompletedTask;
             }
 
             response.Item.Priority = request.Item.Priority;
-            RulePassed();
+            Pass();
             return Task.CompletedTask;
         }
 

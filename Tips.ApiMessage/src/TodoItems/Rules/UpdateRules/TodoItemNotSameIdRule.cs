@@ -14,10 +14,10 @@ namespace Tips.TodoItems.Rules.UpdateRules
             {
                 response.Notifications.Add(NotSameIdNotification(request.Id, request.Item.Id));
                 ContinueProcessing = false;
-                RuleFailed();
+                Fail();
                 return Task.CompletedTask;
             }
-            RulePassed();
+            Pass();
             return Task.CompletedTask;
         }
 

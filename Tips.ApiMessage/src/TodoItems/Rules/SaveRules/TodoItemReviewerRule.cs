@@ -24,11 +24,11 @@ namespace Tips.TodoItems.Rules.SaveRules
             if (string.IsNullOrEmpty(response.Item.Reviewer))
             {
                 response.Notifications.Add(TodoItemReviewerIsNullNotification(request.Item.Priority));
-                RuleFailed();
+                Fail();
                 return Task.CompletedTask;
             }
 
-            RulePassed();
+            Pass();
             return Task.CompletedTask;
         }
 
