@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -10,36 +11,43 @@ namespace Rules.Tests
     public class RulesEngineTest
     {
         [TestMethod]
-        public async Task ProcessAsyncTest()
+        [DynamicData(nameof(SetupProcessAsyncTest), DynamicDataSourceType.Method)]
+        public async Task ProcessAsyncTest(FakeRequest fakeRequest, FakeResponse fakeResponse, IList<Mock<IBaseRule<FakeRequest, FakeResponse>>> mockRules)
         {
             var rulesEngine = new RulesEngine();
+            await rulesEngine.ProcessAsync(fakeRequest, fakeResponse, mockRules.Select(mockRule => mockRule.Object));
+
+            foreach (var mockRule in mockRules)
+            {
+                VerifyRuleCalledOnce(mockRule, fakeRequest, fakeResponse);
+            }
+        }
+
+        private static IEnumerable<object[]> SetupProcessAsyncTest()
+        {
             var fakeRequest = new FakeRequest();
             var fakeResponse = new FakeResponse();
 
-            var mockRule1 = CreateMockRule(fakeRequest, fakeResponse);
-            var mockRule2 = CreateMockRule(fakeRequest, fakeResponse);
-            var mockRule3 = CreateMockRule(fakeRequest, fakeResponse);
-
-            var fakeRules = new List<IBaseRule<FakeRequest, FakeResponse>>
+            yield return new object[]
             {
-                mockRule1.Object,
-                mockRule2.Object,
-                mockRule3.Object
+                fakeRequest,
+                fakeResponse,
+                new List<Mock<IBaseRule<FakeRequest, FakeResponse>>>
+                {
+                    CreateMockRule(fakeRequest, fakeResponse, RuleStatusType.Passed, true),
+                    CreateMockRule(fakeRequest, fakeResponse, RuleStatusType.Passed, true),
+                    CreateMockRule(fakeRequest, fakeResponse, RuleStatusType.Passed, true)
+                }
             };
-
-            await rulesEngine.ProcessAsync(fakeRequest, fakeResponse, fakeRules);
-
-            VerifyRuleCalledOnce(mockRule1, fakeRequest, fakeResponse);
-            VerifyRuleCalledOnce(mockRule2, fakeRequest, fakeResponse);
-            VerifyRuleCalledOnce(mockRule3, fakeRequest, fakeResponse);
         }
 
-        private static Mock<IBaseRule<FakeRequest, FakeResponse>> CreateMockRule(FakeRequest fakeRequest, FakeResponse fakeResponse)
+        private static Mock<IBaseRule<FakeRequest, FakeResponse>>
+            CreateMockRule(FakeRequest fakeRequest, FakeResponse fakeResponse, RuleStatusType statusType, bool continueProcessing)
         {
             var mockRule = new Mock<IBaseRule<FakeRequest, FakeResponse>>();
             mockRule.Setup(x => x.ProcessAsync(fakeRequest, fakeResponse, ItIsAnyRules())).Returns(Task.CompletedTask);
-            mockRule.Setup(x => x.Status).Returns(RuleStatusType.Passed);
-            mockRule.Setup(x => x.ContinueProcessing).Returns(true);
+            mockRule.Setup(x => x.Status).Returns(statusType);
+            mockRule.Setup(x => x.ContinueProcessing).Returns(continueProcessing);
             return mockRule;
         }
 

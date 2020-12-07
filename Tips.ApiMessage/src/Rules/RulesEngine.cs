@@ -28,10 +28,10 @@ namespace Tips.Rules
         //     ProcessAsync method, and then returns the final response.
         public async Task ProcessAsync<TRequest, TResponse>(TRequest request, TResponse response, IEnumerable<IBaseRule<TRequest, TResponse>> rules)
         {
-            var processedRules = rules.ToList();
-            foreach (var rule in processedRules)
+            var rulesList = rules.ToList();
+            foreach (var rule in rulesList)
             {
-                await rule.ProcessAsync(request, response, processedRules);
+                await rule.ProcessAsync(request, response, rulesList);
                 if (!rule.ContinueProcessing) return;
             }
         }
