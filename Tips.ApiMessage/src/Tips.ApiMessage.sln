@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardClauses", "GuardClause
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardClauses.Tests", "GuardClauses.Tests\GuardClauses.Tests.csproj", "{323CE55A-4607-454A-AFD5-18C47365C3F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rules.Tests", "Rules.Tests\Rules.Tests.csproj", "{36E48EC4-FAC4-41F7-A7D4-D6CF6D7C840B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rules.Tests", "Rules.Tests\Rules.Tests.csproj", "{36E48EC4-FAC4-41F7-A7D4-D6CF6D7C840B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Support.Tests", "Support.Tests\Support.Tests.csproj", "{A5C2E7FF-3AE5-44EB-AEAE-90EA9F23BA0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{36E48EC4-FAC4-41F7-A7D4-D6CF6D7C840B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36E48EC4-FAC4-41F7-A7D4-D6CF6D7C840B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36E48EC4-FAC4-41F7-A7D4-D6CF6D7C840B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5C2E7FF-3AE5-44EB-AEAE-90EA9F23BA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5C2E7FF-3AE5-44EB-AEAE-90EA9F23BA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5C2E7FF-3AE5-44EB-AEAE-90EA9F23BA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5C2E7FF-3AE5-44EB-AEAE-90EA9F23BA0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

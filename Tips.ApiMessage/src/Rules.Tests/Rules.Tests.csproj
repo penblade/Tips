@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rules\Rules.csproj" />
+    <ProjectReference Include="..\Support.Tests\Support.Tests.csproj" />
   </ItemGroup>
 
 </Project>
