@@ -9,10 +9,10 @@ using Tips.Security.Configuration;
 namespace Security.Tests.Configuration
 {
     [TestClass]
-    public class DependencyRegistrarTest
+    public class ApiRepositoryTest
     {
         [TestMethod]
-        public void RegisterTest2()
+        public void RegisterTest()
         {
             var configurationRootFromJson = new ConfigurationBuilder().AddJsonFile(@"Configuration\appsettings.json").Build();
 
