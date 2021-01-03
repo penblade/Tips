@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Security\Security.csproj" />
+    <ProjectReference Include="..\Support.Tests\Support.Tests.csproj" />
   </ItemGroup>
 
 </Project>
