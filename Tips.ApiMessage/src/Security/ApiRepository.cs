@@ -11,13 +11,13 @@ namespace Tips.Security
 
         public ApiRepository(ApiKeyConfiguration apiKeyConfiguration) => _apiKeyConfiguration = apiKeyConfiguration;
 
-        public ApiKey GetApiKeyFromHeaders(HttpContext context) => GetApiKeysFromHeaders(context).FirstOrDefault();
+        public ApiKey GetApiKeyFromHeaders(HttpContext context) => GetApiKeysFromHeaders(context)?.FirstOrDefault();
 
         public IEnumerable<ApiKey> GetApiKeysFromHeaders(HttpContext context)
         {
-            if (!TryGetApiKeyIdFromHeaders(context, out var apiKeyInHeaders)) return new List<ApiKey>();
+            if (_apiKeyConfiguration?.ApiKeys == null || !TryGetApiKeyIdFromHeaders(context, out var apiKeyInHeaders)) return new List<ApiKey>();
 
-            return _apiKeyConfiguration.ApiKeys.Where(apiKey =>
+            return _apiKeyConfiguration.ApiKeys?.Where(apiKey =>
                 string.Equals(apiKey.Key, apiKeyInHeaders, StringComparison.OrdinalIgnoreCase));
         }
 

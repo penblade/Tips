@@ -13,16 +13,28 @@ namespace Security.Tests
     {
         private const bool TryGetApiKeyIdFromHeadersReturnsTrue = true;
         private const bool TryGetApiKeyIdFromHeadersReturnsFalse = false;
+        private const bool ApiKeysIsNullTrue = true;
+        private const bool ApiKeysIsNullFalse = false;
+
         [TestMethod]
-        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        public void GetApiKeyFromHeadersTest(int? expectedApiKeyId, bool tryGetApiKeyIdFromHeadersReturns)
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        public void GetApiKeyFromHeadersTest(int? expectedApiKeyId, bool tryGetApiKeyIdFromHeadersReturns, bool apiKeysIsNull)
         {
             var expectedApiKeyConfiguration = CreateExpectedApiKeyConfiguration();
+            if (apiKeysIsNull) expectedApiKeyConfiguration.ApiKeys = null;
+
             var expectedApiKey = GetExpectedApiKey(expectedApiKeyConfiguration, expectedApiKeyId);
             var expectedApiKeyIdInHeaders = GetExpectedApiKeyId(expectedApiKey);
 
@@ -31,7 +43,7 @@ namespace Security.Tests
             var apiRepository = new ApiRepository(expectedApiKeyConfiguration);
             var actualApiKey = apiRepository.GetApiKeyFromHeaders(mockHttpContext.Object);
 
-            if (expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)
+            if (!apiKeysIsNull && expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)
             {
                 AssertApiKey(expectedApiKey, actualApiKey);
             }
@@ -40,38 +52,49 @@ namespace Security.Tests
                 Assert.IsNull(actualApiKey);
             }
 
-            mockHttpContext.Verify(context => context.Request.Headers.TryGetValue(expectedApiKeyConfiguration.ApiHeader, out expectedApiKeyIdInHeaders), Times.Once);
+            var times = !apiKeysIsNull ? Times.Once() : Times.Never();
+            mockHttpContext.Verify(context => context.Request.Headers.TryGetValue(expectedApiKeyConfiguration.ApiHeader, out expectedApiKeyIdInHeaders), times);
         }
 
         [TestMethod]
-        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue)]
-        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse)]
-        public void GetApiKeysFromHeadersTest(int? expectedApiKeyId, bool tryGetApiKeyIdFromHeadersReturns)
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullFalse)]
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullFalse)]
+
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsTrue, ApiKeysIsNullTrue)]
+        [DataRow(null, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        [DataRow(0, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        [DataRow(1, TryGetApiKeyIdFromHeadersReturnsFalse, ApiKeysIsNullTrue)]
+        public void GetApiKeysFromHeadersTest(int? expectedApiKeyId, bool tryGetApiKeyIdFromHeadersReturns, bool apiKeysIsNull)
         {
             var expectedApiKeyConfiguration = CreateExpectedApiKeyConfiguration();
+            if (apiKeysIsNull) expectedApiKeyConfiguration.ApiKeys = null;
+
             var expectedApiKey = GetExpectedApiKey(expectedApiKeyConfiguration, expectedApiKeyId);
             var expectedApiKeyIdInHeaders = GetExpectedApiKeyId(expectedApiKey);
 
             var mockHttpContext = SetupMockHttpContext(expectedApiKeyConfiguration, expectedApiKeyIdInHeaders, tryGetApiKeyIdFromHeadersReturns);
 
             var apiRepository = new ApiRepository(expectedApiKeyConfiguration);
-            var actualApiKeys = apiRepository.GetApiKeysFromHeaders(mockHttpContext.Object).ToList();
+            var actualApiKeys = apiRepository.GetApiKeysFromHeaders(mockHttpContext.Object)?.ToList();
 
-            if (expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)
+            if (!apiKeysIsNull && expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)
             {
-                Assert.AreEqual(1, actualApiKeys.Count);
-                AssertApiKey(expectedApiKey, actualApiKeys.First());
+                Assert.AreEqual(1, actualApiKeys?.Count);
+                AssertApiKey(expectedApiKey, actualApiKeys?.First());
             }
             else
             {
-                Assert.AreEqual(0, actualApiKeys.Count);
+                Assert.AreEqual(0, actualApiKeys?.Count);
             }
 
-            mockHttpContext.Verify(context => context.Request.Headers.TryGetValue(expectedApiKeyConfiguration.ApiHeader, out expectedApiKeyIdInHeaders), Times.Once);
+            var times = !apiKeysIsNull ? Times.Once() : Times.Never();
+            mockHttpContext.Verify(context => context.Request.Headers.TryGetValue(expectedApiKeyConfiguration.ApiHeader, out expectedApiKeyIdInHeaders), times);
         }
 
         private static Mock<HttpContext> SetupMockHttpContext(ApiKeyConfiguration expectedApiKeyConfiguration, StringValues expectedApiKeyIdInHeaders,
@@ -86,14 +109,14 @@ namespace Security.Tests
         private static StringValues GetExpectedApiKeyId(ApiKey expectedApiKey) => new StringValues(expectedApiKey?.Key);
 
         private static ApiKey GetExpectedApiKey(ApiKeyConfiguration expectedApiKeyConfiguration, int? expectedApiKeyId) =>
-            expectedApiKeyId != null ? expectedApiKeyConfiguration.ApiKeys.ToList()[(int) expectedApiKeyId] : null;
+            expectedApiKeyId != null ? expectedApiKeyConfiguration?.ApiKeys?.ToList()[(int) expectedApiKeyId] : null;
 
         private static void AssertApiKey(ApiKey expectedApiKey, ApiKey actualApiKey)
         {
-            Assert.AreEqual(expectedApiKey.Id, actualApiKey.Id);
-            Assert.AreEqual(expectedApiKey.Owner, actualApiKey.Owner);
-            Assert.AreEqual(expectedApiKey.Key, actualApiKey.Key);
-            Assert.AreEqual(expectedApiKey.Created, actualApiKey.Created);
+            Assert.AreEqual(expectedApiKey?.Id, actualApiKey?.Id);
+            Assert.AreEqual(expectedApiKey?.Owner, actualApiKey?.Owner);
+            Assert.AreEqual(expectedApiKey?.Key, actualApiKey?.Key);
+            Assert.AreEqual(expectedApiKey?.Created, actualApiKey?.Created);
         }
 
         private static ApiKeyConfiguration CreateExpectedApiKeyConfiguration() =>
