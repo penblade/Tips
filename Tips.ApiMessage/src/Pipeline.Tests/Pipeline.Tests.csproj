@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
+    <ProjectReference Include="..\Support.Tests\Support.Tests.csproj" />
   </ItemGroup>
 
 </Project>
