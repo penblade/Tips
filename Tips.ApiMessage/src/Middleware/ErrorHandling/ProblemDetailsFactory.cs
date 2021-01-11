@@ -7,14 +7,14 @@ namespace Tips.Middleware.ErrorHandling
 {
     internal class ProblemDetailsFactory : IProblemDetailsFactory
     {
+        public const string BadRequestId = "69244389-3C4E-4D94-ABDC-C05E703E3DBD";
+
         private readonly ProblemDetailsConfiguration _configuration;
 
         public ProblemDetailsFactory(ProblemDetailsConfiguration configuration) => _configuration = configuration;
 
         public ProblemDetailsWithNotifications BadRequest(List<Notification> notifications)
         {
-            const string badRequestId = "69244389-3C4E-4D94-ABDC-C05E703E3DBD";
-
             // ProblemDetails implements the RF7807 standards.
             var problemDetails = new ProblemDetailsWithNotifications
             {
@@ -22,7 +22,7 @@ namespace Tips.Middleware.ErrorHandling
                 Title = "Bad Request",
                 Status = (int)HttpStatusCode.BadRequest,
                 Detail = "Review the notifications for details.",
-                Instance = $"urn:{_configuration.UrnName}:error:{badRequestId}",
+                Instance = $"urn:{_configuration.UrnName}:error:{BadRequestId}",
                 Notifications = notifications
             };
 

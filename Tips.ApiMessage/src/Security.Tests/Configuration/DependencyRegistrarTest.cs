@@ -9,7 +9,7 @@ using Tips.Security.Configuration;
 namespace Security.Tests.Configuration
 {
     [TestClass]
-    public class ApiRepositoryTest
+    public class DependencyRegistrarTest
     {
         [TestMethod]
         public void RegisterTest()
