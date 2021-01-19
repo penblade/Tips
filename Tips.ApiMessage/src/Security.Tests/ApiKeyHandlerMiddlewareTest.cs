@@ -24,7 +24,7 @@ namespace Security.Tests
             SetupMocks(new List<ApiKey> { new() });
 
             var middleware = new ApiKeyHandlerMiddleware(_mockRequestDelegate.Object, _mockApiKeyRepository.Object);
-            await middleware.Invoke(_mockHttpContext.Object);
+            await middleware.InvokeAsync(_mockHttpContext.Object);
 
             VerifyMocks(Times.Once(), Times.Once(), Times.Never(), Times.Never());
         }
@@ -35,7 +35,7 @@ namespace Security.Tests
             SetupMocks(new List<ApiKey>());
 
             var middleware = new ApiKeyHandlerMiddleware(_mockRequestDelegate.Object, _mockApiKeyRepository.Object);
-            await middleware.Invoke(_mockHttpContext.Object);
+            await middleware.InvokeAsync(_mockHttpContext.Object);
 
             VerifyMocks(Times.Once(), Times.Never(), Times.Once(), Times.Once());
         }
@@ -53,7 +53,7 @@ namespace Security.Tests
             var errorMessage = $"The following ApiKey's share the same id.  Fix immediately!!! | {testOwner1}, {testOwner2}";
             var expectedException = new InvalidOperationException(errorMessage);
 
-            await Verify.ThrowsExceptionAsync(() => middleware.Invoke(_mockHttpContext.Object), expectedException);
+            await Verify.ThrowsExceptionAsync(() => middleware.InvokeAsync(_mockHttpContext.Object), expectedException);
 
             VerifyMocks(Times.Once(), Times.Never(), Times.Never(), Times.Never());
         }

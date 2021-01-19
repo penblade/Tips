@@ -19,7 +19,7 @@ namespace Tips.Security
             _apiKeyRepository = apiKeyRepository;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             var apiKeysFromHeaders = _apiKeyRepository.GetApiKeysFromHeaders(context).ToList();
 

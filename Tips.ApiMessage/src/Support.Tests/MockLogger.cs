@@ -11,13 +11,23 @@ namespace Support.Tests
         public static void VerifyBeginScope<TCategory>(Mock<ILogger<TCategory>> mockLogger, string state) =>
             mockLogger.Verify(logger => logger.BeginScope(It.Is<object>(request => request.ToString() == state)), Times.Once);
 
-        public static void VerifyLog<TCategory>(Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, string message, string key) =>
+        public static void VerifyLog<TCategory>(Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, object message, string key) =>
             mockLogger.Verify(logger =>
                     logger.Log(
                         logLevel,
                         It.IsAny<EventId>(),
                         It.Is<It.IsAnyType>((state, t) => CheckValue(state, message, key)),
-                        It.IsAny<Exception>(),
+                        null,
+                        (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())
+                , Times.Once);
+
+        public static void VerifyLog<TCategory>(Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, Exception exception, string key) =>
+            mockLogger.Verify(logger =>
+                    logger.Log(
+                        logLevel,
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>((state, t) => CheckValue(state, null, key)),
+                        It.Is<Exception>(actualException => CheckException(exception, actualException)),
                         (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())
                 , Times.Once);
 
@@ -34,7 +44,16 @@ namespace Support.Tests
             var actualValue = keyValuePairList.FirstOrDefault(kvp =>
                 string.Compare(kvp.Key, key, StringComparison.Ordinal) == 0).Value;
 
-            return expectedValue.Equals(actualValue);
+            // Support null values.
+            if (expectedValue == null && actualValue == null) return true;
+            return expectedValue?.Equals(actualValue) ?? false;
         }
+
+        /// <summary>
+        /// Checks that a given exception was called.
+        /// </summary>
+        private static bool CheckException(Exception expectedException, Exception actualException) =>
+            expectedException?.GetType() == actualException?.GetType()
+            && expectedException?.Message == actualException?.Message;
     }
 }
