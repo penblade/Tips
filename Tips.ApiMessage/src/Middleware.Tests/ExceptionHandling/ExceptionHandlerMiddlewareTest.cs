@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -18,102 +16,101 @@ namespace Middleware.Tests.ExceptionHandling
     [TestClass]
     public class ExceptionHandlerMiddlewareTest
     {
-        private const string Https = "https";
-        private const int InternalServerError = (int) HttpStatusCode.InternalServerError;
-
-        private readonly IHeaderDictionary _headers = new HeaderDictionary();
-        private readonly Mock<HttpRequest> _mockHttpRequest = new();
-        private readonly Mock<HttpResponse> _mockHttpResponse = new();
-        private readonly Mock<HttpContext> _mockHttpContext = new();
-        private readonly Mock<ILogger<ExceptionHandlerMiddleware>> _mockLogger = new();
-        private readonly IProblemDetailsFactory _problemDetailsFactory = new ProblemDetailsFactory(new ProblemDetailsConfiguration());
-        private readonly Mock<RequestDelegate> _mockRequestDelegate = new();
-
         [TestMethod]
         public async Task InvokeAsyncSuccessTest()
         {
-            var middleware = new ExceptionHandlerMiddleware(_mockRequestDelegate.Object, _mockLogger.Object, _problemDetailsFactory);
-            await middleware.InvokeAsync(_mockHttpContext.Object);
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockRequestDelegate = new Mock<RequestDelegate>();
+            mockRequestDelegate.Setup(requestDelegate => requestDelegate.Invoke(mockHttpContext.Object));
+            var mockLogger = new Mock<ILogger<ExceptionHandlerMiddleware>>();
 
-            _mockRequestDelegate.Verify(requestDelegate => requestDelegate.Invoke(_mockHttpContext.Object), Times.Once);
+            var middleware = new ExceptionHandlerMiddleware(mockRequestDelegate.Object, mockLogger.Object, null);
+            await middleware.InvokeAsync(mockHttpContext.Object);
+
+            mockRequestDelegate.Verify(requestDelegate => requestDelegate.Invoke(mockHttpContext.Object), Times.Once);
+            // If an exception was thrown, then this test will fail with null references as the required objects were not setup.
+            // We could setup additional mocks to verify the methods weren't called.
+            // However, due to complications with extension methods, as detailed in the throws exception case below,
+            // I am fine with leaving this scenario simple with the null reference exceptions.
         }
 
         [TestMethod]
         public async Task InvokeAsyncThrowsExceptionTest()
         {
-            var expectedProblemDetails = _problemDetailsFactory.InternalServerError();
+            var problemDetailsFactory = SetupProblemDetailsFactory();
+            var expectedProblemDetails = problemDetailsFactory.InternalServerError();
             var expectedSerializedProblemDetails = JsonSerializer.Serialize(expectedProblemDetails);
             var expectedProblemDetailsBytes = Encoding.UTF8.GetBytes(expectedSerializedProblemDetails);
             var expectedArgumentException = new ArgumentException("Test Message");
+            
+            var headers = SetupHeaders();
 
-            SetupHttpRequest();
-            SetupHttpResponse(expectedProblemDetailsBytes);
-            SetupHttpContext();
-            SetupRequestDelegate(expectedArgumentException);
+            var mockLogger = new Mock<ILogger<ExceptionHandlerMiddleware>>();
 
-            var middleware = new ExceptionHandlerMiddleware(_mockRequestDelegate.Object, _mockLogger.Object, _problemDetailsFactory);
-            await middleware.InvokeAsync(_mockHttpContext.Object);
+            var mockHttpRequest = mockLogger.SetupHttpRequest();
+            var mockHttpResponse = SetupHttpResponse(mockLogger, headers, expectedProblemDetailsBytes);
+            var mockConnectionInfo = mockLogger.SetupConnectionInfo();
+            var mockHttpContext = mockLogger.SetupHttpContext(mockHttpRequest, mockHttpResponse, mockConnectionInfo);
+            var mockRequestDelegate = SetupRequestDelegate(mockHttpContext, expectedArgumentException);
 
-            AssertRequestDelegate();
-            AssertHeaders();
-            AssertHttpResponse(expectedProblemDetailsBytes);
-            AssertLogger(expectedSerializedProblemDetails, expectedArgumentException);
+            var middleware = new ExceptionHandlerMiddleware(mockRequestDelegate.Object, mockLogger.Object, problemDetailsFactory);
+            await middleware.InvokeAsync(mockHttpContext.Object);
+
+            VerifyRequestDelegate(mockHttpContext, mockRequestDelegate);
+            AssertHeaders(headers);
+            VerifyContext(mockHttpContext);
+            VerifyHttpResponse(mockHttpResponse, expectedProblemDetailsBytes);
+            VerifyLogs(mockLogger, expectedSerializedProblemDetails, expectedArgumentException);
+            mockLogger.VerifyLogResponse();
         }
 
-        private void SetupHttpRequest()
+        private static IProblemDetailsFactory SetupProblemDetailsFactory() => new ProblemDetailsFactory(new ProblemDetailsConfiguration());
+
+        private static IHeaderDictionary SetupHeaders() => new HeaderDictionary();
+
+        private static Mock<RequestDelegate> SetupRequestDelegate(Mock<HttpContext> mockHttpContext, Exception expectedArgumentException)
         {
-            _mockHttpRequest.SetupGet(request => request.Protocol).Returns(Https);
+            var mockRequestDelegate = new Mock<RequestDelegate>();
+            mockRequestDelegate.Setup(requestDelegate => requestDelegate.Invoke(mockHttpContext.Object)).ThrowsAsync(expectedArgumentException);
+            return mockRequestDelegate;
         }
 
-        private void SetupHttpResponse(byte[] expectedProblemDetailsBytes)
+        public static Mock<HttpResponse> SetupHttpResponse<TCategory>(Mock<ILogger<TCategory>> mockLogger, IHeaderDictionary headers, byte[] expectedProblemDetailsBytes)
         {
-            _mockHttpResponse.SetupGet(response => response.Body).Returns(new MemoryStream());
-            _mockHttpResponse.SetupGet(response => response.Headers).Returns(_headers);
-            _mockHttpResponse.SetupSet(response => response.StatusCode = InternalServerError);
-            _mockHttpResponse.SetupGet(response => response.StatusCode).Returns(InternalServerError);
+            var mockHttpResponse = mockLogger.SetupHttpResponse();
+
+            mockHttpResponse.SetupGet(response => response.Headers).Returns(headers);
 
             // WriteAsync is an extension method, so mock the underlying method called.
-            _mockHttpResponse.Setup(response => response.Body.WriteAsync(expectedProblemDetailsBytes, 0,
+            mockHttpResponse.Setup(response => response.Body.WriteAsync(expectedProblemDetailsBytes, 0,
                 expectedProblemDetailsBytes.Length, It.IsAny<CancellationToken>()));
+            return mockHttpResponse;
         }
 
-        private void SetupHttpContext()
+        private static void VerifyRequestDelegate(Mock<HttpContext> mockHttpContext, Mock<RequestDelegate> mockRequestDelegate) =>
+            mockRequestDelegate.Verify(requestDelegate => requestDelegate.Invoke(mockHttpContext.Object), Times.Once);
+
+        private static void AssertHeaders(IHeaderDictionary headers)
         {
-            _mockHttpContext.SetupGet(context => context.Request).Returns(_mockHttpRequest.Object);
-            _mockHttpContext.SetupGet(context => context.Response).Returns(_mockHttpResponse.Object);
+            Assert.AreEqual("no-cache", headers["Cache-Control"].ToString());
+            Assert.AreEqual("no-cache", headers["Pragma"].ToString());
+            Assert.AreEqual("-1", headers["Expires"].ToString());
         }
 
-        private void SetupRequestDelegate(ArgumentException expectedArgumentException) =>
-            _mockRequestDelegate.Setup(requestDelegate => requestDelegate.Invoke(_mockHttpContext.Object))
-                .ThrowsAsync(expectedArgumentException);
+        // 1 for RequestDelegate, 3 for Headers, 1 for StatusCode, 1 for ContentType, 1 for WriteAsync, 1 for LogResponse
+        private static void VerifyContext(Mock<HttpContext> mockHttpContext) => mockHttpContext.VerifyGet(context => context.Response, Times.Exactly(8));
 
-        private void AssertRequestDelegate() =>
-            _mockRequestDelegate.Verify(requestDelegate => requestDelegate.Invoke(_mockHttpContext.Object), Times.Once);
-
-        private void AssertHeaders()
+        private static void VerifyHttpResponse(Mock<HttpResponse> mockHttpResponse, byte[] expectedProblemDetailsBytes)
         {
-            Assert.AreEqual("no-cache", _headers["Cache-Control"].ToString());
-            Assert.AreEqual("no-cache", _headers["Pragma"].ToString());
-            Assert.AreEqual("-1", _headers["Expires"].ToString());
+            mockHttpResponse.VerifySet(response => response.StatusCode = MockLoggerVerifyLogRequestResponseExtensions.InternalServerError, Times.Once);
+            mockHttpResponse.VerifySet(response => response.ContentType = "application/problem+json", Times.Once);
+            mockHttpResponse.Verify(response => response.Body.WriteAsync(expectedProblemDetailsBytes, 0, expectedProblemDetailsBytes.Length, It.IsAny<CancellationToken>()), Times.Once);
         }
 
-        private void AssertHttpResponse(byte[] expectedProblemDetailsBytes)
+        private static void VerifyLogs<T>(Mock<ILogger<T>> mockLogger, string expectedSerializedProblemDetails, Exception expectedException)
         {
-            // 1 for RequestDelegate, 3 for Headers, 1 for StatusCode, 1 for ContentType, 1 for WriteAsync, 1 for LogResponse
-            _mockHttpContext.VerifyGet(context => context.Response, Times.Exactly(8));
-            _mockHttpResponse.VerifySet(response => response.StatusCode = InternalServerError, Times.Once);
-            _mockHttpResponse.VerifySet(response => response.ContentType = "application/problem+json", Times.Once);
-            _mockHttpResponse.Verify(response => response.Body.WriteAsync(expectedProblemDetailsBytes, 0, expectedProblemDetailsBytes.Length, It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        private void AssertLogger(string expectedSerializedProblemDetails, ArgumentException expectedArgumentException)
-        {
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Error, expectedSerializedProblemDetails, "ProblemDetails");
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Error, expectedArgumentException, "Uncaught Exception");
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Information, Https, "RequestProtocol");
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Information, InternalServerError, "StatusCode");
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Information, Enum.GetName(typeof(HttpStatusCode), HttpStatusCode.InternalServerError), "StatusCodeName");
-            MockLogger.VerifyLog(_mockLogger, LogLevel.Information, "{RequestProtocol} {StatusCode} {StatusCodeName}", "{OriginalFormat}");
+            mockLogger.VerifyLog(LogLevel.Error, expectedSerializedProblemDetails, "ProblemDetails");
+            mockLogger.VerifyLog(LogLevel.Error, expectedException, "Uncaught Exception");
         }
     }
 }

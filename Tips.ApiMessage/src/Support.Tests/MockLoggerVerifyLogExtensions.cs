@@ -6,12 +6,12 @@ using Moq;
 
 namespace Support.Tests
 {
-    public class MockLogger
+    public static class MockLoggerVerifyLogExtensions
     {
-        public static void VerifyBeginScope<TCategory>(Mock<ILogger<TCategory>> mockLogger, string state) =>
+        public static void VerifyBeginScope<TCategory>(this Mock<ILogger<TCategory>> mockLogger, string state) =>
             mockLogger.Verify(logger => logger.BeginScope(It.Is<object>(request => request.ToString() == state)), Times.Once);
 
-        public static void VerifyLog<TCategory>(Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, object message, string key) =>
+        public static void VerifyLog<TCategory>(this Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, object message, string key) =>
             mockLogger.Verify(logger =>
                     logger.Log(
                         logLevel,
@@ -21,7 +21,7 @@ namespace Support.Tests
                         (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())
                 , Times.Once);
 
-        public static void VerifyLog<TCategory>(Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, Exception exception, string key) =>
+        public static void VerifyLog<TCategory>(this Mock<ILogger<TCategory>> mockLogger, LogLevel logLevel, Exception exception, string key) =>
             mockLogger.Verify(logger =>
                     logger.Log(
                         logLevel,

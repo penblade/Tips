@@ -33,10 +33,10 @@ namespace Pipeline.Tests.Logging
 
             var actualResponse = await loggingBehavior.HandleAsync(fakeRequest, mockRequestHandlerDelegate.Object);
 
-            MockLogger.VerifyBeginScope(mockLogger, requestString);
-            MockLogger.VerifyBeginScope(mockLogger, responseString);
-            MockLogger.VerifyLog(mockLogger, LogLevel.Information, serializedFakeRequest, requestString);
-            MockLogger.VerifyLog(mockLogger, LogLevel.Information, serializedFakeResponse, responseString);
+            mockLogger.VerifyBeginScope(requestString);
+            mockLogger.VerifyBeginScope(responseString);
+            mockLogger.VerifyLog(LogLevel.Information, serializedFakeRequest, requestString);
+            mockLogger.VerifyLog(LogLevel.Information, serializedFakeResponse, responseString);
 
             Assert.AreSame(fakeResponse, actualResponse);
         }
