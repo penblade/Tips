@@ -9,7 +9,7 @@ using Tips.Security;
 namespace Security.Tests
 {
     [TestClass]
-    public class ApiRepositoryTest
+    public class ApiKeyRepositoryTest
     {
         private const bool TryGetApiKeyIdFromHeadersReturnsTrue = true;
         private const bool TryGetApiKeyIdFromHeadersReturnsFalse = false;
@@ -40,7 +40,7 @@ namespace Security.Tests
 
             var mockHttpContext = SetupMockHttpContext(expectedApiKeyConfiguration, expectedApiKeyIdInHeaders, tryGetApiKeyIdFromHeadersReturns);
 
-            var apiRepository = new ApiRepository(expectedApiKeyConfiguration);
+            var apiRepository = new ApiKeyRepository(expectedApiKeyConfiguration);
             var actualApiKey = apiRepository.GetApiKeyFromHeaders(mockHttpContext.Object);
 
             if (!apiKeysIsNull && expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)
@@ -80,7 +80,7 @@ namespace Security.Tests
 
             var mockHttpContext = SetupMockHttpContext(expectedApiKeyConfiguration, expectedApiKeyIdInHeaders, tryGetApiKeyIdFromHeadersReturns);
 
-            var apiRepository = new ApiRepository(expectedApiKeyConfiguration);
+            var apiRepository = new ApiKeyRepository(expectedApiKeyConfiguration);
             var actualApiKeys = apiRepository.GetApiKeysFromHeaders(mockHttpContext.Object)?.ToList();
 
             if (!apiKeysIsNull && expectedApiKeyId != null && tryGetApiKeyIdFromHeadersReturns)

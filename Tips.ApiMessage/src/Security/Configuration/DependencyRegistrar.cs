@@ -11,7 +11,7 @@ namespace Tips.Security.Configuration
             configuration.Bind(nameof(ApiKeyConfiguration), apiKeyConfiguration);
             services.AddSingleton(apiKeyConfiguration);
 
-            services.AddSingleton(typeof(IApiKeyRepository), typeof(ApiRepository));
+            services.AddSingleton(typeof(IApiKeyRepository), typeof(ApiKeyRepository));
         }
     }
 }

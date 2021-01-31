@@ -21,7 +21,7 @@ namespace Security.Tests.Configuration
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             AssertType<ApiKeyConfiguration, ApiKeyConfiguration>(serviceProvider);
-            AssertType<IApiKeyRepository, ApiRepository>(serviceProvider);
+            AssertType<IApiKeyRepository, ApiKeyRepository>(serviceProvider);
             AssertApiKeyConfiguration(serviceProvider);
         }
 

@@ -61,6 +61,7 @@ namespace Middleware.Tests.ExceptionHandling
             VerifyContext(mockHttpContext);
             VerifyHttpResponse(mockHttpResponse, expectedProblemDetailsBytes);
             VerifyLogs(mockLogger, expectedSerializedProblemDetails, expectedArgumentException);
+            mockLogger.VerifyBeginScope("Internal Server Error");
             mockLogger.VerifyLogResponse();
         }
 

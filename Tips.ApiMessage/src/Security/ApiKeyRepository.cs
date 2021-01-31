@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace Tips.Security
 {
-    internal class ApiRepository : IApiKeyRepository
+    internal class ApiKeyRepository : IApiKeyRepository
     {
         private readonly ApiKeyConfiguration _apiKeyConfiguration;
 
-        public ApiRepository(ApiKeyConfiguration apiKeyConfiguration) => _apiKeyConfiguration = apiKeyConfiguration;
+        public ApiKeyRepository(ApiKeyConfiguration apiKeyConfiguration) => _apiKeyConfiguration = apiKeyConfiguration;
 
         public ApiKey GetApiKeyFromHeaders(HttpContext context) => GetApiKeysFromHeaders(context)?.FirstOrDefault();
 
