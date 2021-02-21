@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security.Tests", "Security.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline.Tests", "Pipeline.Tests\Pipeline.Tests.csproj", "{0B789BB4-6EE5-45FD-84C3-D356944C8FB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware.Tests", "Middleware.Tests\Middleware.Tests.csproj", "{CDFE0BF2-AF70-44AD-942C-97F49552E686}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Tests", "Middleware.Tests\Middleware.Tests.csproj", "{CDFE0BF2-AF70-44AD-942C-97F49552E686}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Tests", "Api.Tests\Api.Tests.csproj", "{9519AA80-C8CD-4503-8486-7FDD41F08557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{CDFE0BF2-AF70-44AD-942C-97F49552E686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFE0BF2-AF70-44AD-942C-97F49552E686}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDFE0BF2-AF70-44AD-942C-97F49552E686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9519AA80-C8CD-4503-8486-7FDD41F08557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9519AA80-C8CD-4503-8486-7FDD41F08557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9519AA80-C8CD-4503-8486-7FDD41F08557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9519AA80-C8CD-4503-8486-7FDD41F08557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

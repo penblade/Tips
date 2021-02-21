@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Support.Tests;
 using Tips.Middleware.Configuration;
 using Tips.Middleware.ErrorHandling;
 
@@ -13,14 +14,14 @@ namespace Middleware.Tests.Configuration
         [TestMethod]
         public void RegisterTest()
         {
-            var configurationRootFromJson = new ConfigurationBuilder().AddJsonFile(@"Configuration\appsettings.json").Build();
+            var configurationRootFromJson = new ConfigurationBuilder().AddJsonFile(@"Configuration\appsettings.test.json").Build();
 
             var serviceCollection = new ServiceCollection();
             DependencyRegistrar.Register(serviceCollection, configurationRootFromJson);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            AssertType<ProblemDetailsConfiguration, ProblemDetailsConfiguration>(serviceProvider);
-            AssertType<IProblemDetailsFactory, ProblemDetailsFactory>(serviceProvider);
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<ProblemDetailsConfiguration, ProblemDetailsConfiguration>(serviceProvider);
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<IProblemDetailsFactory, ProblemDetailsFactory>(serviceProvider);
             AssertConfiguration(serviceProvider);
         }
 
@@ -37,11 +38,5 @@ namespace Middleware.Tests.Configuration
             {
                 UrnName = "TestUrnName"
             };
-
-        private static void AssertType<TExpected, TActual>(IServiceProvider serviceProvider)
-        {
-            var service = serviceProvider.GetService<TExpected>();
-            Assert.IsInstanceOfType(service, typeof(TActual));
-        }
     }
 }

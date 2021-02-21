@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Support.Tests;
 using Tips.Rules;
 using Tips.Rules.Configuration;
 
@@ -15,15 +15,13 @@ namespace Rules.Tests.Configuration
             var serviceCollection = new ServiceCollection();
             DependencyRegistrar.Register(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            AssertType<IRulesEngine, RulesEngine>(serviceProvider);
-            AssertType<IRulesFactory<string, int>, RulesFactory<string, int>>(serviceProvider);
+            VerifyDependencyRegistrar(serviceProvider);
         }
 
-        private static void AssertType<TExpected, TActual>(IServiceProvider serviceProvider)
+        public static void VerifyDependencyRegistrar(ServiceProvider serviceProvider)
         {
-            var service = serviceProvider.GetService<TExpected>();
-            Assert.IsInstanceOfType(service, typeof(TActual));
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<IRulesEngine, RulesEngine>(serviceProvider);
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<IRulesFactory<string, int>, RulesFactory<string, int>>(serviceProvider);
         }
     }
 }

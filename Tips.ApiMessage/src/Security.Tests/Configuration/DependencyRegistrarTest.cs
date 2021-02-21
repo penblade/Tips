@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Support.Tests;
 using Tips.Security;
 using Tips.Security.Configuration;
 
@@ -14,14 +15,19 @@ namespace Security.Tests.Configuration
         [TestMethod]
         public void RegisterTest()
         {
-            var configurationRootFromJson = new ConfigurationBuilder().AddJsonFile(@"Configuration\appsettings.json").Build();
+            var configurationRootFromJson = new ConfigurationBuilder().AddJsonFile(@"Configuration\appsettings.test.json").Build();
 
             var serviceCollection = new ServiceCollection();
             DependencyRegistrar.Register(serviceCollection, configurationRootFromJson);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            AssertType<ApiKeyConfiguration, ApiKeyConfiguration>(serviceProvider);
-            AssertType<IApiKeyRepository, ApiKeyRepository>(serviceProvider);
+            VerifyDependencyRegistrar(serviceProvider);
+        }
+
+        public static void VerifyDependencyRegistrar(ServiceProvider serviceProvider)
+        {
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<ApiKeyConfiguration, ApiKeyConfiguration>(serviceProvider);
+            DependencyRegistrarSupport.AssertServiceIsInstanceOfType<IApiKeyRepository, ApiKeyRepository>(serviceProvider);
             AssertApiKeyConfiguration(serviceProvider);
         }
 
@@ -49,10 +55,10 @@ namespace Security.Tests.Configuration
         }
 
         private static ApiKeyConfiguration CreateExpectedApiKeyConfiguration() =>
-        new ApiKeyConfiguration
+        new()
         {
             ApiHeader = "TestApiHeader",
-            ApiKeys = new ApiKey[]
+            ApiKeys = new[]
             {
                 new ApiKey
                 {
@@ -70,11 +76,5 @@ namespace Security.Tests.Configuration
                 }
             }
         };
-
-        private static void AssertType<TExpected, TActual>(IServiceProvider serviceProvider)
-        {
-            var service = serviceProvider.GetService<TExpected>();
-            Assert.IsInstanceOfType(service, typeof(TActual));
-        }
     }
 }
