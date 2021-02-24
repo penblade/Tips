@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,12 +16,8 @@ namespace Api.Tests.Controllers
         [TestMethod]
         public async Task GetTodoItemsTest()
         {
-            //var request = new GetTodoItemsRequest();
             var mockRequestHandler = new Mock<IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>>();
             mockRequestHandler.Setup(handler => handler.HandleAsync(It.IsAny<GetTodoItemsRequest>()));
-
-            //var mockRequestHandlerDelegate = new Mock<RequestHandlerDelegate<Response<List<TodoItem>>>>();
-            //mockRequestHandlerDelegate.Setup(() => mockRequestHandler.Object);
 
             var expectedResponse = new Response<List<TodoItem>> {Item = new List<TodoItem> {new()}};
 
@@ -33,7 +26,9 @@ namespace Api.Tests.Controllers
             mockLoggingBehavior.Setup(loggingBehavior =>
                 loggingBehavior.HandleAsync(
                     It.IsAny<GetTodoItemsRequest>(),
-                    It.IsAny<RequestHandlerDelegate<Response<List<TodoItem>>>>())).ReturnsAsync(expectedResponse);
+                    It.Is<RequestHandlerDelegate<Response<List<TodoItem>>>>(
+                        requestHandlerDelegate => IsDelegateTargetSameAsMethod(requestHandlerDelegate, mockRequestHandler.Object))))
+                .ReturnsAsync(expectedResponse);
 
             var controller = new TodoItemsController(mockLoggingBehavior.Object);
 
@@ -43,23 +38,23 @@ namespace Api.Tests.Controllers
 
             var actualActionResult = (OkObjectResult) actionResult;
 
-            var expectedActionResult = new OkObjectResult(expectedResponse.Item);
             Assert.AreSame(expectedResponse.Item, actualActionResult?.Value);
-
-            //mockLoggingBehavior.Verify(loggingBehavior =>
-            //    loggingBehavior.HandleAsync(
-            //        It.IsAny<GetTodoItemsRequest>(),
-            //        mockRequestHandlerDelegate.Object), Times.Once());
-
-            //mockLoggingBehavior.Verify(loggingBehavior =>
-            //    loggingBehavior.HandleAsync(
-            //        It.IsAny<GetTodoItemsRequest>(),
-            //        It.Is<RequestHandlerDelegate<Response<List<TodoItem>>>>(() => mockRequestHandler.Object)), Times.Once());
 
             mockLoggingBehavior.Verify(loggingBehavior =>
                 loggingBehavior.HandleAsync(
                     It.IsAny<GetTodoItemsRequest>(),
-                    It.IsAny<RequestHandlerDelegate<Response<List<TodoItem>>>>()), Times.Once());
+                    It.Is<RequestHandlerDelegate<Response<List<TodoItem>>>>(
+                        requestHandlerDelegate => IsDelegateTargetSameAsMethod(requestHandlerDelegate, mockRequestHandler.Object))), Times.Once);
+        }
+
+        private static bool IsDelegateTargetSameAsMethod(
+            RequestHandlerDelegate<Response<List<TodoItem>>> requestHandlerDelegate,
+            object mockRequestHandler)
+        {
+            var type = requestHandlerDelegate.Target?.GetType();
+            var field = type?.GetField("handler");
+            var handler = field?.GetValue(requestHandlerDelegate.Target);
+            return Equals(handler, mockRequestHandler);
         }
     }
 }
