@@ -20,6 +20,11 @@ namespace Tips.TodoItems.Configuration
     {
         public static void Register(IServiceCollection services)
         {
+            // DbContext is added by default as scoped for APIs.
+            // Any handlers, repositories, or other classes
+            // consuming the database should also be scoped.
+            // https://ardalis.com/avoid-wrapping-dbcontext-in-using/
+
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 
             // This is the order the rules will be run in.

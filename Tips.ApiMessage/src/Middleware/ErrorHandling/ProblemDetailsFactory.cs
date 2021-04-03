@@ -15,7 +15,7 @@ namespace Tips.Middleware.ErrorHandling
 
         public ProblemDetailsWithNotifications BadRequest(List<Notification> notifications)
         {
-            // ProblemDetails implements the RF7807 standards.
+            // ProblemDetails implements the RFC7807 standards.
             var problemDetails = new ProblemDetailsWithNotifications
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
@@ -34,7 +34,7 @@ namespace Tips.Middleware.ErrorHandling
         {
             const string uncaughtExceptionId = "D1537B75-D85A-48CF-8A02-DF6C614C3198";
 
-            // ProblemDetails implements the RF7807 standards.
+            // ProblemDetails implements the RFC7807 standards.
             var problemDetails = new ProblemDetails
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",

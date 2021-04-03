@@ -1,6 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.TodoItems.Context;
+using Tips.TodoItems.Context.Models;
+using TodoItems.Tests.Support;
 
 namespace TodoItems.Tests.Context
 {
@@ -72,5 +77,14 @@ namespace TodoItems.Tests.Context
             new DbContextOptionsBuilder<TodoContext>()
                 .UseInMemoryDatabase(databaseName: "TodoList")
                 .Options;
+
+        internal async Task<List<TodoItemEntity>> Populate(int totalItems)
+        {
+            var todoItemEntities = TodoItemFactory.CreateTodoItemEntities(totalItems).ToList();
+            await Context.AddRangeAsync(todoItemEntities);
+            await Context.SaveChangesAsync();
+
+            return todoItemEntities;
+        }
     }
 }
