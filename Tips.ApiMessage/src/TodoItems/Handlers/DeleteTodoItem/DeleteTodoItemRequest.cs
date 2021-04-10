@@ -1,4 +1,4 @@
-﻿namespace Tips.TodoItems.Handlers.DeleteTodoItems
+﻿namespace Tips.TodoItems.Handlers.DeleteTodoItem
 {
     public class DeleteTodoItemRequest
     {

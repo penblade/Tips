@@ -2,7 +2,7 @@
 using Tips.Pipeline;
 using Tips.TodoItems.Context;
 
-namespace Tips.TodoItems.Handlers.DeleteTodoItems
+namespace Tips.TodoItems.Handlers.DeleteTodoItem
 {
     internal class DeleteTodoItemRequestHandler : IRequestHandler<DeleteTodoItemRequest, Response>
     {
@@ -22,8 +22,8 @@ namespace Tips.TodoItems.Handlers.DeleteTodoItems
             return new Response();
         }
 
-        internal const string NotFoundNotificationId = "44799F8F-C7CE-4392-8709-2824899E486C";
+        internal const string TodoItemNotFoundNotificationId = "44799F8F-C7CE-4392-8709-2824899E486C";
         private static Notification TodoItemNotFoundNotification(long id) =>
-            NotFoundNotification.Create(NotFoundNotificationId, $"TodoItem {id} was not found.");
+            NotFoundNotification.Create(TodoItemNotFoundNotificationId, $"TodoItem {id} was not found.");
     }
 }
