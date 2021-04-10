@@ -16,7 +16,7 @@ namespace TodoItems.Tests.Handlers.GetTodoItem
         [DataRow(2, 2)]
         public async Task HandleAsyncTest(int totalItems, int requestId)
         {
-            var todoItemEntities = await Populate(totalItems);
+            var todoItemEntities = await PopulateTodoItems(totalItems);
             var expectedTodoItemEntity = todoItemEntities.SingleOrDefault(item => item.Id == requestId);
 
             var handler = new GetTodoItemRequestHandler(Context);
@@ -34,7 +34,7 @@ namespace TodoItems.Tests.Handlers.GetTodoItem
         [DataRow(2, 3)]
         public async Task HandleAsyncNotFoundTest(int totalItems, int requestId)
         {
-            var todoItemEntities = await Populate(totalItems);
+            var todoItemEntities = await PopulateTodoItems(totalItems);
             var expectedTodoItemEntity = todoItemEntities.SingleOrDefault(item => item.Id == requestId);
 
             var handler = new GetTodoItemRequestHandler(Context);

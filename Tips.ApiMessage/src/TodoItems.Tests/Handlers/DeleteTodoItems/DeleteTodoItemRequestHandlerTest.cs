@@ -15,12 +15,18 @@ namespace TodoItems.Tests.Handlers.DeleteTodoItems
         [DataRow(2, 2)]
         public async Task HandleAsyncTest(int totalItems, int requestId)
         {
-            await Populate(totalItems);
+            await PopulateTodoItems(totalItems);
+            var todoItemBeforeDelete = await GetTodoItem(requestId);
 
             var handler = new DeleteTodoItemRequestHandler(Context);
 
             var request = new DeleteTodoItemRequest { Id = requestId };
             var response = await handler.HandleAsync(request);
+
+            var todoItemAfterDelete = await GetTodoItem(requestId);
+            
+            Assert.IsNotNull(todoItemBeforeDelete);
+            Assert.IsNull(todoItemAfterDelete);
 
             Assert.IsNotNull(response);
             Assert.AreEqual(0, response.Notifications.Count);
@@ -31,7 +37,7 @@ namespace TodoItems.Tests.Handlers.DeleteTodoItems
         [DataRow(2, 3)]
         public async Task HandleAsyncNotFoundTest(int totalItems, int requestId)
         {
-            await Populate(totalItems);
+            await PopulateTodoItems(totalItems);
 
             var handler = new DeleteTodoItemRequestHandler(Context);
 

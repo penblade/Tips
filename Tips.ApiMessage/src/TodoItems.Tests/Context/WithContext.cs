@@ -78,7 +78,7 @@ namespace TodoItems.Tests.Context
                 .UseInMemoryDatabase(databaseName: "TodoList")
                 .Options;
 
-        internal async Task<List<TodoItemEntity>> Populate(int totalItems)
+        internal async Task<List<TodoItemEntity>> PopulateTodoItems(int totalItems)
         {
             var todoItemEntities = TodoItemFactory.CreateTodoItemEntities(totalItems).ToList();
             await Context.AddRangeAsync(todoItemEntities);
@@ -86,5 +86,7 @@ namespace TodoItems.Tests.Context
 
             return todoItemEntities;
         }
+
+        internal async Task<TodoItemEntity> GetTodoItem(int requestId) => await Context.TodoItems.SingleOrDefaultAsync(todoItem => todoItem.Id == requestId);
     }
 }

@@ -20,7 +20,7 @@ namespace TodoItems.Tests.Handlers.GetTodoItems
         [DataRow(200)]
         public async Task HandleAsyncTest(int totalItems)
         {
-            var todoItemEntities = await Populate(totalItems);
+            var todoItemEntities = await PopulateTodoItems(totalItems);
 
             var handler = new GetTodoItemsRequestHandler(Context);
 
