@@ -9,7 +9,7 @@ using Tips.Api.Configuration;
 using Tips.Pipeline;
 using Tips.Rules;
 using Tips.Security;
-using Tips.TodoItems.Handlers.CreateTodoItems;
+using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Handlers.DeleteTodoItem;
 using Tips.TodoItems.Handlers.GetTodoItem;
 using Tips.TodoItems.Handlers.GetTodoItems;

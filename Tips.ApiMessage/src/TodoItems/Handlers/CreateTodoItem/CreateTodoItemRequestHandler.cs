@@ -9,7 +9,7 @@ using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Mappers;
 using Tips.TodoItems.Models;
 
-namespace Tips.TodoItems.Handlers.CreateTodoItems
+namespace Tips.TodoItems.Handlers.CreateTodoItem
 {
     internal class CreateTodoItemRequestHandler : IRequestHandler<CreateTodoItemRequest, Response<TodoItem>>
     {

@@ -5,7 +5,7 @@ using Tips.Pipeline;
 using Tips.Rules;
 using Tips.TodoItems.Context;
 using Tips.TodoItems.Context.Models;
-using Tips.TodoItems.Handlers.CreateTodoItems;
+using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Handlers.DeleteTodoItem;
 using Tips.TodoItems.Handlers.GetTodoItem;
 using Tips.TodoItems.Handlers.GetTodoItems;
