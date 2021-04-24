@@ -6,15 +6,32 @@ namespace TodoItems.Tests.Support
 {
     internal static class VerifyTodoItem
     {
-        public static void AssertTodoItem(TodoItemEntity todoItemEntity, TodoItem todoItem)
+        public static void AssertTodoItem(TodoItemEntity expected, TodoItem actual)
         {
-            if (todoItemEntity == null && todoItem == null) return;
+            if (expected == null && actual == null) return;
 
-            Assert.AreEqual(todoItemEntity?.Id, todoItem?.Id);
-            Assert.AreEqual(todoItemEntity?.Description, todoItem?.Description);
-            Assert.AreEqual(todoItemEntity?.IsComplete, todoItem?.IsComplete);
-            Assert.AreEqual(todoItemEntity?.Name, todoItem?.Name);
-            Assert.AreEqual(todoItemEntity?.Priority, todoItem?.Priority);
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(expected.Id, actual.Id);
+            Assert.AreEqual(expected.Description, actual.Description);
+            Assert.AreEqual(expected.IsComplete, actual.IsComplete);
+            Assert.AreEqual(expected.Name, actual.Name);
+            Assert.AreEqual(expected.Priority, actual.Priority);
+        }
+
+        public static void AssertTodoItem(TodoItemEntity expected, TodoItemEntity actual)
+        {
+            if (expected == null && actual == null) return;
+
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(expected.Id, actual.Id);
+            Assert.AreEqual(expected.Description, actual.Description);
+            Assert.AreEqual(expected.IsComplete, actual.IsComplete);
+            Assert.AreEqual(expected.Name, actual.Name);
+            Assert.AreEqual(expected.Priority, actual.Priority);
         }
     }
 }
