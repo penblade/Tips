@@ -60,13 +60,20 @@ namespace TodoItems.Tests.Rules.SaveRules
         }
 
         [TestMethod]
-        public async Task ProcessRuleAsyncPass()
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
+        public async Task ProcessRuleAsyncPass(int id)
         {
-            var request = CreateRequest();
+            var request = CreateRequest(id);
             var response = CreateResponse();
 
             var rule = new TodoItemDescriptionRule();
             await rule.ProcessAsync(request, response, CreateBaseRulesWithRequiredRules());
+
+            Assert.AreEqual($"TodoItem - Description - {id}", response.Item.Description);
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
             Assert.IsTrue(rule.ContinueProcessing);
@@ -102,6 +109,7 @@ namespace TodoItems.Tests.Rules.SaveRules
             yield return new object[] { "Description is empty", request };
         }
 
+        private static Request<TodoItem> CreateRequest(int id) => new() { Item = TodoItemFactory.CreateTodoItem(id) };
         private static Request<TodoItem> CreateRequest() => new() { Item = TodoItemFactory.CreateTodoItem(ItemId) };
         private static Response<TodoItemEntity> CreateResponse() => new();
 
