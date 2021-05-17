@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Extensions;
 using Tips.TodoItems.Context.Models;
+using Tips.TodoItems.Models;
 
 namespace TodoItems.Tests.Support
 {
@@ -10,7 +12,7 @@ namespace TodoItems.Tests.Support
             var todoItemEntities = new List<TodoItemEntity>();
             for (var i = 0; i < totalItems; i++)
             {
-                todoItemEntities.Add(TodoItemFactory.CreateTodoItemEntity(i + 1));
+                todoItemEntities.Add(CreateTodoItemEntity(i + 1));
             }
 
             return todoItemEntities;
@@ -20,12 +22,16 @@ namespace TodoItems.Tests.Support
             new()
             {
                 Id = id,
-                Description = $"TodoItem - Description - {id}",
+                Description = BuildStringProperty(nameof(TodoItemEntity.Description), id),
                 IsComplete = IsOdd(id),
-                Name = $"TodoItem - Name - {id}",
+                Name = BuildStringProperty(nameof(TodoItemEntity.Name), id),
                 Priority = id + 1,
-                Reviewer = $"TodoItem - Reviewer - {id}"
+                Reviewer = BuildStringProperty(nameof(TodoItemEntity.Reviewer), id)
             };
+
+        public static TodoItem CreateTodoItem(int id) => CreateTodoItemEntity(id).Clone<TodoItemEntity, TodoItem>();
+
+        private static string BuildStringProperty(string name, int id) => $"TodoItem - {name} - {id}";
 
         private static bool IsOdd(int id) => id % 2 == 1;
     }
