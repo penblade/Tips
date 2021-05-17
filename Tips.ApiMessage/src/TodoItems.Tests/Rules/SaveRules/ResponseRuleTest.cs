@@ -28,7 +28,7 @@ namespace TodoItems.Tests.Rules.SaveRules
             var response = CreateResponse();
 
             var rule = new ResponseRule();
-            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
+            await rule.ProcessAsync(request, response, RuleFactory.CreateEmptyListOfSaveRules());
 
             VerifyTodoItem.AssertTodoItem(expectedTodoItemEntity, response.Item);
 
@@ -48,8 +48,5 @@ namespace TodoItems.Tests.Rules.SaveRules
 
         private static Request<TodoItem> CreateRequest(int id) => new() { Item = TodoItemFactory.CreateTodoItem(id) };
         private static Response<TodoItemEntity> CreateResponse() => new();
-
-        private static IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
-            new List<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>();
     }
 }

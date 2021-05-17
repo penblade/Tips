@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 using Tips.Rules;
@@ -28,7 +27,7 @@ namespace TodoItems.Tests.Rules.SaveRules
             var response = CreateResponse();
 
             var rule = new RequestRule();
-            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
+            await rule.ProcessAsync(request, response, RuleFactory.CreateEmptyListOfSaveRules());
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
             Assert.IsTrue(rule.ContinueProcessing);
@@ -43,7 +42,7 @@ namespace TodoItems.Tests.Rules.SaveRules
             var response = CreateResponse();
 
             var rule = new RequestRule();
-            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
+            await rule.ProcessAsync(request, response, RuleFactory.CreateEmptyListOfSaveRules());
 
             Assert.IsInstanceOfType(rule, typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>));
             Assert.AreEqual(RuleStatusType.Failed, rule.Status);
@@ -58,8 +57,5 @@ namespace TodoItems.Tests.Rules.SaveRules
 
         private static Response CreateExpectedResponse() =>
             new(Notification.CreateError(RequestRule.TodoItemWasNotProvidedNotificationId, "TodoItem was not provided."));
-
-        private static IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
-            new List<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 using Tips.Rules;
@@ -29,7 +28,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
             var response = CreateResponse();
 
             var rule = new TodoItemNotSameIdRule();
-            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
+            await rule.ProcessAsync(request, response, RuleFactory.CreateEmptyListOfUpdateRules());
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
             Assert.IsTrue(rule.ContinueProcessing);
@@ -46,7 +45,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
             var response = CreateResponse();
 
             var rule = new TodoItemNotSameIdRule();
-            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
+            await rule.ProcessAsync(request, response, RuleFactory.CreateEmptyListOfUpdateRules());
 
             Assert.IsInstanceOfType(rule, typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>));
             Assert.AreEqual(RuleStatusType.Failed, rule.Status);
@@ -60,8 +59,5 @@ namespace TodoItems.Tests.Rules.UpdateRules
 
         private static Response CreateExpectedResponse() =>
             new(Notification.CreateError(TodoItemNotSameIdRule.NotSameIdNotificationId, $"TodoItem {NotSameId} does not match {ItemId}."));
-
-        private static IEnumerable<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
-            new List<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>();
     }
 }
