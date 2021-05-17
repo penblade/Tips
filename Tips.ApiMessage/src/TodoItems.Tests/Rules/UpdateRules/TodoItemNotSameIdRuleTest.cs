@@ -50,22 +50,14 @@ namespace TodoItems.Tests.Rules.UpdateRules
             Assert.AreEqual(RuleStatusType.Failed, rule.Status);
             Assert.IsFalse(rule.ContinueProcessing);
 
-            AssertNotFoundNotification(response);
-        }
-
-        private static void AssertNotFoundNotification(Response<TodoItemEntity> response)
-        {
-            Assert.AreEqual(1, response.Notifications.Count);
-            var notification = response.Notifications.Single();
-            Assert.IsInstanceOfType(notification, typeof(Notification));
-            Assert.AreEqual(Notification.SeverityType.Error, notification.Severity);
-            Assert.AreEqual(TodoItemNotSameIdRule.NotSameIdNotificationId, notification.Id);
-            Assert.AreEqual($"TodoItem {NotSameId} does not match {ItemId}.", notification.Detail);
-            Assert.AreEqual(0, notification.Notifications.Count);
+            VerifyNotification.AssertResponseNotifications(CreateExpectedResponse(), response);
         }
 
         private static UpdateTodoItemRequest CreateRequest() => new() { Id = ItemId, Item = TodoItemFactory.CreateTodoItem(ItemId) };
         private static Response<TodoItemEntity> CreateResponse() => new();
+
+        private static Response CreateExpectedResponse() =>
+            new(Notification.CreateError(TodoItemNotSameIdRule.NotSameIdNotificationId, $"TodoItem {NotSameId} does not match {ItemId}."));
 
         private static IEnumerable<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>> CreateBaseRules =>
             new List<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>();
