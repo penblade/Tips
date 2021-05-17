@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -12,10 +11,10 @@ using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Models;
 using TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.CreateTodoItem
+namespace TodoItems.Tests.Handlers.UpdateTodoItem
 {
     [TestClass]
-    public class CreateTodoItemRequestHandlerTest
+    public class UpdateTodoItemRequestHandlerTest
     {
         [TestMethod]
         public async Task HandleAsyncHasErrorTest()
@@ -72,7 +71,15 @@ namespace TodoItems.Tests.Handlers.CreateTodoItem
                 .Callback<Request<TodoItem>, Response<TodoItemEntity>, IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>>
                 ((callbackRequest, callbackResponse, callbackRules) =>
                 {
-                    callbackResponse.Item = expectedResponse.Clone().Item;
+                    callbackResponse.Item = new TodoItemEntity
+                    {
+                        Id = expectedResponse.Item.Id,
+                        Name = expectedResponse.Item.Name,
+                        Description = expectedResponse.Item.Description,
+                        Priority = expectedResponse.Item.Priority,
+                        IsComplete = expectedResponse.Item.IsComplete,
+                        Reviewer = expectedResponse.Item.Reviewer
+                    };
                 });
 
 

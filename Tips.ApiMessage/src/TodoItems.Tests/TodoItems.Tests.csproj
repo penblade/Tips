@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\Support.Tests\Support.Tests.csproj" />
     <ProjectReference Include="..\TodoItems\TodoItems.csproj" />
   </ItemGroup>
 

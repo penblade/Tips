@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tips.Pipeline
 {
     public class Response<TItem> : Response
     {
+        public Response() : this(Activator.CreateInstance<TItem>()) { }
         public Response(TItem item = default) => Item = item;
         public Response(Notification notification, TItem item = default)
         {

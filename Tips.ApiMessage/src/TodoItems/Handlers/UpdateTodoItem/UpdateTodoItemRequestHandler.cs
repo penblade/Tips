@@ -45,6 +45,7 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
 
             // Command.  Save the data.
             await _updateTodoItemRepository.SaveAsync(todoItemEntityResponse);
+
             LogTodoItemEntityResponse(todoItemEntityResponse);
 
             return new Response(todoItemEntityResponse.Notifications);
