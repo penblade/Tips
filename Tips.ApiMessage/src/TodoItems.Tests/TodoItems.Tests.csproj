@@ -33,8 +33,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Rules\SaveRules\" />
-  </ItemGroup>
-
 </Project>

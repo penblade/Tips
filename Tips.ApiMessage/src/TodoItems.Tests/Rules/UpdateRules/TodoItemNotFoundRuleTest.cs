@@ -14,6 +14,9 @@ namespace TodoItems.Tests.Rules.UpdateRules
     [TestClass]
     public class TodoItemNotFoundRuleTest : WithContext
     {
+        // Request/Response/RequiredRules null guards are done in the BaseRule.
+        // The BaseRule framework has unit tests validating the guards, so no need to do it here again.
+
         private const int ItemId = 1;
         private const int TotalItems = 1;
 
@@ -28,7 +31,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
             var response = CreateResponse();
 
             var rule = new TodoItemNotFoundRule(Context);
-            await rule.ProcessAsync(request, response, CreateBaseRules);
+            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
             Assert.IsTrue(rule.ContinueProcessing);
@@ -43,7 +46,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
             var response = CreateResponse();
 
             var rule = new TodoItemNotFoundRule(Context);
-            await rule.ProcessAsync(request, response, CreateBaseRules);
+            await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
 
             Assert.IsInstanceOfType(rule, typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>));
             Assert.AreEqual(RuleStatusType.Failed, rule.Status);
@@ -58,7 +61,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
         private static Response CreateExpectedResponse() =>
             new(NotFoundNotification.Create(TodoItemNotFoundRule.TodoItemNotFoundNotificationId, $"TodoItem {ItemId} was not found."));
 
-        private static IEnumerable<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>> CreateBaseRules =>
+        private static IEnumerable<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
             new List<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>();
     }
 }

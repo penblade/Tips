@@ -4,23 +4,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 using Tips.Rules;
 using Tips.TodoItems.Context.Models;
-using Tips.TodoItems.Handlers.UpdateTodoItem;
-using Tips.TodoItems.Rules.UpdateRules;
+using Tips.TodoItems.Models;
+using Tips.TodoItems.Rules.SaveRules;
 using TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Rules.UpdateRules
+namespace TodoItems.Tests.Rules.SaveRules
 {
     [TestClass]
-    public class TodoItemNotSameIdRuleTest
+    public class RequestRuleTest
     {
         // Request/Response/RequiredRules null guards are done in the BaseRule.
         // The BaseRule framework has unit tests validating the guards, so no need to do it here again.
 
         private const int ItemId = 1;
-        private const int NotSameId = 2;
 
         [TestMethod]
-        public void IsBaseRule() => VerifyRule.VerifyIsAssignableFrom<BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>, TodoItemNotSameIdRule>();
+        public void IsBaseRule() => VerifyRule.VerifyIsAssignableFrom<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>, RequestRule>();
 
         [TestMethod]
         public async Task ProcessRuleAsyncPass()
@@ -28,7 +27,7 @@ namespace TodoItems.Tests.Rules.UpdateRules
             var request = CreateRequest();
             var response = CreateResponse();
 
-            var rule = new TodoItemNotSameIdRule();
+            var rule = new RequestRule();
             await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
@@ -38,30 +37,29 @@ namespace TodoItems.Tests.Rules.UpdateRules
         }
 
         [TestMethod]
-        public async Task ProcessRuleAsyncNotSameId()
+        public async Task ProcessRuleAsyncNotProvided()
         {
-            var request = CreateRequest();
-            request.Id = NotSameId;
-
+            var request = CreateRequestWithNoItem();
             var response = CreateResponse();
 
-            var rule = new TodoItemNotSameIdRule();
+            var rule = new RequestRule();
             await rule.ProcessAsync(request, response, CreateBaseRulesWithNoRules);
 
-            Assert.IsInstanceOfType(rule, typeof(BaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>));
+            Assert.IsInstanceOfType(rule, typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>));
             Assert.AreEqual(RuleStatusType.Failed, rule.Status);
             Assert.IsFalse(rule.ContinueProcessing);
 
             VerifyNotification.AssertResponseNotifications(CreateExpectedResponse(), response);
         }
 
-        private static UpdateTodoItemRequest CreateRequest() => new() { Id = ItemId, Item = TodoItemFactory.CreateTodoItem(ItemId) };
+        private static Request<TodoItem> CreateRequestWithNoItem() => new() { Item = null };
+        private static Request<TodoItem> CreateRequest() => new() { Item = TodoItemFactory.CreateTodoItem(ItemId) };
         private static Response<TodoItemEntity> CreateResponse() => new();
 
         private static Response CreateExpectedResponse() =>
-            new(Notification.CreateError(TodoItemNotSameIdRule.NotSameIdNotificationId, $"TodoItem {NotSameId} does not match {ItemId}."));
+            new(Notification.CreateError(RequestRule.TodoItemWasNotProvidedNotificationId, "TodoItem was not provided."));
 
-        private static IEnumerable<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
-            new List<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>();
+        private static IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>> CreateBaseRulesWithNoRules =>
+            new List<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>();
     }
 }
