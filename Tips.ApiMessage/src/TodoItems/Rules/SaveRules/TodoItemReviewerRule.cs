@@ -35,7 +35,7 @@ namespace Tips.TodoItems.Rules.SaveRules
         internal const string TodoItemReviewerIsNullNotificationId = "1FC6B1C0-B72A-4F2F-ADBC-C059382D4363";
         private static Notification TodoItemReviewerIsNullNotification(int priority)
         {
-            var notification =Notification.CreateError(TodoItemReviewerIsNullNotificationId,
+            var notification = Notification.CreateError(TodoItemReviewerIsNullNotificationId,
                 "TodoItem Reviewer could not be determined.");
 
             notification.Notifications.Add(TodoItemReviewerIsNullReason1Notification());

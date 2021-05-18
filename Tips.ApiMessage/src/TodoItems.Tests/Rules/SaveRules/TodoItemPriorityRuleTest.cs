@@ -60,13 +60,14 @@ namespace TodoItems.Tests.Rules.SaveRules
         }
 
         [TestMethod]
-        [DataRow(0, 1)]
-        [DataRow(1, 2)]
-        [DataRow(2, 3)]
-        [DataRow(3, 4)]
-        public async Task ProcessRuleAsyncPass(int id, int priority)
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        public async Task ProcessRuleAsyncPass(int priority)
         {
-            var request = CreateRequest(id);
+            var request = CreateRequest();
+            request.Item.Priority = priority;
             var response = CreateResponse();
 
             var rule = new TodoItemPriorityRule();
@@ -101,12 +102,11 @@ namespace TodoItems.Tests.Rules.SaveRules
             VerifyNotification.AssertResponseNotifications(CreateExpectedResponse(), response);
         }
 
-        private static Request<TodoItem> CreateRequest(int id) => new() { Item = TodoItemFactory.CreateTodoItem(id) };
         private static Request<TodoItem> CreateRequest() => new() { Item = TodoItemFactory.CreateTodoItem(ItemId) };
         private static Response<TodoItemEntity> CreateResponse() => new();
 
         private static Response CreateExpectedResponse() =>
-            new(Notification.CreateError(TodoItemPriorityRule.TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 4."));
+            new(Notification.CreateError(TodoItemPriorityRule.TodoItemPriorityIsNotInRangeNotificationId, "TodoItem Priority must be between 1 - 3."));
 
         private static IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>> CreateBaseRulesWithRequiredRules()
         {
