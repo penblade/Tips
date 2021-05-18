@@ -12,7 +12,7 @@ using TodoItems.Tests.Support;
 namespace TodoItems.Tests.Rules.SaveRules
 {
     [TestClass]
-    public class TodoItemDescriptionRuleTest
+    public class TodoItemNameRuleTest
     {
         // Request/Response/RequiredRules null guards are done in the BaseRule.
         // The BaseRule framework has unit tests validating the guards, so no need to do it here again.
@@ -20,7 +20,7 @@ namespace TodoItems.Tests.Rules.SaveRules
         private const int ItemId = 1;
 
         [TestMethod]
-        public void IsBaseRule() => VerifyRule.VerifyIsAssignableFrom<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>, TodoItemDescriptionRule>();
+        public void IsBaseRule() => VerifyRule.VerifyIsAssignableFrom<BaseRule<Request<TodoItem>, Response<TodoItemEntity>>, TodoItemNameRule>();
 
         [TestMethod]
         [DynamicData(nameof(SetupProcessRuleAsyncSkipped), DynamicDataSourceType.Method)]
@@ -30,7 +30,7 @@ namespace TodoItems.Tests.Rules.SaveRules
             var request = CreateRequest();
             var response = CreateResponse();
 
-            var rule = new TodoItemDescriptionRule();
+            var rule = new TodoItemNameRule();
             await rule.ProcessAsync(request, response, rules);
 
             Assert.AreEqual(RuleStatusType.Skipped, rule.Status);
@@ -70,10 +70,10 @@ namespace TodoItems.Tests.Rules.SaveRules
             var request = CreateRequest(id);
             var response = CreateResponse();
 
-            var rule = new TodoItemDescriptionRule();
+            var rule = new TodoItemNameRule();
             await rule.ProcessAsync(request, response, CreateBaseRulesWithRequiredRules());
 
-            Assert.AreEqual($"TodoItem - Description - {id}", response.Item.Description);
+            Assert.AreEqual($"TodoItem - Name - {id}", response.Item.Name);
 
             Assert.AreEqual(RuleStatusType.Passed, rule.Status);
             Assert.IsTrue(rule.ContinueProcessing);
@@ -84,13 +84,13 @@ namespace TodoItems.Tests.Rules.SaveRules
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public async Task ProcessRuleAsyncDescriptionNotProvided(string description)
+        public async Task ProcessRuleAsyncNameNotProvided(string name)
         {
             var request = CreateRequest();
-            request.Item.Description = description;
+            request.Item.Name = name;
             var response = CreateResponse();
 
-            var rule = new TodoItemDescriptionRule();
+            var rule = new TodoItemNameRule();
             await rule.ProcessAsync(request, response, CreateBaseRulesWithRequiredRules());
 
             Assert.IsInstanceOfType(rule, typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>));
@@ -105,7 +105,7 @@ namespace TodoItems.Tests.Rules.SaveRules
         private static Response<TodoItemEntity> CreateResponse() => new();
 
         private static Response CreateExpectedResponse() =>
-            new(Notification.CreateError(TodoItemDescriptionRule.TodoItemDescriptionWasNotProvidedNotificationId, "TodoItem Description was not provided."));
+            new(Notification.CreateError(TodoItemNameRule.TodoItemNameWasNotProvidedNotificationId, "TodoItem Name was not provided."));
 
         private static IEnumerable<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>> CreateBaseRulesWithRequiredRules()
         {
