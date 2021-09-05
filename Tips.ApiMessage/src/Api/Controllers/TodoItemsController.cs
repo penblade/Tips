@@ -27,6 +27,11 @@ namespace Tips.Api.Controllers
 
         public TodoItemsController(IPipelineBehavior loggingBehavior) => _loggingBehavior = loggingBehavior;
 
+        /// <summary>
+        /// Get a list of to do items.
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -40,6 +45,12 @@ namespace Tips.Api.Controllers
             return Ok(response.Item);
         }
 
+        /// <summary>
+        /// Get a single to do item.
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="id"></param>
+        /// <returns>A to do item</returns>
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,6 +69,14 @@ namespace Tips.Api.Controllers
             return Ok(response.Item);
         }
 
+        /// <summary>
+        /// Update a single to do item.
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="problemDetailsFactory"></param>
+        /// <param name="id"></param>
+        /// <param name="todoItem"></param>
+        /// <returns></returns>
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -82,6 +101,14 @@ namespace Tips.Api.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Create a to do item.
+        /// </summary>
+        /// <param name="handler">The create to do item handler</param>
+        /// <param name="problemDetailsFactory"></param>
+        /// <param name="todoItem"></param>
+        /// <returns></returns>
         // POST: api/TodoItems
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -103,6 +130,12 @@ namespace Tips.Api.Controllers
             return CreatedAtAction(nameof(GetTodoItem), new {id = response.Item.Id}, response.Item);
         }
 
+        /// <summary>
+        /// Delete a to do item.
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

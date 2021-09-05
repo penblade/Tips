@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tips.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Tips.Api.Controllers.TodoItemsController.GetTodoItems(Tips.Pipeline.IRequestHandler{Tips.TodoItems.Handlers.GetTodoItems.GetTodoItemsRequest,Tips.Pipeline.Response{System.Collections.Generic.List{Tips.TodoItems.Models.TodoItem}}})">
+            <summary>
+            Get ToDo items.  hello world
+            </summary>
+        </member>
+    </members>
+</doc>
