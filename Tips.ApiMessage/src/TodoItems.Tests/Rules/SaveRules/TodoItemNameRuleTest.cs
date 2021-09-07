@@ -45,16 +45,16 @@ namespace TodoItems.Tests.Rules.SaveRules
             yield return new object[] { "Rules: 0 of 2 required rules, 0 MockRule", rules };
 
             rules = RuleFactory.CreateEmptyListOfSaveRules().ToList();
-            rules.Add(RuleFactory.CreateMockRule());
+            rules.Add(RuleFactory.CreateMockSaveRule());
             yield return new object[] { "Rules: 0 of 2 required rules, 1 MockRule", rules };
 
             rules = RuleFactory.CreateEmptyListOfSaveRules().ToList();
-            rules.Add(RuleFactory.CreateMockRule());
+            rules.Add(RuleFactory.CreateMockSaveRule());
             rules.Add(RuleFactory.CreatePassedRule<RequestRule>());
             yield return new object[] { "Rules: 1 of 2 required rules (RequestRule), 1 MockRule", rules };
 
             rules = RuleFactory.CreateEmptyListOfSaveRules().ToList();
-            rules.Add(RuleFactory.CreateMockRule());
+            rules.Add(RuleFactory.CreateMockSaveRule());
             rules.Add(RuleFactory.CreatePassedRule<ResponseRule>());
             yield return new object[] { "Rules: 1 of 2 required rules (ResponseRule), 1 MockRule", rules };
         }

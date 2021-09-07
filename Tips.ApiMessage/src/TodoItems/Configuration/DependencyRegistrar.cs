@@ -11,6 +11,7 @@ using Tips.TodoItems.Handlers.GetTodoItem;
 using Tips.TodoItems.Handlers.GetTodoItems;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
+using Tips.TodoItems.Rules.CreateRules;
 using Tips.TodoItems.Rules.SaveRules;
 using Tips.TodoItems.Rules.UpdateRules;
 
@@ -26,6 +27,9 @@ namespace Tips.TodoItems.Configuration
             // https://ardalis.com/avoid-wrapping-dbcontext-in-using/
 
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+
+            // This is the order the rules will be run in.
+            services.AddScoped(typeof(IBaseRule<CreateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemIdRule));
 
             // This is the order the rules will be run in.
             services.AddScoped(typeof(IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>), typeof(TodoItemNotFoundRule));

@@ -13,20 +13,20 @@ namespace Tips.TodoItems.Handlers.UpdateTodoItem
     internal class UpdateTodoItemRequestHandler : IRequestHandler<UpdateTodoItemRequest, Response>
     {
         private readonly IRulesEngine _rulesEngine;
-        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;
         private readonly IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>> _updateRulesFactory;
+        private readonly IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> _saveRulesFactory;
         private readonly IUpdateTodoItemRepository _updateTodoItemRepository;
         private readonly ILogger<UpdateTodoItemRequestHandler> _logger;
 
         public UpdateTodoItemRequestHandler(IRulesEngine rulesEngine,
-            IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> saveRulesFactory,
             IRulesFactory<UpdateTodoItemRequest, Response<TodoItemEntity>> updateRulesFactory,
+            IRulesFactory<Request<TodoItem>, Response<TodoItemEntity>> saveRulesFactory,
             IUpdateTodoItemRepository updateTodoItemRepository,
             ILogger<UpdateTodoItemRequestHandler> logger)
         {
             _rulesEngine = rulesEngine;
-            _saveRulesFactory = saveRulesFactory;
             _updateRulesFactory = updateRulesFactory;
+            _saveRulesFactory = saveRulesFactory;
             _updateTodoItemRepository = updateTodoItemRepository;
             _logger = logger;
         }
