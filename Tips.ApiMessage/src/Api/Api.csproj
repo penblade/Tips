@@ -6,9 +6,6 @@
     <Nullable>annotations</Nullable>
     <AssemblyName>Tips.Api</AssemblyName>
     <RootNamespace>Tips.Api</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
