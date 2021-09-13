@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoItems.Tests", "TodoItem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "Extensions\Extensions.csproj", "{4BF0A195-FC34-412F-869D-96056E092CAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swagger", "Swagger\Swagger.csproj", "{959461F5-67C7-469C-858D-D906566B188E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swagger", "Swagger\Swagger.csproj", "{959461F5-67C7-469C-858D-D906566B188E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
