@@ -34,7 +34,9 @@ namespace Api.Tests.Configuration
             // No clean way of getting the count of ILogger<out TCategoryName>
             // without changing the class implemented for the logger
             // from internal to public, which defeats the purpose.
-            // Long term solution is still to create a Facade for the ILogger.
+            // Long term solution was to create a Facade for the ILogger,
+            // but that's not worth the time, effort, maintenance, and is
+            // not a critical feature here that must be tested.
 
             // In order to verify the internals were actually registered properly
             // we could make them public, but that would defeat the purpose.
