@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Rules;
 using Tips.Rules.Configuration;
 
-namespace Rules.Tests.Configuration
+namespace Tips.Rules.Tests.Configuration
 {
     [TestClass]
     public class DependencyRegistrarTest

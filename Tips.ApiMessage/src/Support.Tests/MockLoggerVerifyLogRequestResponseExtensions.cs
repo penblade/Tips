@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Tips.Pipeline;
 
-namespace Support.Tests
+namespace Tips.Support.Tests
 {
     public static class MockLoggerVerifyLogRequestResponseExtensions
     {

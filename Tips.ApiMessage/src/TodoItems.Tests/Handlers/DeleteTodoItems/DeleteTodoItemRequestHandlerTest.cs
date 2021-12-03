@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 using Tips.TodoItems.Handlers.DeleteTodoItem;
-using TodoItems.Tests.Context;
+using Tips.TodoItems.Tests.Context;
 
-namespace TodoItems.Tests.Handlers.DeleteTodoItems
+namespace Tips.TodoItems.Tests.Handlers.DeleteTodoItems
 {
     [TestClass]
     public class DeleteTodoItemRequestHandlerTest : WithContext
@@ -24,7 +24,7 @@ namespace TodoItems.Tests.Handlers.DeleteTodoItems
             var response = await handler.HandleAsync(request);
 
             var todoItemAfterDelete = await GetTodoItem(requestId);
-            
+
             Assert.IsNotNull(todoItemBeforeDelete);
             Assert.IsNull(todoItemAfterDelete);
 

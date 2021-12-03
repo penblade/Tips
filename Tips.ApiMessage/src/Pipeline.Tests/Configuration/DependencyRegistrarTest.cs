@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Pipeline;
 using Tips.Pipeline.Configuration;
 using Tips.Pipeline.Logging;
 
-namespace Pipeline.Tests.Configuration
+namespace Tips.Pipeline.Tests.Configuration
 {
     [TestClass]
     public class DependencyRegistrarTest

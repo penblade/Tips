@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Support.Tests
+namespace Tips.Support.Tests
 {
     public static class DependencyRegistrarSupport
     {

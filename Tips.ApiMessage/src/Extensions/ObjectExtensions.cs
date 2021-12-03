@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Extensions
+namespace Tips.Extensions
 {
     public static class ObjectExtensions
     {

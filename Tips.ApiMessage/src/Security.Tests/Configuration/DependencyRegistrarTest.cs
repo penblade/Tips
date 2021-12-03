@@ -3,11 +3,11 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Security;
 using Tips.Security.Configuration;
 
-namespace Security.Tests.Configuration
+namespace Tips.Security.Tests.Configuration
 {
     [TestClass]
     public class DependencyRegistrarTest

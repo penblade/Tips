@@ -5,10 +5,10 @@ using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Rules.UpdateRules;
-using TodoItems.Tests.Context;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Context;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Rules.UpdateRules
+namespace Tips.TodoItems.Tests.Rules.UpdateRules
 {
     [TestClass]
     public class TodoItemNotFoundRuleTest : WithContext

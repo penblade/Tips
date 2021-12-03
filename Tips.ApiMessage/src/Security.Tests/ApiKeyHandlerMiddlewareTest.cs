@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Security;
 
-namespace Security.Tests
+namespace Tips.Security.Tests
 {
     [TestClass]
     public class ApiKeyHandlerMiddlewareTest
@@ -60,7 +60,7 @@ namespace Security.Tests
 
         private void SetupMocks(IEnumerable<ApiKey> apiKeys)
         {
-            _mockHttpResponse.SetupSet(response => response.StatusCode = (int) HttpStatusCode.Unauthorized);
+            _mockHttpResponse.SetupSet(response => response.StatusCode = (int)HttpStatusCode.Unauthorized);
             _mockHttpContext.SetupGet(context => context.Response).Returns(_mockHttpResponse.Object);
             _mockApiKeyRepository.Setup(repository => repository.GetApiKeysFromHeaders(_mockHttpContext.Object)).Returns(apiKeys);
         }

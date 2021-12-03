@@ -5,9 +5,9 @@ using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Rules.CreateRules;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Rules.CreateRules
+namespace Tips.TodoItems.Tests.Rules.CreateRules
 {
     [TestClass]
     public class TodoItemIdRuleTest

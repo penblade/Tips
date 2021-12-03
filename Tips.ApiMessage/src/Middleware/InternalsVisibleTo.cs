@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
-[assembly: InternalsVisibleTo("Middleware.Tests")]
+[assembly: InternalsVisibleTo("Tips.Middleware.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

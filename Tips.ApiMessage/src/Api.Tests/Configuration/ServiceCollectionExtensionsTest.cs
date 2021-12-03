@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Api.Configuration;
 using Tips.Pipeline;
 using Tips.Rules;
@@ -16,7 +16,7 @@ using Tips.TodoItems.Handlers.GetTodoItems;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
 
-namespace Api.Tests.Configuration
+namespace Tips.Api.Tests.Configuration
 {
     [TestClass]
     public class ServiceCollectionExtensionsTest
@@ -66,7 +66,7 @@ namespace Api.Tests.Configuration
             AssertDependenciesForTodoItems(serviceProvider);
         }
 
-        private static void AssertDependenciesForPipeline(IServiceProvider serviceProvider) => 
+        private static void AssertDependenciesForPipeline(IServiceProvider serviceProvider) =>
             DependencyRegistrarSupport.AssertServiceIsNotNull<IPipelineBehavior>(serviceProvider);
 
         private static void AssertDependenciesForMiddleware(IServiceProvider serviceProvider)
@@ -91,7 +91,7 @@ namespace Api.Tests.Configuration
         private static void AssertDependenciesForTodoItems(IServiceProvider serviceProvider)
         {
             // Cannot verify the TodoContext because it is internal only
-            
+
             // We can test the handlers and contracts were setup.
             DependencyRegistrarSupport.AssertServiceIsNotNull<IRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>>(serviceProvider);
             DependencyRegistrarSupport.AssertServiceIsNotNull<IRequestHandler<GetTodoItemRequest, Response<TodoItem>>>(serviceProvider);

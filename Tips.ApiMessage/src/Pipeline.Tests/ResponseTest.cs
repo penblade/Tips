@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 
-namespace Pipeline.Tests
+namespace Tips.Pipeline.Tests
 {
     [TestClass]
     public class ResponseTest

@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>TodoItems.Tests</AssemblyName>
+    <AssemblyName>Tips.$(MSBuildProjectName)</AssemblyName>
 
-    <RootNamespace>TodoItems.Tests</RootNamespace>
+    <RootNamespace>Tips.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

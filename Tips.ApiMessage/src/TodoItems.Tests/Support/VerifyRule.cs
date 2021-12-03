@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TodoItems.Tests.Support
+namespace Tips.TodoItems.Tests.Support
 {
     internal class VerifyRule
     {

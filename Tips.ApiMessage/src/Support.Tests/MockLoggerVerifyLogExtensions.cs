@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Support.Tests
+namespace Tips.Support.Tests
 {
     public static class MockLoggerVerifyLogExtensions
     {

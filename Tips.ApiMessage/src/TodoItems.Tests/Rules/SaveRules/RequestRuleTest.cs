@@ -5,9 +5,9 @@ using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Models;
 using Tips.TodoItems.Rules.SaveRules;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Rules.SaveRules
+namespace Tips.TodoItems.Tests.Rules.SaveRules
 {
     [TestClass]
     public class RequestRuleTest

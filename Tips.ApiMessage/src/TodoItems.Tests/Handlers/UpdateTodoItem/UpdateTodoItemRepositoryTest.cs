@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
+using Tips.Extensions;
 using Tips.Pipeline;
+using Tips.Support.Tests;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
-using TodoItems.Tests.Context;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Context;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.UpdateTodoItem
+namespace Tips.TodoItems.Tests.Handlers.UpdateTodoItem
 {
     [TestClass]
     public class UpdateTodoItemRepositoryTest : WithContext
@@ -41,7 +41,7 @@ namespace TodoItems.Tests.Handlers.UpdateTodoItem
         [DynamicData(nameof(SetupSaveAsyncGuardAgainstNullTest), DynamicDataSourceType.Method)]
         public async Task SaveAsyncGuardAgainstNullTest(string scenario, object response, string parameterName)
         {
-            var expectedResponse = (Response<TodoItemEntity>) response;
+            var expectedResponse = (Response<TodoItemEntity>)response;
 
             var repository = new UpdateTodoItemRepository(Context);
 
@@ -52,7 +52,7 @@ namespace TodoItems.Tests.Handlers.UpdateTodoItem
         private static IEnumerable<object[]> SetupSaveAsyncGuardAgainstNullTest()
         {
             yield return new object[] { "Response == null", null, "response" };
-            yield return new object[] { "Response.Item == null", new Response<TodoItemEntity> {Item = null}, "Item" };
+            yield return new object[] { "Response.Item == null", new Response<TodoItemEntity> { Item = null }, "Item" };
         }
 
         [TestMethod]

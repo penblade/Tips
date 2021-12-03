@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Tips.Extensions;
 using Tips.Pipeline;
 using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.UpdateTodoItem
+namespace Tips.TodoItems.Tests.Handlers.UpdateTodoItem
 {
     [TestClass]
     public class UpdateTodoItemRequestHandlerTest

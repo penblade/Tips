@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.GuardClauses;
 
-namespace GuardClauses.Tests
+namespace Tips.GuardClauses.Tests
 {
     [TestClass]
     public class GuardTest
@@ -19,17 +19,17 @@ namespace GuardClauses.Tests
 
         private static IEnumerable<object[]> SetupAgainstNullThrowsException()
         {
-            var anonymous = new {};
+            var anonymous = new { };
             anonymous = null;
 
             yield return new object[] { null, "null" };
             yield return new object[] { anonymous, "anonymousObject" };
-            yield return new object[] { (Tuple<string, int>) null, "tuple" };
-            yield return new object[] { (string) null, "string" };
-            yield return new object[] { (int?) null, "nullableInt" };
-            yield return new object[] { (bool?) null, "nullableBool" };
-            yield return new object[] { (Exception) null, "exception" };
-            yield return new object[] { (List<string>) null, "stringList" };
+            yield return new object[] { null, "tuple" };
+            yield return new object[] { null, "string" };
+            yield return new object[] { null, "nullableInt" };
+            yield return new object[] { null, "nullableBool" };
+            yield return new object[] { null, "exception" };
+            yield return new object[] { null, "stringList" };
         }
 
         [TestMethod]
@@ -46,8 +46,8 @@ namespace GuardClauses.Tests
             yield return new object[] { anonymous, "anonymousObject" };
             yield return new object[] { new Tuple<string, int>("test", 5), "tuple" };
             yield return new object[] { "null", "string" };
-            yield return new object[] { (int?) 1, "nullableInt" };
-            yield return new object[] { (bool?) false, "nullableBool" };
+            yield return new object[] { (int?)1, "nullableInt" };
+            yield return new object[] { (bool?)false, "nullableBool" };
             yield return new object[] { new Exception("testException"), "exception" };
             yield return new object[] { new List<string>(), "stringList" };
         }

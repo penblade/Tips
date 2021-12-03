@@ -3,7 +3,7 @@ using Tips.Pipeline;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Models;
 
-namespace TodoItems.Tests.Support
+namespace Tips.TodoItems.Tests.Support
 {
     internal static class VerifyTodoItem
     {

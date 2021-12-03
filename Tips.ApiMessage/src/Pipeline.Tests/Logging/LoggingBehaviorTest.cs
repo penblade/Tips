@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Support.Tests;
+using Tips.Support.Tests;
 using Tips.Pipeline;
 using Tips.Pipeline.Logging;
 
-namespace Pipeline.Tests.Logging
+namespace Tips.Pipeline.Tests.Logging
 {
     [TestClass]
     public class LoggingBehaviorTest

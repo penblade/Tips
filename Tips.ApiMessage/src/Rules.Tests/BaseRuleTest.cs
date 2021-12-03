@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Rules;
-using Support.Tests;
+using Tips.Support.Tests;
 
-namespace Rules.Tests
+namespace Tips.Rules.Tests
 {
     [TestClass]
     public class BaseRuleTest

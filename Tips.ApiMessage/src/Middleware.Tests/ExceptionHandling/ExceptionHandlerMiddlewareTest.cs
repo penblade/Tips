@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Support.Tests;
 using Tips.Middleware.ErrorHandling;
 using Tips.Middleware.ExceptionHandling;
+using Tips.Support.Tests;
 
-namespace Middleware.Tests.ExceptionHandling
+namespace Tips.Middleware.Tests.ExceptionHandling
 {
     [TestClass]
     public class ExceptionHandlerMiddlewareTest
@@ -42,7 +42,7 @@ namespace Middleware.Tests.ExceptionHandling
             var expectedSerializedProblemDetails = JsonSerializer.Serialize(expectedProblemDetails);
             var expectedProblemDetailsBytes = Encoding.UTF8.GetBytes(expectedSerializedProblemDetails);
             var expectedArgumentException = new ArgumentException("Test Message");
-            
+
             var headers = SetupHeaders();
 
             var mockLogger = new Mock<ILogger<ExceptionHandlerMiddleware>>();

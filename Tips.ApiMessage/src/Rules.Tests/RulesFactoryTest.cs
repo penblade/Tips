@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Rules;
 
-namespace Rules.Tests
+namespace Tips.Rules.Tests
 {
     [TestClass]
     public class RulesFactoryTest
@@ -25,7 +25,7 @@ namespace Rules.Tests
             {
                 services.AddScoped(typeof(IBaseRule<FakeRequest, FakeResponse>), expectedRules[i].GetType());
             }
-            
+
             var serviceProvider = services.BuildServiceProvider();
             var factory = new RulesFactory<FakeRequest, FakeResponse>(serviceProvider);
             var actualRules = factory.Create().ToList();
@@ -38,19 +38,19 @@ namespace Rules.Tests
 
         private static IEnumerable<IBaseRule<FakeRequest, FakeResponse>> CreateFakeRules(int[] ruleIds)
         {
-            return ruleIds.Select(ruleId => (IBaseRule<FakeRequest, FakeResponse>) (ruleId switch
-                {
-                    1 => new FakeRule1<FakeRequest, FakeResponse>(),
-                    2 => new FakeRule2<FakeRequest, FakeResponse>(),
-                    3 => new FakeRule3<FakeRequest, FakeResponse>(),
-                    _ => throw new ArgumentOutOfRangeException(nameof(ruleIds))
-                }))
+            return ruleIds.Select(ruleId => (IBaseRule<FakeRequest, FakeResponse>)(ruleId switch
+            {
+                1 => new FakeRule1<FakeRequest, FakeResponse>(),
+                2 => new FakeRule2<FakeRequest, FakeResponse>(),
+                3 => new FakeRule3<FakeRequest, FakeResponse>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(ruleIds))
+            }))
                 .ToList();
         }
 
-        public class FakeRequest {}
+        public class FakeRequest { }
 
-        public class FakeResponse {}
+        public class FakeResponse { }
 
         private class FakeRule1<TRequest, TResponse> : BaseRule<TRequest, TResponse>
         {

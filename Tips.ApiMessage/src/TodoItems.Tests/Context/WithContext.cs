@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.TodoItems.Context;
 using Tips.TodoItems.Context.Models;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Context
+namespace Tips.TodoItems.Tests.Context
 {
     public abstract class WithContext
     {

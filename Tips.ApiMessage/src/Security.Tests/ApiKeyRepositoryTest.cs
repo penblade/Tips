@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Tips.Security;
 
-namespace Security.Tests
+namespace Tips.Security.Tests
 {
     [TestClass]
     public class ApiKeyRepositoryTest
@@ -109,7 +109,7 @@ namespace Security.Tests
         private static StringValues GetExpectedApiKeyId(ApiKey expectedApiKey) => new StringValues(expectedApiKey?.Key);
 
         private static ApiKey GetExpectedApiKey(ApiKeyConfiguration expectedApiKeyConfiguration, int? expectedApiKeyId) =>
-            expectedApiKeyId != null ? expectedApiKeyConfiguration?.ApiKeys?.ToList()[(int) expectedApiKeyId] : null;
+            expectedApiKeyId != null ? expectedApiKeyConfiguration?.ApiKeys?.ToList()[(int)expectedApiKeyId] : null;
 
         private static void AssertApiKey(ApiKey expectedApiKey, ApiKey actualApiKey)
         {

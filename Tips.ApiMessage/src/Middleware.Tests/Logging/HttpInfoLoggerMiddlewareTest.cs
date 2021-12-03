@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Support.Tests;
 using Tips.Middleware.Logging;
 using Tips.Security;
+using Tips.Support.Tests;
 
-namespace Middleware.Tests.Logging
+namespace Tips.Middleware.Tests.Logging
 {
     [TestClass]
     public class HttpInfoLoggerMiddlewareTest

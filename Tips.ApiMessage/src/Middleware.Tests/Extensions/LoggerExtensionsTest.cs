@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Support.Tests;
 using Tips.Middleware.Extensions;
+using Tips.Support.Tests;
 
-namespace Middleware.Tests.Extensions
+namespace Tips.Middleware.Tests.Extensions
 {
     [TestClass]
     public class LoggerExtensionsTest

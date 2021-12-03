@@ -2,10 +2,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.TodoItems.Handlers.GetTodoItems;
-using TodoItems.Tests.Context;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Context;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.GetTodoItems
+namespace Tips.TodoItems.Tests.Handlers.GetTodoItems
 {
     [TestClass]
     public class GetTodoItemsRequestHandlerTest : WithContext

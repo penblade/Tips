@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Tips.Extensions;
 using Tips.Pipeline;
 using Tips.Rules;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Models;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.CreateTodoItem
+namespace Tips.TodoItems.Tests.Handlers.CreateTodoItem
 {
     [TestClass]
     public class CreateTodoItemRequestHandlerTest
@@ -44,7 +44,7 @@ namespace TodoItems.Tests.Handlers.CreateTodoItem
             // Setup generic mock setups first and then more specific.
             SetupMockProcessAsyncWithSaveRules(mockRulesEngine, request, saveRules,
                 callbackResponse => ProcessCallBackResponseToAddNotification(!createRulesHasError, callbackResponse, errorNotification));
-            SetupMockProcessAsyncWithCreateRules(mockRulesEngine, request, createRules, 
+            SetupMockProcessAsyncWithCreateRules(mockRulesEngine, request, createRules,
                 callbackResponse => ProcessCallBackResponseToAddNotification(createRulesHasError, callbackResponse, errorNotification));
 
             var mockCreateTodoItemRepository = new Mock<ICreateTodoItemRepository>();
@@ -157,7 +157,7 @@ namespace TodoItems.Tests.Handlers.CreateTodoItem
             mockSaveRulesFactory.VerifyNoOtherCalls();
             mockRulesEngine.VerifyNoOtherCalls();
             mockCreateTodoItemRepository.VerifyNoOtherCalls();
-            
+
             // Test critical behavior.  If the logging here is critical, then verify the calls.
             // See examples of ILogger testing in other parts of this app.
             mockLogger.VerifyAll();
@@ -187,4 +187,3 @@ namespace TodoItems.Tests.Handlers.CreateTodoItem
             };
     }
 }
- 

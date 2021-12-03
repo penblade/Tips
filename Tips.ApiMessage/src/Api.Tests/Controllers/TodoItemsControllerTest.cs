@@ -14,7 +14,7 @@ using Tips.TodoItems.Handlers.GetTodoItems;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
 
-namespace Api.Tests.Controllers
+namespace Tips.Api.Tests.Controllers
 {
     [TestClass]
     public class TodoItemsControllerTest
@@ -26,7 +26,7 @@ namespace Api.Tests.Controllers
         {
             var mockRequestHandler = SetupMockRequestHandler<GetTodoItemsRequest, Response<List<TodoItem>>>();
 
-            var expectedResponse = new Response<List<TodoItem>> {Item = new List<TodoItem> { new() { Id = ExpectedId } } };
+            var expectedResponse = new Response<List<TodoItem>> { Item = new List<TodoItem> { new() { Id = ExpectedId } } };
 
             var mockLoggingBehavior = SetupMockLoggingBehavior(mockRequestHandler, expectedResponse);
 
@@ -36,7 +36,7 @@ namespace Api.Tests.Controllers
             VerifyMockLoggingBehavior(mockLoggingBehavior, mockRequestHandler);
 
             Assert.IsInstanceOfType(actionResult, typeof(OkObjectResult));
-            var actualActionResult = (OkObjectResult) actionResult;
+            var actualActionResult = (OkObjectResult)actionResult;
             Assert.AreSame(expectedResponse.Item, actualActionResult?.Value);
         }
 
@@ -95,7 +95,7 @@ namespace Api.Tests.Controllers
 
         private static IEnumerable<object[]> SetupUpdateTodoItemTest()
         {
-            yield return new object[] { "NotFoundResult Scenario", new Response { Notifications = {new NotFoundNotification()}}, typeof(NotFoundResult) };
+            yield return new object[] { "NotFoundResult Scenario", new Response { Notifications = { new NotFoundNotification() } }, typeof(NotFoundResult) };
             yield return new object[] { "BadRequest Scenario", new Response { Notifications = { Notification.CreateError("1", "error") } }, typeof(BadRequestObjectResult) };
             yield return new object[] { "NoContentResult Scenario", new Response(), typeof(NoContentResult) };
         }
@@ -128,7 +128,7 @@ namespace Api.Tests.Controllers
                 var actualActionResult = (CreatedAtActionResult)actionResult;
                 Assert.AreSame(expectedResponse.Item, actualActionResult?.Value);
                 Assert.AreEqual(nameof(TodoItemsController.GetTodoItem), actualActionResult.ActionName);
-                Assert.AreEqual((long) ExpectedId, actualActionResult.RouteValues["id"]);
+                Assert.AreEqual((long)ExpectedId, actualActionResult.RouteValues["id"]);
             }
         }
 

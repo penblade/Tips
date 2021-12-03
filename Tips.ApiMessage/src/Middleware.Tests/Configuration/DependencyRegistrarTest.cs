@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Support.Tests;
 using Tips.Middleware.Configuration;
 using Tips.Middleware.ErrorHandling;
+using Tips.Support.Tests;
 
-namespace Middleware.Tests.Configuration
+namespace Tips.Middleware.Tests.Configuration
 {
     [TestClass]
     public class DependencyRegistrarTest

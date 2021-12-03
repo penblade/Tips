@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Support.Tests
+namespace Tips.Support.Tests
 {
     public class Verify
     {

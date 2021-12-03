@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>Tips.GuardClauses</AssemblyName>
-    <RootNamespace>Tips.GuardClauses</RootNamespace>
+    <AssemblyName>Tips.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tips.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
 </Project>

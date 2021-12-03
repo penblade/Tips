@@ -4,10 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 using Tips.TodoItems.Context.Models;
 using Tips.TodoItems.Handlers.CreateTodoItem;
-using TodoItems.Tests.Context;
-using TodoItems.Tests.Support;
+using Tips.TodoItems.Tests.Context;
+using Tips.TodoItems.Tests.Support;
 
-namespace TodoItems.Tests.Handlers.CreateTodoItem
+namespace Tips.TodoItems.Tests.Handlers.CreateTodoItem
 {
     [TestClass]
     public class CreateTodoItemRepositoryTest : WithContext

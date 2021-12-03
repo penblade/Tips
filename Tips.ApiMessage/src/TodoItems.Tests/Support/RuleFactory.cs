@@ -9,7 +9,7 @@ using Tips.TodoItems.Handlers.CreateTodoItem;
 using Tips.TodoItems.Handlers.UpdateTodoItem;
 using Tips.TodoItems.Models;
 
-namespace TodoItems.Tests.Support
+namespace Tips.TodoItems.Tests.Support
 {
     internal static class RuleFactory
     {
@@ -23,18 +23,18 @@ namespace TodoItems.Tests.Support
             new List<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>();
 
         public static IBaseRule<Request<TodoItem>, Response<TodoItemEntity>> CreateMockSaveRule() =>
-            (new Mock<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>()).Object;
+            new Mock<IBaseRule<Request<TodoItem>, Response<TodoItemEntity>>>().Object;
 
         public static IBaseRule<CreateTodoItemRequest, Response<TodoItemEntity>> CreateMockCreateRule() =>
-            (new Mock<IBaseRule<CreateTodoItemRequest, Response<TodoItemEntity>>>()).Object;
+            new Mock<IBaseRule<CreateTodoItemRequest, Response<TodoItemEntity>>>().Object;
 
         public static IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>> CreateMockUpdateRule() =>
-            (new Mock<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>()).Object;
+            new Mock<IBaseRule<UpdateTodoItemRequest, Response<TodoItemEntity>>>().Object;
 
         private static Type BaseType => typeof(BaseRule<Request<TodoItem>, Response<TodoItemEntity>>);
         public static TRule CreatePassedRule<TRule>()
         {
-            var rule = (TRule) Activator.CreateInstance(typeof(TRule));
+            var rule = (TRule)Activator.CreateInstance(typeof(TRule));
             var property1 = BaseType?.GetProperty("Status", BindingFlags.Public | BindingFlags.Instance);
             property1?.SetValue(rule, RuleStatusType.Passed);
             return rule;

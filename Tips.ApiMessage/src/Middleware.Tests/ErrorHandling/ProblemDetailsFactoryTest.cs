@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Middleware.ErrorHandling;
 using Tips.Pipeline;
 
-namespace Middleware.Tests.ErrorHandling
+namespace Tips.Middleware.Tests.ErrorHandling
 {
     [TestClass]
     public class ProblemDetailsFactoryTest
@@ -20,7 +20,7 @@ namespace Middleware.Tests.ErrorHandling
                 var configuration = CreateProblemDetailsConfiguration();
 
                 var expected = CreateExpectedProblemDetailsWithNotifications(configuration);
-                
+
                 var problemDetailsFactory = new ProblemDetailsFactory(configuration);
 
                 var actual = problemDetailsFactory.BadRequest(expected.Notifications);
@@ -38,7 +38,7 @@ namespace Middleware.Tests.ErrorHandling
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                 Title = "Bad Request",
-                Status = (int) HttpStatusCode.BadRequest,
+                Status = (int)HttpStatusCode.BadRequest,
                 Detail = "Review the notifications for details.",
                 Instance = $"urn:{configuration.UrnName}:error:{ProblemDetailsFactory.BadRequestId}",
                 Notifications = new List<Notification>()

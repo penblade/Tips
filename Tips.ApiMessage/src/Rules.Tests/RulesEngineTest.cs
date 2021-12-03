@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Tips.Rules;
 
-namespace Rules.Tests
+namespace Tips.Rules.Tests
 {
     [TestClass]
     public class RulesEngineTest
@@ -311,9 +311,9 @@ namespace Rules.Tests
 
         private static IEnumerable<IBaseRule<FakeRequest, FakeResponse>> ItIsAnyRules() => It.IsAny<IEnumerable<IBaseRule<FakeRequest, FakeResponse>>>();
 
-        public class FakeRequest {}
+        public class FakeRequest { }
 
-        public class FakeResponse {}
+        public class FakeResponse { }
 
         public class RuleScenario
         {

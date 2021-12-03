@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 
-namespace Support.Tests
+namespace Tips.Support.Tests
 {
     public class FakeLogger<TCategoryName> : ILogger<TCategoryName>
     {

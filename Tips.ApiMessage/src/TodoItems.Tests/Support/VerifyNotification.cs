@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tips.Pipeline;
 
-namespace TodoItems.Tests.Support
+namespace Tips.TodoItems.Tests.Support
 {
     internal static class VerifyNotification
     {

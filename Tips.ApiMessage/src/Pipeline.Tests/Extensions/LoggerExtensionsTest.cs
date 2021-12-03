@@ -5,7 +5,7 @@ using Moq;
 using Tips.Pipeline;
 using Tips.Pipeline.Extensions;
 
-namespace Pipeline.Tests.Extensions
+namespace Tips.Pipeline.Tests.Extensions
 {
     [TestClass]
     public class LoggerExtensionsTest

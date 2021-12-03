@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <StartupObject>Tips.Api.Program</StartupObject>
     <Nullable>annotations</Nullable>
-    <AssemblyName>Tips.Api</AssemblyName>
-    <RootNamespace>Tips.Api</RootNamespace>
+    <AssemblyName>Tips.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tips.$(MSBuildProjectName)</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
