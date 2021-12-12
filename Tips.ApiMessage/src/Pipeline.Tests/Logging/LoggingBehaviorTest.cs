@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Tips.Support.Tests;
-using Tips.Pipeline;
 using Tips.Pipeline.Logging;
 
 namespace Tips.Pipeline.Tests.Logging
